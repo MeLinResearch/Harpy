@@ -8,12 +8,15 @@ placeholders with figures read off a provider pricing page.
 
 from __future__ import annotations
 
+import random
 from dataclasses import dataclass
 from pathlib import Path
 
 import yaml
 
 from .types import AuditResult, BudgetLedger
+
+MINUTES_PER_HOUR = 60.0
 
 #: Entries subject to the provider-source requirement. Tier 0 is arithmetic, not
 #: a model call, so its unit cost is a spec-fixed estimate and is exempt.
@@ -100,6 +103,64 @@ def load_pricing(path: str | Path) -> Pricing:
     )
 
 
+@dataclass(frozen=True)
+class HumanReviewConfig:
+    """Analyst time, in minutes and a rate, rather than dollars per alert.
+
+    Every quantity here is dimensionless with respect to fleet size, which the
+    flat ``human_review_dollars`` constant this replaces was not: 25 dollars is
+    16% of a 30-agent worker bill and 0.016% of a 30,000-agent one, so the old
+    constant silently encoded the size of the simulated slice into the overhead
+    ratio and put the 10% kill ceiling out of reach the moment an alert fired.
+    """
+
+    analyst_cost_per_hour: float
+    triage_minutes: float
+    investigation_minutes: float
+    escalation_rate: float
+    batch_window_ticks: int
+
+    def __post_init__(self) -> None:
+        for name in ("analyst_cost_per_hour", "triage_minutes", "investigation_minutes"):
+            if getattr(self, name) < 0.0:
+                raise ValueError(f"{name} must be >= 0, got {getattr(self, name)}")
+        if not 0.0 <= self.escalation_rate <= 1.0:
+            raise ValueError(f"escalation_rate must be in [0, 1], got {self.escalation_rate}")
+        if self.batch_window_ticks < 0:
+            raise ValueError(f"batch_window_ticks must be >= 0, got {self.batch_window_ticks}")
+
+    @classmethod
+    def from_config(cls, cfg: dict) -> HumanReviewConfig:
+        review = cfg["human_review"]
+        return cls(
+            analyst_cost_per_hour=float(review["analyst_cost_per_hour"]),
+            triage_minutes=float(review["triage_minutes"]),
+            investigation_minutes=float(review["investigation_minutes"]),
+            escalation_rate=float(review["escalation_rate"]),
+            batch_window_ticks=int(review["batch_window_ticks"]),
+        )
+
+    def triage_dollars(self) -> float:
+        """Charged for every review. Someone looks at every alert."""
+        return self.triage_minutes / MINUTES_PER_HOUR * self.analyst_cost_per_hour
+
+    def investigation_dollars(self) -> float:
+        """Charged only for the reviews that escalate."""
+        return self.investigation_minutes / MINUTES_PER_HOUR * self.analyst_cost_per_hour
+
+    def expected_dollars_per_review(self) -> float:
+        """(triage + escalation_rate * investigation) / 60 * rate.
+
+        The *expectation* only. Escalation is drawn per review from the run's
+        RNG rather than averaged in, because a run with two alerts does not pay
+        a quarter of an investigation twice — it pays for zero, one or two of
+        them, and the variance is part of what the sweep is measuring.
+        """
+        return (
+            self.triage_minutes + self.escalation_rate * self.investigation_minutes
+        ) / MINUTES_PER_HOUR * self.analyst_cost_per_hour
+
+
 class CostAccountant:
     """Owns the :class:`BudgetLedger` and the per-agent spend clocks behind it.
 
@@ -112,16 +173,24 @@ class CostAccountant:
     def __init__(
         self,
         pricing: Pricing,
+        review: HumanReviewConfig,
         rerun_multiplier: float = 1.0,
-        human_review_dollars: float = 25.0,
+        review_rng: random.Random | None = None,
+        fleet_scale: float = 1.0,
     ) -> None:
         self.pricing = pricing
+        self.review = review
         self.rerun_multiplier = float(rerun_multiplier)
-        self.human_review_cost = float(human_review_dollars)
-        self.ledger = BudgetLedger()
+        self._review_rng = review_rng if review_rng is not None else random.Random(0)
+        self.ledger = BudgetLedger(fleet_scale=float(fleet_scale))
         self._agent_spend_since_restart: dict[str, float] = {}
+        #: Tick at which each agent's currently-open review was opened.
+        self._review_opened_tick: dict[str, int] = {}
         self.audits_charged = 0
         self.alerts_charged = 0
+        self.alerts_batched = 0
+        self.reviews_charged = 0
+        self.escalations_charged = 0
 
     # -- worker side -------------------------------------------------------
 
@@ -164,7 +233,34 @@ class CostAccountant:
         self.ledger.rerun_work_dollars += rerun
         return discarded, rerun
 
-    def charge_human_review(self) -> float:
-        self.ledger.human_review_dollars += self.human_review_cost
+    def charge_human_review(self, agent_id: str, tick: int) -> tuple[float, bool]:
+        """Charge one alert's worth of analyst time, batched per agent.
+
+        Alerts about the same agent inside ``batch_window_ticks`` of the review
+        that is already open collapse into that review and cost nothing extra:
+        a person handed the same agent twice in five minutes reads one case, not
+        two. The window is anchored on the tick the open review started, so a
+        burst longer than the window does open a second one.
+
+        Returns ``(dollars charged, whether this alert opened a new review)``.
+        """
         self.alerts_charged += 1
-        return self.human_review_cost
+        opened = self._review_opened_tick.get(agent_id)
+        if opened is not None and tick - opened < self.review.batch_window_ticks:
+            self.alerts_batched += 1
+            return 0.0, False
+
+        self._review_opened_tick[agent_id] = tick
+        self.reviews_charged += 1
+        cost = self.review.triage_dollars()
+        self.ledger.triage_dollars += cost
+        # Drawn unconditionally, so the stream position depends on the number of
+        # reviews and not on the configured rate: a run with escalation_rate 0
+        # and one with 0.25 stay comparable draw for draw.
+        escalated = self._review_rng.random() < self.review.escalation_rate
+        if escalated:
+            investigation = self.review.investigation_dollars()
+            self.ledger.investigation_dollars += investigation
+            self.escalations_charged += 1
+            cost += investigation
+        return cost, True

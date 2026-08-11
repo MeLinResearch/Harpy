@@ -29,11 +29,13 @@ class ResponseController:
         mesh,
         accountant,
         lineage_provider: Callable[[], LineagePair],
+        alert_budget,
         alert_on_isolation: bool = True,
     ) -> None:
         self._mesh = mesh
         self._accountant = accountant
         self._lineage_provider = lineage_provider
+        self._alert_budget = alert_budget
         self.alert_on_isolation = bool(alert_on_isolation)
         self.actions: list[ActionRecord] = []
         self.flagged_claim_ids: set[str] = set()
@@ -79,9 +81,26 @@ class ResponseController:
         return self._record("flag_downstream", claim_id, {"n_flagged": len(reachable) + 1})
 
     def alert_human(self, agent_id: str) -> ActionRecord:
-        """Put one agent in front of a person, at the configured review cost."""
-        cost = self._accountant.charge_human_review()
-        return self._record("alert_human", agent_id, {"human_review_dollars": cost})
+        """Put one agent in front of a person, if there is attention left to spend.
+
+        The alert budget is consulted first and is not advisory: at the cap the
+        alert does not fire, and the refusal is recorded as ``alert_suppressed``
+        so the run can count what it did not do. Suppression is not a sixth
+        permitted action — it is the absence of the fifth, logged.
+        """
+        if not self._alert_budget.allows():
+            self._alert_budget.record_suppression()
+            return self._record("alert_suppressed", agent_id, {"reason": "alert_budget"})
+
+        cost, opened_review = self._accountant.charge_human_review(
+            agent_id, self._mesh.current_tick
+        )
+        self._alert_budget.record_alert()
+        return self._record(
+            "alert_human",
+            agent_id,
+            {"review_dollars": cost, "opened_review": opened_review},
+        )
 
     # -- bookkeeping -------------------------------------------------------
 

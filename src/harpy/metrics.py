@@ -14,6 +14,11 @@ from .simulation import RunRecord
 
 SECONDS_PER_HOUR = 3600.0
 
+#: The preregistered kill ceiling: incremental oversight cost as a fraction of
+#: worker-fleet cost. Lives here because it is scoring, not configuration — a
+#: kill condition you can edit in YAML is not a kill condition.
+KILL_CEILING_PCT = 0.10
+
 
 def detection_rate(record: RunRecord) -> float:
     """0 or 1 for a single run; a rate once averaged over seeds within a cell."""
@@ -58,12 +63,55 @@ def contaminated_claims_at_isolation(record: RunRecord) -> int | None:
 
 
 def overhead_pct(record: RunRecord) -> float:
-    return float(record.ledger_dict.get("overhead_pct", 0.0))
+    return record.ledger.overhead_pct()
+
+
+def run_hours(record: RunRecord) -> float:
+    return record.n_ticks * record.tick_seconds / SECONDS_PER_HOUR
+
+
+def agent_hours(record: RunRecord) -> float:
+    return record.agent_active_ticks * record.tick_seconds / SECONDS_PER_HOUR
+
+
+def alerts_per_agent_hour(record: RunRecord) -> float:
+    hours = agent_hours(record)
+    if hours <= 0.0:
+        return 0.0
+    return record.alerts_fired / hours
+
+
+def min_fleet_dollars_per_hour_for_viability(record: RunRecord) -> float | None:
+    """Smallest fleet spend, in worker dollars per hour, that clears the ceiling.
+
+    At fleet scale ``s`` the overhead ratio is ``(s*A + R) / (s*W)``, where ``A``
+    is the slice's per-agent oversight cost, ``R`` its review cost and ``W`` its
+    worker spend. Review cost does not scale, so the ratio falls monotonically in
+    ``s`` towards ``A/W`` — the smallest viable ``s`` is therefore
+    ``R / (ceiling*W - A)`` whenever ``ceiling*W > A``, and there is no viable
+    scale at all otherwise. Reported as fleet worker dollars per hour rather than
+    as the scale itself, because the scale is only meaningful against the size of
+    the slice that produced it.
+
+    ``None`` means no fleet clears the ceiling: the run's scale-invariant
+    oversight cost is already at or over it, and buying more agents cannot help.
+    ``0.0`` means the run had no review cost to amortise and clears at any scale.
+    """
+    ledger = record.ledger
+    worker = ledger.worker_dollars
+    hours = run_hours(record)
+    if worker <= 0.0 or hours <= 0.0:
+        return None
+    headroom = KILL_CEILING_PCT * worker - ledger.per_agent_overhead_dollars()
+    if headroom <= 0.0:
+        return None
+    min_scale = ledger.review_dollars() / headroom
+    return min_scale * worker / hours
 
 
 def run_metrics(record: RunRecord) -> dict:
     """The full per-run metric block, with all six cost components broken out."""
-    ledger = record.ledger_dict
+    ledger = record.ledger.as_dict()
     return {
         "run_id": record.spec.run_id(),
         **record.spec.as_dict(),
@@ -80,15 +128,33 @@ def run_metrics(record: RunRecord) -> dict:
         "tier0_messages": record.tier0_messages,
         "isolations_total": len(record.isolations),
         "fault_onset_tick": record.fault_onset_tick,
-        # Six cost components, never rolled into one number.
+        # Six oversight cost components, never rolled into one number, plus the
+        # worker spend they are a ratio of. All at fleet scale.
         "worker_dollars": ledger["worker_dollars"],
         "sentinel_dollars": ledger["sentinel_dollars"],
         "tier0_dollars": ledger["tier0_dollars"],
         "discarded_work_dollars": ledger["discarded_work_dollars"],
         "rerun_work_dollars": ledger["rerun_work_dollars"],
-        "human_review_dollars": ledger["human_review_dollars"],
+        "triage_dollars": ledger["triage_dollars"],
+        "investigation_dollars": ledger["investigation_dollars"],
         "incremental_dollars": ledger["incremental_dollars"],
         "overhead_pct": ledger["overhead_pct"],
+        # Emitted in every results JSON: at scale 1 this is most of the
+        # overhead, and at scale 1000 it is a rounding error.
+        "review_cost_share_of_overhead": ledger["review_cost_share_of_overhead"],
+        "min_fleet_dollars_per_hour_for_viability": (
+            min_fleet_dollars_per_hour_for_viability(record)
+        ),
+        # -- the second budget ---------------------------------------------
+        "alerts_fired": record.alerts_fired,
+        "alerts_per_agent_hour": alerts_per_agent_hour(record),
+        "suppressed_alerts": record.suppressed_alerts,
+        "detections_lost_to_alert_cap": record.detections_lost_to_alert_cap,
+        "effective_isolation_threshold": record.effective_isolation_threshold,
+        "base_isolation_threshold": record.base_isolation_threshold,
+        "reviews_opened": record.reviews_opened,
+        "alerts_batched_into_open_reviews": record.alerts_batched,
+        "escalated_reviews": record.escalated_reviews,
         # Echoed so a result can always be read against what produced it.
         "fault_distribution": dict(sorted(record.fault_distribution.items())),
         "lineage_fidelity": record.spec.lineage_fidelity,
@@ -102,7 +168,7 @@ def result_document(record: RunRecord) -> dict:
         "schema": "harpy-sim/run/1",
         "spec": record.spec.as_dict(),
         "metrics": run_metrics(record),
-        "ledger": record.ledger_dict,
+        "ledger": record.ledger.as_dict(),
         "pricing": record.pricing_dict,
         "world": {
             "n_agents": record.n_agents,
@@ -127,9 +193,11 @@ def result_document(record: RunRecord) -> dict:
 
 
 def aggregate(rows: list[dict]) -> list[dict]:
-    """Collapse seeds within each (arm, severity, budget, fidelity, reserve) cell.
+    """Collapse seeds within each cell.
 
-    Seeds are the only axis collapsed here. Severity never is.
+    Seeds are the only axis collapsed here. Severity never is, and neither is
+    fleet_scale or the alert cap: both change the answer, which is the point of
+    having swept them.
     """
     cells: dict[tuple, list[dict]] = {}
     for row in rows:
@@ -139,12 +207,19 @@ def aggregate(rows: list[dict]) -> list[dict]:
             row["budget_pct"],
             row["lineage_fidelity"],
             row["reserve_fraction"],
+            row.get("fleet_scale", 1.0),
+            row.get("max_alerts_per_agent_hour", float("inf")),
         )
         cells.setdefault(key, []).append(row)
 
     out: list[dict] = []
     for key, group in sorted(cells.items(), key=lambda item: tuple(str(p) for p in item[0])):
-        arm, severity, budget, fidelity, reserve = key
+        arm, severity, budget, fidelity, reserve, fleet_scale, alert_cap = key
+        viability = [
+            r["min_fleet_dollars_per_hour_for_viability"]
+            for r in group
+            if r.get("min_fleet_dollars_per_hour_for_viability") is not None
+        ]
         detections = [r["median_interactions_to_detection"] for r in group]
         detections = [d for d in detections if d is not None]
         contaminated = [
@@ -159,6 +234,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "budget_pct": budget,
                 "lineage_fidelity": fidelity,
                 "reserve_fraction": reserve,
+                "fleet_scale": fleet_scale,
+                "max_alerts_per_agent_hour": alert_cap,
                 "n_seeds": len(group),
                 "detection_rate": statistics.fmean(r["detection_rate"] for r in group),
                 "overhead_pct": statistics.fmean(r["overhead_pct"] for r in group),
@@ -179,11 +256,34 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "mean_rerun_work_dollars": statistics.fmean(
                     r["rerun_work_dollars"] for r in group
                 ),
-                "mean_human_review_dollars": statistics.fmean(
-                    r["human_review_dollars"] for r in group
+                "mean_triage_dollars": statistics.fmean(r["triage_dollars"] for r in group),
+                "mean_investigation_dollars": statistics.fmean(
+                    r["investigation_dollars"] for r in group
                 ),
                 "mean_worker_dollars": statistics.fmean(r["worker_dollars"] for r in group),
                 "mean_audits_run": statistics.fmean(r["audits_run"] for r in group),
+                "mean_review_cost_share_of_overhead": statistics.fmean(
+                    r["review_cost_share_of_overhead"] for r in group
+                ),
+                # None means "no fleet size clears the ceiling"; those runs are
+                # dropped from the median rather than counted as zero, and the
+                # count of them is reported alongside so the drop is visible.
+                "median_min_fleet_dollars_per_hour_for_viability": (
+                    statistics.median(viability) if viability else None
+                ),
+                "n_seeds_never_viable": len(group) - len(viability),
+                "mean_alerts_per_agent_hour": statistics.fmean(
+                    r["alerts_per_agent_hour"] for r in group
+                ),
+                "mean_suppressed_alerts": statistics.fmean(
+                    r["suppressed_alerts"] for r in group
+                ),
+                "mean_detections_lost_to_alert_cap": statistics.fmean(
+                    r["detections_lost_to_alert_cap"] for r in group
+                ),
+                "mean_effective_isolation_threshold": statistics.fmean(
+                    r["effective_isolation_threshold"] for r in group
+                ),
                 "pricing_verified": all(r["pricing_verified"] for r in group),
             }
         )

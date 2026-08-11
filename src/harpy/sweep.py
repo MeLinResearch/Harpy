@@ -7,6 +7,7 @@ made-up prices is worse than no cost curve — it looks like a finding.
 
 from __future__ import annotations
 
+import dataclasses
 import json
 import multiprocessing as mp
 from dataclasses import dataclass
@@ -14,7 +15,7 @@ from pathlib import Path
 
 from .ledger import Pricing, load_pricing
 from .metrics import result_document, run_metrics
-from .simulation import RunSpec, run_simulation
+from .simulation import RunSpec, rescale, run_simulation
 from .types import Arm, Severity
 
 SEEDS: tuple[int, ...] = tuple(range(50))
@@ -23,6 +24,13 @@ SEVERITIES: tuple[Severity, ...] = tuple(Severity)
 BUDGET_PCTS: tuple[float, ...] = (0.01, 0.025, 0.05, 0.10, 0.20)
 LINEAGE_FIDELITIES: tuple[float, ...] = (0.0, 0.25, 0.5, 0.75, 1.0)
 RESERVE_FRACTIONS: tuple[float, ...] = (0.0, 0.25, 0.5, 0.75, 1.0)
+#: How many times larger the real fleet is than the 30-agent simulated slice.
+#: The slice is a sample, not a fleet: at scale 1 an alert is a sixth of the
+#: oversight bill and at scale 1000 it is invisible, and neither number is a
+#: fact about HARPY until the scale it was computed at is stated.
+FLEET_SCALES: tuple[float, ...] = (1.0, 10.0, 100.0, 1000.0)
+#: The second budget's cap. ``inf`` is the no-cap control.
+ALERT_CAPS: tuple[float, ...] = (0.01, 0.05, 0.25, 1.0, float("inf"))
 
 
 class PricingNotVerifiedError(RuntimeError):
@@ -37,8 +45,15 @@ class SweepGrid:
     budget_pcts: tuple[float, ...] = BUDGET_PCTS
     lineage_fidelities: tuple[float, ...] = LINEAGE_FIDELITIES
     reserve_fractions: tuple[float, ...] = RESERVE_FRACTIONS
+    fleet_scales: tuple[float, ...] = FLEET_SCALES
+    alert_caps: tuple[float, ...] = ALERT_CAPS
 
-    def specs(self) -> list[RunSpec]:
+    def base_specs(self) -> list[RunSpec]:
+        """One spec per distinct simulation, at ``fleet_scales[0]``.
+
+        Every axis here changes the run. ``fleet_scale`` does not, so it is not
+        one of them — see :meth:`specs`.
+        """
         specs: list[RunSpec] = []
         for seed in self.seeds:
             for arm in self.arms:
@@ -49,17 +64,35 @@ class SweepGrid:
                     for budget in self.budget_pcts:
                         for fidelity in self.lineage_fidelities:
                             for reserve in reserves:
-                                specs.append(
-                                    RunSpec(
-                                        seed=seed,
-                                        severity=severity,
-                                        arm=arm,
-                                        budget_pct=budget,
-                                        lineage_fidelity=fidelity,
-                                        reserve_fraction=reserve,
+                                for cap in self.alert_caps:
+                                    specs.append(
+                                        RunSpec(
+                                            seed=seed,
+                                            severity=severity,
+                                            arm=arm,
+                                            budget_pct=budget,
+                                            lineage_fidelity=fidelity,
+                                            reserve_fraction=reserve,
+                                            fleet_scale=self.fleet_scales[0],
+                                            max_alerts_per_agent_hour=cap,
+                                        )
                                     )
-                                )
         return specs
+
+    def specs(self) -> list[RunSpec]:
+        """Every cell of the grid, fleet_scale included.
+
+        ``fleet_scale`` multiplies four cost components after the fact and
+        touches no RNG stream, no threshold and no decision, so the sweep
+        simulates each :meth:`base_specs` entry once and re-costs it at each
+        scale. The results are identical to simulating every cell separately,
+        and this enumeration is what a cell count should be read off.
+        """
+        return [
+            dataclasses.replace(spec, fleet_scale=scale)
+            for spec in self.base_specs()
+            for scale in self.fleet_scales
+        ]
 
 
 def check_pricing(pricing: Pricing, allow_unverified: bool = False) -> list[str]:
@@ -80,9 +113,11 @@ def check_pricing(pricing: Pricing, allow_unverified: bool = False) -> list[str]
     return problems
 
 
-def _worker(payload: tuple) -> dict:
-    config, spec, pricing = payload
-    return result_document(run_simulation(config, spec, pricing))
+def _worker(payload: tuple) -> list[dict]:
+    """One simulation, costed at every fleet scale it is asked for."""
+    config, spec, pricing, fleet_scales = payload
+    record = run_simulation(config, spec, pricing)
+    return [result_document(rescale(record, scale)) for scale in fleet_scales]
 
 
 def run_sweep(
@@ -104,23 +139,26 @@ def run_sweep(
     grid = grid or SweepGrid()
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    specs = grid.specs()
-    payloads = [(config, spec, pricing) for spec in specs]
+    base_specs = grid.base_specs()
+    n_cells = len(base_specs) * len(grid.fleet_scales)
+    payloads = [(config, spec, pricing, grid.fleet_scales) for spec in base_specs]
 
     processes = processes or max(mp.cpu_count() - 1, 1)
     rows: list[dict] = []
 
-    def drain(documents) -> None:
-        # Written as they land rather than at the end: the full grid is tens of
-        # thousands of runs, and a crash an hour in should not cost all of them.
-        for index, document in enumerate(documents, start=1):
-            run_id = document["metrics"]["run_id"]
-            (out_dir / f"{run_id}.json").write_text(
-                json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-            )
-            rows.append(document["metrics"])
-            if progress and index % 200 == 0:
-                print(f"  {index}/{len(specs)} runs", flush=True)
+    def drain(batches) -> None:
+        # Written as they land rather than at the end: the full grid is hundreds
+        # of thousands of cells, and a crash an hour in should not cost all of
+        # them.
+        for batch in batches:
+            for document in batch:
+                run_id = document["metrics"]["run_id"]
+                (out_dir / f"{run_id}.json").write_text(
+                    json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+                )
+                rows.append(document["metrics"])
+            if progress and len(rows) % 400 < len(batch):
+                print(f"  {len(rows)}/{n_cells} cells", flush=True)
 
     if processes == 1:
         drain(_worker(payload) for payload in payloads)

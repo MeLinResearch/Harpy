@@ -50,7 +50,31 @@ class SuspicionTracker:
     def __init__(self, config: SuspicionConfig) -> None:
         self.config = config
         self._scores: dict[str, float] = {}
+        self._isolation_threshold = config.isolation_threshold
         self.audits_applied = 0
+
+    # -- the gate ----------------------------------------------------------
+
+    @property
+    def isolation_threshold(self) -> float:
+        """The gate currently in force. Starts at the configured value.
+
+        It is mutable because :mod:`harpy.alert_budget` raises it when the alert
+        cap binds: spending less human attention has to mean being more
+        conservative about isolating, not quietly dropping alerts about
+        isolations that happened anyway.
+        """
+        return self._isolation_threshold
+
+    def set_isolation_threshold(self, value: float) -> None:
+        """Move the gate. The one-audit invariant is re-checked, not assumed."""
+        value = float(value)
+        if value <= self.config.audit_weight:
+            raise ValueError(
+                "isolation_threshold must stay strictly above audit_weight so isolation can "
+                f"never fire off a single audit (got {value} <= {self.config.audit_weight})"
+            )
+        self._isolation_threshold = value
 
     def score(self, agent_id: str) -> float:
         return self._scores.get(agent_id, 0.0)
@@ -79,7 +103,7 @@ class SuspicionTracker:
         return self._scores[result.agent_id]
 
     def should_isolate(self, agent_id: str) -> bool:
-        return self.score(agent_id) >= self.config.isolation_threshold
+        return self.score(agent_id) >= self._isolation_threshold
 
     def isolation_candidates(self, agent_ids) -> tuple[str, ...]:
         return tuple(sorted(a for a in agent_ids if self.should_isolate(a)))
