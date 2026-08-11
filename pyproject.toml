@@ -1,0 +1,43 @@
+[project]
+name = "harpy"
+version = "0.1.0.dev0"
+description = "HARPY-SIM: phase 1 simulation of budgeted oversight for multi-agent meshes."
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+dependencies = [
+    "pyyaml>=6.0",
+    "matplotlib>=3.8",
+    "pandas>=2.1",
+    "pyarrow>=15.0",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.2", "ruff>=0.6"]
+
+[project.scripts]
+harpy = "harpy.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+# The spec fixes Severity/Arm as `(str, Enum)`; StrEnum would change their
+# member values under `str()` and with them every results filename.
+ignore = ["UP042"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["harpy"]
+known-local-folder = ["conftest"]

@@ -1,0 +1,28 @@
+# SYNTHETIC PRICING — FOR SMOKE TESTS AND CI ONLY. NOT PROVIDER PRICING.
+#
+# These are round made-up numbers whose only job is to exercise the pipeline:
+# with the shipped configs/pricing.yaml placeholders every price is 0.0, audits
+# cost nothing, and the budget stops bounding anything. Nothing produced with
+# this file may be reported. `verified: false` below keeps `harpy sweep` from
+# accepting it without an explicit --allow-unverified-pricing, and every run it
+# produces is stamped pricing_verified=false.
+#
+# To report results: fill in configs/pricing.yaml from provider pricing pages
+# instead, with the URL and access date, and flip its verified flag.
+
+verified: false
+
+worker_model:
+  input_per_mtok: 3.0
+  output_per_mtok: 15.0
+  source: "SYNTHETIC — not a provider price"
+  accessed: ""
+
+sentinel_model:
+  input_per_mtok: 5.0
+  output_per_mtok: 25.0
+  source: "SYNTHETIC — not a provider price"
+  accessed: ""
+
+tier0:
+  cost_per_message_dollars: 0.0000001
