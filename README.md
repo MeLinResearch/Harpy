@@ -101,13 +101,57 @@ real, the prices are arbitrary.
 
 "min fleet spend" is the continuous threshold, in worker dollars per hour, at
 which that arm's overhead crosses below 10%; the four scale columns are the
-sweep's discrete samples of the same curve.
+sweep's discrete samples of the same curve. Read the `vs TIER0_ONLY` column
+first: **clearing the ceiling while detecting nothing is not clearing
+anything**, and most of the rows that clear at scale 1 clear it that way.
 
-<!-- KILL-TABLE -->
+| arm | severity | detection | vs TIER0_ONLY | @1 | @10 | @100 | @1000 | min scale under 10% | min fleet spend |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| NONE | OVERT | 0.00 | -1.00 | 0.0% | 0.0% | 0.0% | 0.0% | 1 | $0/h |
+| TIER0_ONLY | OVERT | 1.00 | — | 6.9% | 4.8% | 4.5% | 4.5% | 1 | $8/h |
+| RANDOM | OVERT | 1.00 | +0.00 | 11.8% | 9.7% | 9.5% | 9.4% | 10 | $80/h |
+| DIRECTED | OVERT | 1.00 | +0.00 | 11.5% | 9.3% | 9.1% | 9.1% | 10 | $50/h |
+| HYBRID | OVERT | 1.00 | +0.00 | 11.5% | 9.4% | 9.2% | 9.1% | 10 | $50/h |
+| NONE | MODERATE | 0.00 | +0.00 | 0.0% | 0.0% | 0.0% | 0.0% | 1 | $0/h |
+| TIER0_ONLY | MODERATE | 0.00 | — | 0.0% | 0.0% | 0.0% | 0.0% | 1 | $0/h |
+| RANDOM | MODERATE | 0.00 | +0.00 | 7.7% | 6.9% | 6.9% | 6.9% | 1 | $0/h (1 of 3 seeds never) |
+| DIRECTED | MODERATE | 0.00 | +0.00 | 5.0% | 5.0% | 5.0% | 5.0% | 1 | $0/h |
+| HYBRID | MODERATE | 0.00 | +0.00 | 5.5% | 5.4% | 5.4% | 5.4% | 1 | $0/h (1 of 15 seeds never) |
+| NONE | SUBTLE | 0.00 | +0.00 | 0.0% | 0.0% | 0.0% | 0.0% | 1 | $0/h |
+| TIER0_ONLY | SUBTLE | 0.00 | — | 0.0% | 0.0% | 0.0% | 0.0% | 1 | $0/h |
+| RANDOM | SUBTLE | 0.00 | +0.00 | 5.0% | 5.0% | 5.0% | 5.0% | 1 | $0/h |
+| DIRECTED | SUBTLE | 0.00 | +0.00 | 5.0% | 5.0% | 5.0% | 5.0% | 1 | $0/h |
+| HYBRID | SUBTLE | 0.00 | +0.00 | 5.0% | 5.0% | 5.0% | 5.0% | 1 | $0/h |
+
+Every sentinel arm crosses under 10% by `fleet_scale` 10 at this operating
+point, and none of them crosses at `fleet_scale` 1. TIER0_ONLY clears at scale
+1 because it raises so few alerts that its review bill stays small.
+
+The cells where a sentinel arm actually buys detection TIER0_ONLY was not
+already getting are at `budget_pct` 0.20, and none of them clears the ceiling
+at any fleet scale:
+
+| arm | severity | detection | vs TIER0_ONLY | @1 | @10 | @100 | @1000 | min scale under 10% |
+| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| RANDOM | MODERATE | 0.33 | +0.33 | 44.6% | 37.4% | 36.7% | 36.7% | never |
+| DIRECTED | MODERATE | 0.67 | +0.67 | 59.1% | 41.1% | 39.4% | 39.2% | never |
+| HYBRID | MODERATE | 0.53 | +0.53 | 48.8% | 37.9% | 36.8% | 36.7% | never |
+
+So on this sweep, **no arm clears 10% at any fleet scale while showing
+incremental detection over TIER0_ONLY.** Fleet scale removes the review-cost
+artifact — the overhead falls by 8 to 18 points between scale 1 and scale
+1000 — and what is left at scale 1000 is still three to four times the ceiling.
+That residue is discarded and rerun work from false isolations, which is
+per-agent and does not amortise. SUBTLE is never detected by any arm at any
+budget.
+
+These numbers are from three seeds and unverified prices; they say what the
+simulator does, not what a real detector would.
 
 `results/overhead_composition.png` is the figure this table is read off:
 stacked bars of the six components by arm and severity, faceted by fleet scale.
-The two review bands dominate the bar at scale 1 and are invisible at scale 1000.
+The two review bands are two thirds of the MODERATE/RANDOM bar at scale 1 and
+invisible at scale 1000.
 
 ### Human attention is a second budget
 
@@ -124,7 +168,21 @@ world's side of the isolation guard, because whether a suppressed alert cost a
 real detection is exactly the question HARPY is not allowed to ask.
 
 `results/detection_vs_alert_budget.png` sweeps the cap from 0.01/agent-hour to
-uncapped.
+uncapped. On the seeds 0..2 sweep the cap binds hard at 0.01 — no alert fires at
+all, the gate walks up to its ceiling, and OVERT detection falls from 1.00 to
+0.22-0.33 — and is slack from 0.05 upwards, where the arms raise only
+0.0013-0.0018 alerts per agent-hour and the curve is flat. The interesting
+region is therefore between 0.01 and 0.05, which is where a real team's capacity
+plausibly sits.
+
+One artifact worth knowing about: the run-to-date half of the cap starts its
+clock at zero, so at tick 0 there are no accrued agent-hours and therefore no
+alert budget. With adaptation on, the gate climbs for the first ~40 ticks and
+decays back over the next ~40. That is why `effective_isolation_threshold`
+reads 3.21 rather than 2.60 even at a cap the run never actually strains. Fault
+onset is drawn from 10-60% of the run, so almost all faults begin after the
+transient has passed, and detection at cap 0.05 matches the uncapped arm
+exactly — but the transient is real and would matter for a shorter run.
 
 ## Out of scope v1
 
