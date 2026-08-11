@@ -1,0 +1,134 @@
+# HARPY-SIM default configuration.
+#
+# fault_distribution below is PREREGISTERED. It is frozen before the sweep and
+# must not be edited afterwards (see README, "Preregistered kill condition").
+# It is echoed verbatim into every results JSON so any run can be checked
+# against the distribution it was scored under.
+
+simulation:
+  n_agents: 30
+  n_ticks: 500
+  # Wall-clock interpretation of one tick, used only for the
+  # false_isolations_per_agent_hour rate. 60s => 1 tick == 1 minute.
+  tick_seconds: 60
+  claims_per_message_min: 1
+  claims_per_message_max: 3
+  # Probability a claim is derived from a claim the agent received (this is
+  # what creates ground-truth lineage edges, and what propagates corruption).
+  derive_probability: 0.55
+  inbox_capacity: 40
+  n_subjects: 24
+  fault_onset_fraction_min: 0.1
+  fault_onset_fraction_max: 0.6
+  schema_version: 3
+  # A recipient mechanically rejects a numeric restatement only once it diverges
+  # by more than this. Values legitimately drift, so rejecting on any difference
+  # would make a 1-3% SUBTLE perturbation structurally visible and stop it being
+  # subtle at all.
+  rejection_numeric_tolerance_pct: 0.10
+  # Healthy agents sometimes publish a genuinely updated value that trips the
+  # same rule. This is the baseline noise floor under check 7.
+  legitimate_update_probability: 0.03
+  # Fraction of a malformed message's tokens that actually make it out.
+  malformed_token_fraction: 0.35
+
+# PREREGISTERED — DO NOT EDIT AFTER THE SWEEP HAS STARTED.
+fault_distribution:
+  OVERT: 0.3333333333333333
+  MODERATE: 0.3333333333333333
+  SUBTLE: 0.3333333333333334
+
+severity_behavior:
+  OVERT:
+    malformed_probability: 0.4
+    tool_error_probability: 0.3
+    schema_version_bump: 1
+    retry_inflation: 2
+  MODERATE:
+    # Probability a post-onset claim conflicts with a claim the agent received
+    # for the same (subject_id, field_name).
+    conflict_probability: 0.85
+  SUBTLE:
+    perturbation_min_pct: 0.01
+    perturbation_max_pct: 0.03
+
+worker:
+  input_tokens_per_message: 1400
+  output_tokens_mean: 420
+  output_tokens_sd: 90
+  output_tokens_min: 40
+
+telemetry:
+  window: 50           # rolling window for checks 2, 3, 4, 7
+  token_window: 100    # trailing window for check 5 (token_len z-score)
+  token_zscore_cap: 4.0
+  # Mean retry_count that saturates check 4 at 1.0.
+  retry_normalizer: 3.0
+  weights:
+    schema_violation: 0.20
+    malformed_rate: 0.18
+    tool_error_rate: 0.14
+    retry_rate: 0.12
+    token_len_zscore: 0.12
+    numeric_range_violation: 0.12
+    downstream_rejection_rate: 0.12
+  # Check 6 operates on these typed bounds, keyed by field_name.
+  numeric_ranges:
+    price_usd: [0.0, 10000.0]
+    temperature_c: [-40.0, 60.0]
+    count_units: [0.0, 5000.0]
+    score_pct: [0.0, 100.0]
+
+sentinel:
+  input_tokens: 9000
+  output_tokens: 600
+  detection_prob:
+    OVERT: 0.95
+    MODERATE: 0.78
+    SUBTLE: 0.42
+  false_positive_rate: 0.02
+  # Messages of the audited agent handed to the sentinel per audit.
+  window_messages: 20
+
+sampler:
+  arm: HYBRID
+  # Per-tick oversight allowance as a fraction of that tick's worker spend.
+  # Audit count is derived from this, never configured.
+  budget_pct: 0.05
+  # HYBRID only: share of the allowance spent uniformly at random.
+  reserve_fraction: 0.5
+  # Unspent allowance rolls forward; capped at this many ticks' worth so an
+  # idle early phase cannot bankroll an implausible audit burst later.
+  carryover_cap_ticks: 5.0
+
+suspicion:
+  # decay is per tick, so its time constant (1/(1-decay) = 50 ticks here) has to
+  # be long relative to how often the budget can afford to audit one agent —
+  # otherwise evidence evaporates between audits and nothing ever accumulates.
+  decay: 0.98
+  # Tuned against measured Tier 0 separation: a healthy agent sits near 0.05 and
+  # an OVERT one near 0.54, so a sustained 0.54 crosses the threshold on its own
+  # in ~50 ticks (which is what makes TIER0_ONLY a real arm) while a sustained
+  # 0.05 saturates at 0.38 and never does.
+  w_tier0: 0.15
+  audit_weight: 1.0
+  clear_credit: 0.25
+  isolation_threshold: 2.6
+  # Invariant checked at construction: audit_weight < isolation_threshold, so
+  # isolation can never fire off a single audit.
+
+response:
+  human_review_dollars: 25.0
+  rerun_multiplier: 1.0
+  # Fired alongside isolation.
+  alert_on_isolation: true
+
+lineage:
+  fidelity: 1.0
+  spurious_rate: 0.1
+
+run:
+  # Severity for `harpy run`. Set to null to draw one from fault_distribution
+  # instead; `harpy sweep` always pins all three and never draws.
+  severity: MODERATE
+  seed: 0

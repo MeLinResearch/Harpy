@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: ${{ matrix.os }} / Python 3.11
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.11"
+          enable-cache: true
+
+      - run: uv sync --extra dev
+
+      - name: ruff check
+        run: uv run ruff check .
+
+      - name: pytest
+        run: uv run pytest -q
+
+      - name: sweep refuses placeholder pricing
+        shell: bash
+        run: |
+          # Must exit nonzero: configs/pricing.yaml ships unverified on purpose.
+          if uv run harpy sweep --config configs/default.yaml --seeds 0..0 --out /tmp/harpy-gate; then
+            echo "sweep accepted placeholder pricing" >&2
+            exit 1
+          fi
+
+      - name: smoke run and plot
+        shell: bash
+        run: |
+          uv run harpy sweep --config configs/default.yaml \
+            --pricing configs/pricing.smoke.yaml \
+            --seeds 0..0 --processes 2 --allow-unverified-pricing \
+            --out smoke-results/
+          uv run harpy plot --results smoke-results/ \
+            --out smoke-results/detection_vs_overhead.png

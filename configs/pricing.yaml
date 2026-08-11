@@ -1,0 +1,28 @@
+# PLACEHOLDER PRICING — NOT VERIFIED.
+# Replace with figures read directly from provider pricing pages and paste
+# the URL and access date below each entry before running any sweep whose
+# results will be reported.
+# worker_model: {input_per_mtok: 0.0, output_per_mtok: 0.0, source: "", accessed: ""}
+# sentinel_model: {input_per_mtok: 0.0, output_per_mtok: 0.0, source: "", accessed: ""}
+
+# Flip to true only once BOTH entries below carry a real provider URL and an
+# access date. `harpy sweep` refuses to run while this is false.
+verified: false
+
+worker_model:
+  input_per_mtok: 0.0
+  output_per_mtok: 0.0
+  source: ""
+  accessed: ""
+
+sentinel_model:
+  input_per_mtok: 0.0
+  output_per_mtok: 0.0
+  source: ""
+  accessed: ""
+
+# Tier 0 is mechanical arithmetic on typed fields, not a model call. This is a
+# spec-fixed engineering estimate, not a provider price, so it is exempt from
+# the source/accessed requirement above.
+tier0:
+  cost_per_message_dollars: 0.0000001
