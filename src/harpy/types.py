@@ -9,7 +9,8 @@ The guard is mechanical, not a convention: both fields are exposed through
 property accessors that inspect the call stack and raise
 :class:`GroundTruthLeakError` when the access originates inside a
 HARPY-side module (``telemetry``, ``sentinel``, ``sampler``, ``suspicion``,
-``response``). ``MockSentinel`` is the single whitelisted exception: it
+``response``, ``alert_budget``). ``MockSentinel`` is the single whitelisted
+exception: it
 simulates a detector rather than implementing one, so reading ground truth is
 the whole of its job. ``tests/test_isolation_guard.py`` pins this behaviour.
 """
@@ -47,7 +48,14 @@ class Arm(str, Enum):
 #: Modules that make up HARPY's detection path. Nothing in here may read
 #: ground truth, directly or through a helper it calls.
 GUARDED_MODULES = frozenset(
-    {"telemetry.py", "sentinel.py", "sampler.py", "suspicion.py", "response.py"}
+    {
+        "telemetry.py",
+        "sentinel.py",
+        "sampler.py",
+        "suspicion.py",
+        "response.py",
+        "alert_budget.py",
+    }
 )
 
 #: Qualified-name prefixes that are exempt, keyed by module file name.
@@ -57,6 +65,13 @@ _THIS_FILE = os.path.basename(__file__)
 _PACKAGE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 
+#: Memo for :func:`_module_name`. The guard runs on every ground-truth read and
+#: walks the whole stack, so this resolves the same handful of code-object
+#: filenames tens of thousands of times per run; only absolute paths are cached,
+#: since a relative one's answer depends on the current directory.
+_MODULE_NAME_CACHE: dict[str, str | None] = {}
+
+
 def _module_name(filename: str) -> str | None:
     """File name if the frame belongs to this package, else None.
 
@@ -64,10 +79,15 @@ def _module_name(filename: str) -> str | None:
     unrelated third-party ``response.py`` somewhere on the stack from being
     mistaken for HARPY's.
     """
+    cached = _MODULE_NAME_CACHE.get(filename, _MODULE_NAME_CACHE)
+    if cached is not _MODULE_NAME_CACHE:
+        return cached  # type: ignore[return-value]
+
     path = os.path.abspath(filename)
-    if os.path.dirname(path) != _PACKAGE_DIR:
-        return None
-    return os.path.basename(path)
+    name = os.path.basename(path) if os.path.dirname(path) == _PACKAGE_DIR else None
+    if os.path.isabs(filename):
+        _MODULE_NAME_CACHE[filename] = name
+    return name
 
 
 def _check_caller(owner: str, attr: str) -> None:
@@ -196,26 +216,71 @@ _install_guard(LineagePair, "ground_truth")
 # --------------------------------------------------------------------------
 
 
+#: Oversight components that are per-agent: a fleet ``fleet_scale`` times the
+#: size of the simulated slice runs that many times as many audits, Tier 0
+#: passes, discards and reruns, so each of these scales linearly. Worker spend
+#: scales for the same reason and is listed separately only because it is the
+#: denominator of the overhead ratio rather than a part of its numerator.
+PER_AGENT_OVERHEAD_COMPONENTS: tuple[str, ...] = (
+    "sentinel_dollars",
+    "tier0_dollars",
+    "discarded_work_dollars",
+    "rerun_work_dollars",
+)
+
+#: The two components that do NOT scale with the fleet. A human reviews the
+#: alerts HARPY actually raises, and the alert count is a property of the
+#: simulated slice, not of how many agents the slice stands in for. This
+#: asymmetry is the whole point of sweeping ``fleet_scale``: it is what makes
+#: review cost dominant at scale 1 and negligible at scale 1000.
+REVIEW_COMPONENTS: tuple[str, ...] = ("triage_dollars", "investigation_dollars")
+
+
 @dataclass
 class BudgetLedger:
-    """Six cost components. Five of them are the price of oversight."""
+    """Six oversight components plus the worker spend they are measured against.
+
+    Every field holds the **slice** figure — what the simulated mesh actually
+    spent. The fleet-level figure is the slice times ``fleet_scale`` for the
+    four per-agent components (and for workers), and the slice unchanged for the
+    two review components.
+    """
 
     worker_dollars: float = 0.0
     sentinel_dollars: float = 0.0
     tier0_dollars: float = 0.0
     discarded_work_dollars: float = 0.0
     rerun_work_dollars: float = 0.0
-    human_review_dollars: float = 0.0
+    triage_dollars: float = 0.0
+    investigation_dollars: float = 0.0
+    #: How many times larger the fleet is than the simulated slice.
+    fleet_scale: float = 1.0
+
+    # -- slice-level views -------------------------------------------------
+
+    def per_agent_overhead_dollars(self) -> float:
+        """Slice cost of the four components that scale with the fleet."""
+        return sum(getattr(self, name) for name in PER_AGENT_OVERHEAD_COMPONENTS)
+
+    def review_dollars(self) -> float:
+        """Triage plus investigation. Identical at every fleet scale."""
+        return sum(getattr(self, name) for name in REVIEW_COMPONENTS)
+
+    # -- fleet-level views -------------------------------------------------
+
+    def fleet_component(self, name: str) -> float:
+        """One component at fleet scale, scaled iff it is a per-agent component."""
+        value = getattr(self, name)
+        if name in REVIEW_COMPONENTS:
+            return value
+        return value * self.fleet_scale
+
+    def fleet_worker_dollars(self) -> float:
+        return self.worker_dollars * self.fleet_scale
 
     def incremental(self) -> float:
         """Everything the oversight layer costs, i.e. everything but the workers."""
-        return (
-            self.sentinel_dollars
-            + self.tier0_dollars
-            + self.discarded_work_dollars
-            + self.rerun_work_dollars
-            + self.human_review_dollars
-        )
+        return self.per_agent_overhead_dollars() * self.fleet_scale + self.review_dollars()
 
     def overhead_pct(self) -> float:
         """Incremental cost as a fraction of worker-fleet cost.
@@ -223,21 +288,34 @@ class BudgetLedger:
         Zero worker spend means there is nothing to be an overhead *of*; the
         ratio is reported as 0.0 rather than raising or returning infinity.
         """
-        if self.worker_dollars <= 0.0:
+        worker = self.fleet_worker_dollars()
+        if worker <= 0.0:
             return 0.0
-        return self.incremental() / self.worker_dollars
+        return self.incremental() / worker
+
+    def review_cost_share_of_overhead(self) -> float:
+        """Fraction of incremental cost that is human review.
+
+        Falls as ``1 / fleet_scale`` by construction, which is the finding the
+        fleet_scale sweep exists to make visible.
+        """
+        incremental = self.incremental()
+        if incremental <= 0.0:
+            return 0.0
+        return self.review_dollars() / incremental
 
     def as_dict(self) -> dict:
-        return {
-            "worker_dollars": self.worker_dollars,
-            "sentinel_dollars": self.sentinel_dollars,
-            "tier0_dollars": self.tier0_dollars,
-            "discarded_work_dollars": self.discarded_work_dollars,
-            "rerun_work_dollars": self.rerun_work_dollars,
-            "human_review_dollars": self.human_review_dollars,
-            "incremental_dollars": self.incremental(),
-            "overhead_pct": self.overhead_pct(),
+        """Fleet-level dollars, plus the scale they were computed at."""
+        out = {
+            "fleet_scale": self.fleet_scale,
+            "worker_dollars": self.fleet_worker_dollars(),
         }
+        for name in PER_AGENT_OVERHEAD_COMPONENTS + REVIEW_COMPONENTS:
+            out[name] = self.fleet_component(name)
+        out["incremental_dollars"] = self.incremental()
+        out["overhead_pct"] = self.overhead_pct()
+        out["review_cost_share_of_overhead"] = self.review_cost_share_of_overhead()
+        return out
 
 
 @dataclass(frozen=True)

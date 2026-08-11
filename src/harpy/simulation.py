@@ -8,12 +8,14 @@ and the lossy lineage projection.
 
 from __future__ import annotations
 
+import dataclasses
 import random
 from collections import deque
 from dataclasses import dataclass, field
 
+from .alert_budget import AlertBudget, AlertBudgetConfig
 from .faults import sample_severity
-from .ledger import CostAccountant, Pricing
+from .ledger import CostAccountant, HumanReviewConfig, Pricing
 from .lineage import make_pair
 from .mesh import Mesh
 from .response import ResponseController
@@ -21,7 +23,7 @@ from .sampler import Sampler, SamplerConfig
 from .sentinel import MockSentinel
 from .suspicion import SuspicionConfig, SuspicionTracker
 from .telemetry import Tier0Config, Tier0Telemetry
-from .types import Arm, LineagePair, Severity
+from .types import Arm, BudgetLedger, LineagePair, Severity
 
 # Independent RNG streams so that changing, say, sampler behaviour does not
 # reshuffle the world the arms are being compared on.
@@ -29,6 +31,7 @@ _STREAM_MESH = 11
 _STREAM_SENTINEL = 23
 _STREAM_SAMPLER = 37
 _STREAM_LINEAGE = 53
+_STREAM_REVIEW = 71
 
 
 def _stream_seed(seed: int, stream: int) -> int:
@@ -43,6 +46,12 @@ class RunSpec:
     budget_pct: float
     lineage_fidelity: float
     reserve_fraction: float = 0.0
+    #: How many times larger the real fleet is than the simulated slice. Pure
+    #: cost arithmetic — it multiplies the per-agent components and nothing
+    #: else, so it cannot and does not perturb the world or the RNG streams.
+    fleet_scale: float = 1.0
+    #: The alert cap this run was scored under. ``inf`` disables it.
+    max_alerts_per_agent_hour: float = float("inf")
 
     def as_dict(self) -> dict:
         return {
@@ -52,12 +61,15 @@ class RunSpec:
             "budget_pct": self.budget_pct,
             "lineage_fidelity": self.lineage_fidelity,
             "reserve_fraction": self.reserve_fraction,
+            "fleet_scale": self.fleet_scale,
+            "max_alerts_per_agent_hour": self.max_alerts_per_agent_hour,
         }
 
     def run_id(self) -> str:
         return (
             f"seed{self.seed:03d}_{self.arm.value}_{self.severity.value}"
             f"_b{self.budget_pct:g}_f{self.lineage_fidelity:g}_r{self.reserve_fraction:g}"
+            f"_x{self.fleet_scale:g}_a{self.max_alerts_per_agent_hour:g}"
         )
 
 
@@ -82,7 +94,10 @@ class RunRecord:
     fault_distribution: dict[str, float]
     faulty_agent_id: str
     fault_onset_tick: int
-    ledger_dict: dict
+    #: Slice-level dollars plus the fleet scale they are reported at. Held as
+    #: the object rather than a dict so a run can be re-costed at another scale
+    #: without being re-simulated — the scale changes no dynamics whatsoever.
+    ledger: BudgetLedger
     isolations: list[IsolationEvent] = field(default_factory=list)
     audits_run: int = 0
     tier0_messages: int = 0
@@ -94,6 +109,29 @@ class RunRecord:
     interactions_to_detection: int | None = None
     contaminated_at_isolation: int | None = None
     pricing_dict: dict = field(default_factory=dict)
+    # -- alert budget ------------------------------------------------------
+    alerts_fired: int = 0
+    suppressed_alerts: int = 0
+    reviews_opened: int = 0
+    alerts_batched: int = 0
+    escalated_reviews: int = 0
+    detections_lost_to_alert_cap: int = 0
+    effective_isolation_threshold: float = 0.0
+    base_isolation_threshold: float = 0.0
+
+
+def rescale(record: RunRecord, fleet_scale: float) -> RunRecord:
+    """The same run, costed for a fleet ``fleet_scale`` times the slice.
+
+    ``fleet_scale`` touches no RNG stream and no decision, so re-costing is
+    exactly equivalent to re-simulating at that scale and is how the sweep
+    avoids running the identical mesh four times over.
+    """
+    return dataclasses.replace(
+        record,
+        spec=dataclasses.replace(record.spec, fleet_scale=float(fleet_scale)),
+        ledger=dataclasses.replace(record.ledger, fleet_scale=float(fleet_scale)),
+    )
 
 
 def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
@@ -102,11 +140,16 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
 
     accountant = CostAccountant(
         pricing,
+        review=HumanReviewConfig.from_config(config),
         rerun_multiplier=float(config["response"]["rerun_multiplier"]),
-        human_review_dollars=float(config["response"]["human_review_dollars"]),
+        review_rng=random.Random(_stream_seed(spec.seed, _STREAM_REVIEW)),
+        fleet_scale=spec.fleet_scale,
     )
     tier0 = Tier0Telemetry(Tier0Config.from_config(config, pricing.tier0_cost_per_message_dollars))
     suspicion = SuspicionTracker(SuspicionConfig.from_config(config))
+    alert_budget = AlertBudget(
+        AlertBudgetConfig.from_config(config, spec.max_alerts_per_agent_hour)
+    )
     sentinel = MockSentinel(
         detection_prob=config["sentinel"]["detection_prob"],
         false_positive_rate=float(config["sentinel"]["false_positive_rate"]),
@@ -149,6 +192,7 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
         mesh,
         accountant,
         lineage_provider,
+        alert_budget,
         alert_on_isolation=bool(config["response"]["alert_on_isolation"]),
     )
 
@@ -165,8 +209,9 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
         fault_distribution={str(k): float(v) for k, v in config["fault_distribution"].items()},
         faulty_agent_id=mesh.faulty_agent_id,
         fault_onset_tick=mesh.fault_onset_tick,
-        ledger_dict={},
+        ledger=accountant.ledger,
         pricing_dict=pricing.as_dict(),
+        base_isolation_threshold=alert_budget.config.base_isolation_threshold,
     )
 
     # NONE is the unsupervised control: no Tier 0, no audits, no isolations, and
@@ -174,6 +219,12 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
     # overhead is measured against, so running Tier 0 under it would quietly
     # give the control an oversight layer.
     oversight = spec.arm is not Arm.NONE
+
+    # Ground-truth bookkeeping for detections_lost_to_alert_cap. Scored here,
+    # on the world's side of the seam, because "was that agent really faulty"
+    # is exactly the question HARPY is not allowed to ask.
+    base_threshold = alert_budget.config.base_isolation_threshold
+    faulty_was_above = False
 
     for tick in range(mesh.n_ticks):
         emissions = mesh.step(tick)
@@ -192,7 +243,11 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
 
         active = mesh.active_agents()
         record.agent_active_ticks += len(active)
+        # Same active count the run is scored on, so the cap the budget enforces
+        # and the alerts_per_agent_hour it is checked against share a denominator.
+        alert_budget.observe_tick(len(active))
         if not oversight:
+            alert_budget.settle()
             continue
         tier0_scores = tier0.scores(active)
         suspicion.tick(tier0_scores)
@@ -203,15 +258,45 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
             accountant.charge_audit(result)
             suspicion.apply_audit(result)
 
+        # The gate for this tick is whatever the alert budget last settled on.
+        suspicion.set_isolation_threshold(alert_budget.isolation_threshold)
+
+        # Read before isolating: isolation resets the score, so afterwards there
+        # is no longer any evidence of the crossing to score.
+        faulty_is_above = (
+            mesh.is_faulty_now(mesh.faulty_agent_id)
+            and suspicion.score(mesh.faulty_agent_id) >= base_threshold
+        )
+        actions_before = len(response.actions)
         for agent_id in suspicion.isolation_candidates(active):
             _isolate(mesh, response, suspicion, tier0, record, recent, agent_id, tick)
+        alerted_now = {
+            action.target
+            for action in response.actions[actions_before:]
+            if action.action == "alert_human"
+        }
+        # A rising edge past the configured gate with no alert behind it: either
+        # adaptation raised the gate out of reach, or the cap ate the alert. Both
+        # are detections the alert budget cost, which is the number this metric
+        # exists to put a price on.
+        if faulty_is_above and not faulty_was_above:
+            if mesh.faulty_agent_id not in alerted_now:
+                record.detections_lost_to_alert_cap += 1
+        faulty_was_above = faulty_is_above
 
-    record.ledger_dict = accountant.ledger.as_dict()
+        alert_budget.settle()
+
     record.audits_run = accountant.audits_charged
     record.tier0_messages = tier0.messages_observed
     record.total_claims = mesh.total_claims
     record.corrupt_claims_total = len(mesh.corrupt_claim_ticks)
     record.flagged_claim_ids = frozenset(response.flagged_claim_ids)
+    record.alerts_fired = alert_budget.alerts_fired
+    record.suppressed_alerts = alert_budget.suppressed_alerts
+    record.reviews_opened = accountant.reviews_charged
+    record.alerts_batched = accountant.alerts_batched
+    record.escalated_reviews = accountant.escalations_charged
+    record.effective_isolation_threshold = alert_budget.effective_isolation_threshold()
     return record
 
 

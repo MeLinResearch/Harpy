@@ -41,9 +41,14 @@ jobs:
       - name: smoke run and plot
         shell: bash
         run: |
+          # Narrowed on the two axes added after the grid was first sized: the
+          # full cross product is 675,000 cells and CI is a wiring check, not a
+          # result. Both endpoints of each axis are kept so all three figures
+          # still have more than one facet to draw.
           uv run harpy sweep --config configs/default.yaml \
             --pricing configs/pricing.smoke.yaml \
-            --seeds 0..0 --processes 2 --allow-unverified-pricing \
+            --seeds 0..0 --fleet-scales 1,1000 --alert-caps 0.05,inf \
+            --processes 2 --allow-unverified-pricing \
             --out smoke-results/
           uv run harpy plot --results smoke-results/ \
             --out smoke-results/detection_vs_overhead.png

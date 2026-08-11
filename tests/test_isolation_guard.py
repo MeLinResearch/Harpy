@@ -14,6 +14,7 @@ from pathlib import Path
 
 import pytest
 
+from harpy import alert_budget as alert_budget_module
 from harpy import mesh as mesh_module
 from harpy import metrics as metrics_module
 from harpy import response as response_module
@@ -34,6 +35,7 @@ GUARDED_MODULES = [
     sampler_module,
     suspicion_module,
     response_module,
+    alert_budget_module,
 ]
 SCORING_MODULES = [metrics_module, mesh_module, simulation_module]
 

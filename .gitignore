@@ -8,6 +8,10 @@ dist/
 .pytest_cache/
 .ruff_cache/
 
-# Sweep output. results/.gitkeep is tracked; run artifacts are not.
+# Sweep output. The three reported figures and results/.gitkeep are tracked;
+# the per-run JSONs and the summary parquet are not.
 results/*
 !results/.gitkeep
+!results/detection_vs_overhead.png
+!results/overhead_composition.png
+!results/detection_vs_alert_budget.png

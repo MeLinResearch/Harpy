@@ -10,7 +10,12 @@ from pathlib import Path
 import yaml
 
 from .ledger import load_pricing
-from .plot import detection_vs_overhead, hybrid_reserve_breakdown
+from .plot import (
+    detection_vs_alert_budget,
+    detection_vs_overhead,
+    hybrid_reserve_breakdown,
+    overhead_composition,
+)
 from .simulation import RunSpec, resolve_severity
 from .sweep import (
     PricingNotVerifiedError,
@@ -60,14 +65,35 @@ def _cmd_run(args: argparse.Namespace) -> int:
             if args.reserve_fraction is not None
             else config["sampler"]["reserve_fraction"]
         ),
+        fleet_scale=args.fleet_scale,
+        max_alerts_per_agent_hour=(
+            args.max_alerts_per_agent_hour
+            if args.max_alerts_per_agent_hour is not None
+            else float(config["alert_budget"]["max_alerts_per_agent_hour"])
+        ),
     )
     path = run_single(config, spec, pricing, args.out)
     document = json.loads(path.read_text(encoding="utf-8"))
     metrics = document["metrics"]
+    viability = metrics["min_fleet_dollars_per_hour_for_viability"]
     print(f"wrote {path}")
     print(f"  arm={metrics['arm']} severity={metrics['severity']} seed={metrics['seed']}")
     print(f"  detected={bool(metrics['detection_rate'])} at tick {metrics['detected_tick']}")
-    print(f"  audits={metrics['audits_run']} overhead={metrics['overhead_pct'] * 100:.3f}%")
+    print(
+        f"  audits={metrics['audits_run']} overhead={metrics['overhead_pct'] * 100:.3f}%"
+        f" at fleet_scale={metrics['fleet_scale']:g}"
+    )
+    print(
+        f"  review share of overhead={metrics['review_cost_share_of_overhead'] * 100:.1f}%"
+        "  min viable fleet spend="
+        + ("none at any scale" if viability is None else f"${viability:,.2f}/h")
+    )
+    print(
+        f"  alerts={metrics['alerts_fired']}"
+        f" ({metrics['alerts_per_agent_hour']:.4f}/agent-h)"
+        f" suppressed={metrics['suppressed_alerts']}"
+        f" detections_lost={metrics['detections_lost_to_alert_cap']}"
+    )
     print(f"  pricing_verified={metrics['pricing_verified']}")
     return 0
 
@@ -75,9 +101,14 @@ def _cmd_run(args: argparse.Namespace) -> int:
 def _cmd_sweep(args: argparse.Namespace) -> int:
     config = load_config(args.config)
     pricing = load_pricing(_pricing_path(args, args.config))
-    grid = SweepGrid()
+    narrowed: dict = {}
     if args.seeds:
-        grid = SweepGrid(seeds=tuple(_parse_seeds(args.seeds)))
+        narrowed["seeds"] = tuple(_parse_seeds(args.seeds))
+    if args.fleet_scales:
+        narrowed["fleet_scales"] = tuple(_parse_floats(args.fleet_scales))
+    if args.alert_caps:
+        narrowed["alert_caps"] = tuple(_parse_floats(args.alert_caps))
+    grid = SweepGrid(**narrowed)
     try:
         summary = run_sweep(
             config,
@@ -99,11 +130,18 @@ def _cmd_plot(args: argparse.Namespace) -> int:
     if not rows:
         print(f"no run JSONs found in {args.results}", file=sys.stderr)
         return 2
-    out = detection_vs_overhead(rows, args.out)
-    print(f"wrote {out}")
-    companion = Path(args.out).with_name(Path(args.out).stem + "_hybrid_reserve.png")
+    out = Path(args.out)
+    print(f"wrote {detection_vs_overhead(rows, out, args.fleet_scale, args.alert_cap)}")
+
+    companion = out.with_name(out.stem + "_hybrid_reserve.png")
     if hybrid_reserve_breakdown(rows, companion) is not None:
         print(f"wrote {companion}")
+
+    composition = out.with_name("overhead_composition.png")
+    print(f"wrote {overhead_composition(rows, composition, args.alert_cap)}")
+
+    by_budget = out.with_name("detection_vs_alert_budget.png")
+    print(f"wrote {detection_vs_alert_budget(rows, by_budget, args.fleet_scale)}")
     return 0
 
 
@@ -113,6 +151,11 @@ def _parse_seeds(text: str) -> list[int]:
         low, high = text.split("..", 1)
         return list(range(int(low), int(high) + 1))
     return [int(part) for part in text.split(",") if part.strip()]
+
+
+def _parse_floats(text: str) -> list[float]:
+    """Accept ``1,10,100`` or ``0.05,inf``."""
+    return [float(part) for part in text.split(",") if part.strip()]
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -128,6 +171,18 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--budget-pct", type=float, default=None)
     run.add_argument("--lineage-fidelity", type=float, default=None)
     run.add_argument("--reserve-fraction", type=float, default=None)
+    run.add_argument(
+        "--fleet-scale",
+        type=float,
+        default=1.0,
+        help="how many times larger the real fleet is than the simulated slice",
+    )
+    run.add_argument(
+        "--max-alerts-per-agent-hour",
+        type=float,
+        default=None,
+        help="alert budget cap; pass inf to disable (default: from config)",
+    )
     run.add_argument("--out", default="results/")
     run.set_defaults(func=_cmd_run)
 
@@ -136,6 +191,16 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--pricing", default=None)
     sweep.add_argument("--out", default="results/")
     sweep.add_argument("--seeds", default=None, help="e.g. 0..2 or 0,1,2 (default 0..49)")
+    sweep.add_argument(
+        "--fleet-scales",
+        default=None,
+        help="narrow the fleet_scale axis, e.g. 1,1000 (default 1,10,100,1000)",
+    )
+    sweep.add_argument(
+        "--alert-caps",
+        default=None,
+        help="narrow the alert-cap axis, e.g. 0.05,inf (default 0.01,0.05,0.25,1,inf)",
+    )
     sweep.add_argument("--processes", type=int, default=None)
     sweep.add_argument(
         "--allow-unverified-pricing",
@@ -144,9 +209,21 @@ def build_parser() -> argparse.ArgumentParser:
     )
     sweep.set_defaults(func=_cmd_sweep)
 
-    plot = sub.add_parser("plot", help="detection vs overhead")
+    plot = sub.add_parser("plot", help="all three figures")
     plot.add_argument("--results", default="results/")
     plot.add_argument("--out", default="results/detection_vs_overhead.png")
+    plot.add_argument(
+        "--fleet-scale",
+        type=float,
+        default=None,
+        help="fleet scale the primary figure is drawn at (default: largest present)",
+    )
+    plot.add_argument(
+        "--alert-cap",
+        type=float,
+        default=None,
+        help="alert cap the primary figure is drawn at (default: largest present)",
+    )
     plot.set_defaults(func=_cmd_plot)
     return parser
 

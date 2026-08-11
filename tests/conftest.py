@@ -5,8 +5,9 @@ from pathlib import Path
 
 import pytest
 
+from harpy.alert_budget import AlertBudget, AlertBudgetConfig
 from harpy.cli import load_config
-from harpy.ledger import ModelPrice, Pricing, load_pricing
+from harpy.ledger import HumanReviewConfig, ModelPrice, Pricing, load_pricing
 from harpy.types import Claim, ClaimPayload, Message
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -15,6 +16,38 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 @pytest.fixture
 def config() -> dict:
     return load_config(REPO_ROOT / "configs" / "default.yaml")
+
+
+@pytest.fixture
+def review_config(config) -> HumanReviewConfig:
+    """The shipped review parameters. Deliberately not restated in Python.
+
+    Restating them here would let the config and the tests drift apart, and the
+    whole point of FIX 1 is that these numbers live in exactly one place.
+    """
+    return HumanReviewConfig.from_config(config)
+
+
+def make_alert_budget(
+    max_alerts_per_agent_hour: float = float("inf"),
+    threshold_adaptation: bool = True,
+    threshold_step: float = 0.2,
+    threshold_max: float = 12.0,
+    window_ticks: int = 100,
+    tick_seconds: int = 60,
+    base_isolation_threshold: float = 2.6,
+) -> AlertBudget:
+    return AlertBudget(
+        AlertBudgetConfig(
+            max_alerts_per_agent_hour=max_alerts_per_agent_hour,
+            threshold_adaptation=threshold_adaptation,
+            threshold_step=threshold_step,
+            threshold_max=threshold_max,
+            window_ticks=window_ticks,
+            tick_seconds=tick_seconds,
+            base_isolation_threshold=base_isolation_threshold,
+        )
+    )
 
 
 @pytest.fixture

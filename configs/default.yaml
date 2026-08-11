@@ -118,10 +118,44 @@ suspicion:
   # isolation can never fire off a single audit.
 
 response:
-  human_review_dollars: 25.0
   rerun_multiplier: 1.0
   # Fired alongside isolation.
   alert_on_isolation: true
+
+# Human review, priced dimensionally instead of as a flat dollars-per-alert
+# constant. A flat constant is a number about a fleet size, not about an alert:
+# at 30 agents it makes one alert a sixth of the whole oversight bill and puts
+# the 10% kill ceiling out of reach the moment anything fires, and at 30,000
+# agents it would round to nothing. Minutes of analyst time do not have that
+# problem, so the cost is built from minutes and a rate.
+human_review:
+  # US BLS OES 15-1212 (Information Security Analysts), May 2023 national mean
+  # annual wage $124,740 -> ~$60/h of direct pay; x1.25 for employer burden and
+  # non-billable time. https://www.bls.gov/oes/current/oes151212.htm
+  # Replace with your own loaded rate before reporting a run.
+  analyst_cost_per_hour: 75.0
+  triage_minutes: 3          # every alert
+  investigation_minutes: 45  # escalated alerts only
+  escalation_rate: 0.25      # fraction of alerts escalated
+  batch_window_ticks: 20     # alerts on the same agent within this window
+                             # collapse into one review
+
+# The second budget. Dollars are not the only thing oversight spends: a team
+# has a finite number of alerts per agent-hour it can actually look at, and a
+# layer that clears the dollar ceiling by paging people 40 times an hour has not
+# cleared anything. This cap binds independently of `sampler.budget_pct`.
+alert_budget:
+  max_alerts_per_agent_hour: 0.05
+  threshold_adaptation: true
+  # What "raise the threshold" means when the cap binds, and how far it may go.
+  # The ceiling stops a saturated run from walking the gate off to infinity;
+  # the step is also the decay applied per tick once there is headroom again.
+  threshold_step: 0.2
+  threshold_max: 12.0
+  # Rolling window for the alert-rate measurement, in ticks. The cap is also
+  # enforced against the run-to-date rate, which is what makes the reported
+  # alerts_per_agent_hour provably <= the cap rather than approximately so.
+  window_ticks: 100
 
 lineage:
   fidelity: 1.0
