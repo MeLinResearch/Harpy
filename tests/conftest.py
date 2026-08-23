@@ -56,8 +56,21 @@ def make_alert_budget(
     )
 
 
+#: A file that must never pass the gate. Deliberately NOT configs/pricing.yaml:
+#: coupling the rejection tests to the real pricing file made them fail the
+#: moment it was legitimately filled in with sourced figures, which is backwards
+#: — filling it in is the goal, not a regression.
+PLACEHOLDER_PRICING_PATH = REPO_ROOT / "tests" / "fixtures" / "pricing.placeholder.yaml"
+
+
 @pytest.fixture
 def placeholder_pricing() -> Pricing:
+    return load_pricing(PLACEHOLDER_PRICING_PATH)
+
+
+@pytest.fixture
+def shipped_pricing() -> Pricing:
+    """The real configs/pricing.yaml, whatever state it is currently in."""
     return load_pricing(REPO_ROOT / "configs" / "pricing.yaml")
 
 

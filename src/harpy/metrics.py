@@ -63,21 +63,30 @@ def contaminated_claims_at_isolation(record: RunRecord) -> int | None:
 
 
 def audit_coverage_of_faulty_agent(record: RunRecord) -> float | None:
-    """Share of post-onset audits that were spent on the actual fault source.
+    """Share of exposure-window audits that were spent on the actual fault source.
 
-    The denominator is every audit at or after ``fault_onset_tick``, not every
-    audit in the run: audits drawn before there was a fault could not have found
-    one, and counting them would make a targeting failure look like bad luck.
+    The denominator is every audit inside the fault's exposure window — from
+    onset until the faulty agent is isolated, or to the end of the run if it
+    never is. Audits outside that window are excluded in both directions and for
+    the same reason: they could not have found the fault. Before onset there was
+    nothing to find; after isolation the agent is out of the mesh, so every
+    remaining audit lands on a clean agent by construction. See
+    :func:`~harpy.simulation.audit_counts_toward_exposure`.
 
-    ``None`` when no audit was drawn after onset — a run that never looked at
-    anything has no coverage, which is a different statement from covering 0%
-    of what it looked at. This is the number that separates the two failure
-    modes: near-zero coverage with a perfect detector is a targeting failure,
-    while high coverage with no detections is a detection failure.
+    A denominator of "all audits after onset" would penalise exactly the arms
+    that work — the faster an arm contains the fault, the more post-isolation
+    audits inflate its denominator — so effective targeting would be reported as
+    bad targeting.
+
+    ``None`` when no audit was drawn inside the window — a run that never looked
+    has no coverage, which is a different statement from covering 0% of what it
+    looked at. This is the number that separates the two failure modes:
+    near-zero coverage with a perfect detector is a targeting failure, while high
+    coverage with no detections is a detection failure.
     """
-    if record.audits_after_fault_onset <= 0:
+    if record.audits_during_fault_exposure <= 0:
         return None
-    return record.audits_on_faulty_agent / record.audits_after_fault_onset
+    return record.audits_on_faulty_agent / record.audits_during_fault_exposure
 
 
 def ticks_faulty_before_first_audit(record: RunRecord) -> int | None:
@@ -159,7 +168,7 @@ def run_metrics(record: RunRecord) -> dict:
         # -- audit targeting ------------------------------------------------
         "audits_on_faulty_agent": record.audits_on_faulty_agent,
         "audits_on_faulty_agent_all_ticks": record.audits_on_faulty_agent_all_ticks,
-        "audits_after_fault_onset": record.audits_after_fault_onset,
+        "audits_during_fault_exposure": record.audits_during_fault_exposure,
         "audit_coverage_of_faulty_agent": audit_coverage_of_faulty_agent(record),
         "ticks_faulty_before_first_audit": ticks_faulty_before_first_audit(record),
         "median_interactions_to_detection": median_interactions_to_detection(record),
@@ -509,8 +518,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "mean_audits_on_faulty_agent": statistics.fmean(
                     r["audits_on_faulty_agent"] for r in group
                 ),
-                "mean_audits_after_fault_onset": statistics.fmean(
-                    r["audits_after_fault_onset"] for r in group
+                "mean_audits_during_fault_exposure": statistics.fmean(
+                    r["audits_during_fault_exposure"] for r in group
                 ),
                 # Coverage and time-to-first-audit are None on runs that never
                 # audited after onset / never audited the faulty agent. Those

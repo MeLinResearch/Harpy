@@ -44,6 +44,30 @@ def _stream_seed(seed: int, stream: int) -> int:
     return (seed * 1_000_003) + stream
 
 
+def audit_counts_toward_exposure(
+    tick: int, fault_onset_tick: int, detected_tick: int | None
+) -> bool:
+    """Does an audit at ``tick`` fall inside the fault's exposure window?
+
+    The window is ``[fault_onset_tick, detected_tick]``, or from onset to the end
+    of the run when the fault is never caught. It is the interval during which an
+    audit could actually have found the fault, which is the only fair denominator
+    for :func:`~harpy.metrics.audit_coverage_of_faulty_agent`.
+
+    The upper bound matters: once the faulty agent is isolated it leaves the mesh
+    permanently, so every later audit lands on a clean agent by construction.
+    Counting those would grow the denominator while the numerator was frozen, and
+    coverage would be dragged towards zero *fastest* for the arms that caught the
+    fault quickest — reporting effective targeting as if it were bad targeting.
+
+    Isolation is resolved after auditing within a tick, so an audit on the tick of
+    isolation happened while the agent was still live and is inside the window.
+    """
+    if tick < fault_onset_tick:
+        return False
+    return detected_tick is None or tick <= detected_tick
+
+
 def _slug(name: str) -> str:
     """Filename-safe form of a worker-model name, for ``run_id``."""
     return "".join(ch if ch.isalnum() else "-" for ch in name)
@@ -141,11 +165,12 @@ class RunRecord:
     #: before it went faulty. Reported alongside the after-onset count because
     #: the two answer different questions and only one of them is coverage.
     audits_on_faulty_agent_all_ticks: int = 0
-    #: Audits spent on the fault source at or after ``fault_onset_tick`` — the
-    #: only ones that could possibly have caught anything.
+    #: Audits spent on the fault source inside the exposure window — the only
+    #: ones that could possibly have caught anything.
     audits_on_faulty_agent: int = 0
-    #: Every audit at or after onset, on any agent. The coverage denominator.
-    audits_after_fault_onset: int = 0
+    #: Every audit inside the exposure window, on any agent. The coverage
+    #: denominator. See :func:`audit_counts_toward_exposure` for the window.
+    audits_during_fault_exposure: int = 0
     #: Tick of the first post-onset audit of the fault source. ``None`` means it
     #: was never audited while faulty — deliberately not zero and not the run
     #: length, both of which would silently become data.
@@ -349,8 +374,10 @@ def run_simulation(
             is_faulty_target = agent_id == mesh.faulty_agent_id
             if is_faulty_target:
                 record.audits_on_faulty_agent_all_ticks += 1
-            if tick >= mesh.fault_onset_tick:
-                record.audits_after_fault_onset += 1
+            # record.detected_tick is set only when the faulty agent is isolated,
+            # so it is exactly the window's upper bound.
+            if audit_counts_toward_exposure(tick, mesh.fault_onset_tick, record.detected_tick):
+                record.audits_during_fault_exposure += 1
                 if is_faulty_target:
                     record.audits_on_faulty_agent += 1
                     if record.first_audit_tick_on_faulty_agent is None:

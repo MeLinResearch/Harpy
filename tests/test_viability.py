@@ -190,7 +190,7 @@ def a_run_row(**overrides) -> dict:
         "detections_lost_to_alert_cap": 0,
         "effective_isolation_threshold": 2.6,
         "audits_on_faulty_agent": 2,
-        "audits_after_fault_onset": 8,
+        "audits_during_fault_exposure": 8,
         "audit_coverage_of_faulty_agent": 0.25,
         "ticks_faulty_before_first_audit": 4,
         "false_isolation_count": 0,

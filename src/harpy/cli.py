@@ -111,7 +111,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
     )
     print(
         f"  audits on faulty agent={metrics['audits_on_faulty_agent']}"
-        f"/{metrics['audits_after_fault_onset']} after onset"
+        f"/{metrics['audits_during_fault_exposure']} in exposure window"
         f" coverage={_fmt_pct(metrics['audit_coverage_of_faulty_agent'])}"
         f" first audit at +{metrics['ticks_faulty_before_first_audit']} ticks"
     )

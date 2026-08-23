@@ -32,7 +32,7 @@ from harpy.simulation import RunSpec, run_simulation
 from harpy.sweep import SweepGrid, check_pricing
 from harpy.types import Arm, Severity
 
-from conftest import REPO_ROOT
+from conftest import PLACEHOLDER_PRICING_PATH, REPO_ROOT
 
 #: The six the diagnostic sweeps were specified to emit.
 REQUIRED_METRICS: tuple[str, ...] = (
@@ -75,7 +75,7 @@ def test_audit_targeting_counts_are_ints_and_nest_correctly(config, test_pricing
     for name in (
         "audits_on_faulty_agent",
         "audits_on_faulty_agent_all_ticks",
-        "audits_after_fault_onset",
+        "audits_during_fault_exposure",
         "false_isolation_count",
     ):
         assert isinstance(metrics[name], int), f"{name} must be a count, got {type(metrics[name])}"
@@ -83,16 +83,16 @@ def test_audit_targeting_counts_are_ints_and_nest_correctly(config, test_pricing
 
     # Audits of the fault source after onset are a subset of all audits after
     # onset, and of all audits of that agent at any time.
-    assert metrics["audits_on_faulty_agent"] <= metrics["audits_after_fault_onset"]
+    assert metrics["audits_on_faulty_agent"] <= metrics["audits_during_fault_exposure"]
     assert metrics["audits_on_faulty_agent"] <= metrics["audits_on_faulty_agent_all_ticks"]
-    assert metrics["audits_after_fault_onset"] <= metrics["audits_run"]
+    assert metrics["audits_during_fault_exposure"] <= metrics["audits_run"]
 
 
 def test_coverage_is_a_fraction_or_none_and_never_a_silent_zero(config, test_pricing):
     metrics = run_metrics(run_simulation(config, a_spec(), test_pricing))
     coverage = metrics["audit_coverage_of_faulty_agent"]
 
-    if metrics["audits_after_fault_onset"] == 0:
+    if metrics["audits_during_fault_exposure"] == 0:
         # "Never looked" is not "looked and covered 0%". This distinction is the
         # entire point of the metric.
         assert coverage is None
@@ -100,7 +100,7 @@ def test_coverage_is_a_fraction_or_none_and_never_a_silent_zero(config, test_pri
         assert isinstance(coverage, float)
         assert 0.0 <= coverage <= 1.0
         assert coverage == pytest.approx(
-            metrics["audits_on_faulty_agent"] / metrics["audits_after_fault_onset"]
+            metrics["audits_on_faulty_agent"] / metrics["audits_during_fault_exposure"]
         )
 
 
@@ -121,7 +121,7 @@ def test_an_arm_that_never_audits_reports_no_coverage_rather_than_zero(config, t
     metrics = run_metrics(record)
 
     assert metrics["audits_run"] == 0
-    assert metrics["audits_after_fault_onset"] == 0
+    assert metrics["audits_during_fault_exposure"] == 0
     assert metrics["audit_coverage_of_faulty_agent"] is None
     assert metrics["ticks_faulty_before_first_audit"] is None
 
@@ -454,18 +454,39 @@ def test_probabilities_outside_the_unit_interval_are_refused(field, bad):
 # ---------------------------------------------------------------------------
 
 
-def test_the_shipped_pricing_file_still_fails_the_gate():
-    """The state that stopped the sweeps, pinned so it cannot regress silently."""
-    pricing = load_pricing(REPO_ROOT / "configs" / "pricing.yaml")
+def test_a_placeholder_pricing_file_fails_the_gate(placeholder_pricing):
+    """The rejection path, pinned against a file built to be rejected.
 
+    This used to assert against configs/pricing.yaml, which was correct only
+    while that file was empty. Filling it in with sourced figures is the goal,
+    so the test now owns its own placeholder and cannot be broken by progress.
+    """
     with pytest.raises(PricingNotVerifiedError) as exc:
-        check_pricing(pricing)
+        check_pricing(placeholder_pricing)
 
     message = str(exc.value)
     assert "source is empty" in message
     assert "accessed is empty" in message
     assert "verified is false" in message
-    assert str(pricing.path) in message, "the error must name the file to edit"
+    assert str(placeholder_pricing.path) in message, "the error must name the file to edit"
+
+
+def test_the_shipped_pricing_file_carries_full_provenance(shipped_pricing):
+    """Whatever configs/pricing.yaml claims, it must be able to back it up.
+
+    The complement of the rejection test, and the one that actually protects a
+    reported result: verified: true is only legitimate when every priced entry
+    carries a source URL and an access date. Flipping the flag without them is
+    the most likely way a placeholder becomes a published number.
+    """
+    problems = shipped_pricing.verification_problems()
+    assert not problems, f"configs/pricing.yaml claims to be reportable but: {problems}"
+
+    for label, price in shipped_pricing.priced_entries():
+        assert price.source.strip(), f"{label} has no source URL"
+        assert price.accessed.strip(), f"{label} has no access date"
+        assert price.input_per_mtok > 0.0, f"{label} has a zero input price"
+        assert price.output_per_mtok > 0.0, f"{label} has a zero output price"
 
 
 def test_run_simulation_aborts_on_unverified_pricing(config, placeholder_pricing):
@@ -558,7 +579,7 @@ def test_the_smoke_waiver_still_runs_and_stamps_the_result(config, placeholder_p
     assert run_metrics(record)["pricing_verified"] is False
 
 
-def test_cli_run_exits_nonzero_on_the_shipped_pricing(tmp_path, capsys):
+def test_cli_run_exits_nonzero_on_placeholder_pricing(tmp_path, capsys):
     """The gate reaches the command line, not just the library."""
     code = main(
         [
@@ -566,7 +587,7 @@ def test_cli_run_exits_nonzero_on_the_shipped_pricing(tmp_path, capsys):
             "--config",
             str(REPO_ROOT / "configs" / "default.yaml"),
             "--pricing",
-            str(REPO_ROOT / "configs" / "pricing.yaml"),
+            str(PLACEHOLDER_PRICING_PATH),
             "--out",
             str(tmp_path),
         ]
@@ -583,11 +604,24 @@ def test_cli_run_exits_nonzero_on_the_shipped_pricing(tmp_path, capsys):
 
 
 def test_a_legacy_singular_worker_block_loads_as_a_one_tier_registry():
-    """The shipped file has no 'worker_models:' mapping and must still load."""
-    pricing = load_pricing(REPO_ROOT / "configs" / "pricing.yaml")
+    """configs/pricing.smoke.yaml still uses the singular block and must load.
+
+    Backward compatibility is checked against a real file that genuinely has the
+    old shape, rather than against whichever shape the main pricing file has
+    today.
+    """
+    pricing = load_pricing(REPO_ROOT / "configs" / "pricing.smoke.yaml")
 
     assert pricing.worker_model_names() == (DEFAULT_WORKER_MODEL_NAME,)
     assert pricing.default_worker_model_name() == DEFAULT_WORKER_MODEL_NAME
+
+
+def test_the_shipped_pricing_file_defines_a_multi_tier_worker_registry(shipped_pricing):
+    """The worker axis has something to sweep, and no tier is named 'default'."""
+    names = shipped_pricing.worker_model_names()
+    assert len(names) >= 1
+    for name in names:
+        assert shipped_pricing.worker_price(name) is not None
 
 
 def test_a_worker_models_mapping_loads_in_yaml_order(tmp_path):

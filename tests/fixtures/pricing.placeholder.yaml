@@ -1,0 +1,27 @@
+# A pricing file that must never pass the gate. Test fixture only.
+#
+# This is the shape configs/pricing.yaml shipped in before real figures were
+# supplied: zero prices, no provenance, verified false. It lives here so the
+# gate's rejection path stays tested by construction rather than by whatever
+# state the real pricing file happens to be in — those tests used to point at
+# configs/pricing.yaml and broke the moment it was legitimately filled in.
+#
+# The zero prices are load-bearing for the sampler test that checks a free audit
+# is still bounded at one per agent per tick.
+
+verified: false
+
+worker_model:
+  input_per_mtok: 0.0
+  output_per_mtok: 0.0
+  source: ""
+  accessed: ""
+
+sentinel_model:
+  input_per_mtok: 0.0
+  output_per_mtok: 0.0
+  source: ""
+  accessed: ""
+
+tier0:
+  cost_per_message_dollars: 0.0000001

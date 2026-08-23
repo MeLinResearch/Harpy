@@ -7,7 +7,7 @@ from dataclasses import fields, replace
 
 import pytest
 
-from harpy.ledger import CostAccountant, load_pricing
+from harpy.ledger import CostAccountant
 from harpy.sampler import Sampler, SamplerConfig
 from harpy.types import (
     PER_AGENT_OVERHEAD_COMPONENTS,
@@ -16,8 +16,6 @@ from harpy.types import (
     AuditResult,
     BudgetLedger,
 )
-
-from conftest import REPO_ROOT
 
 
 def a_ledger(**overrides) -> BudgetLedger:
@@ -44,10 +42,18 @@ def test_overhead_pct_with_no_worker_spend_is_zero():
     assert BudgetLedger(sentinel_dollars=5.0).overhead_pct() == 0.0
 
 
-def test_shipped_pricing_is_unverified_placeholder():
-    pricing = load_pricing(REPO_ROOT / "configs" / "pricing.yaml")
-    problems = pricing.verification_problems()
-    assert problems, "configs/pricing.yaml must ship unverified"
+def test_an_unsourced_pricing_file_reports_problems(placeholder_pricing):
+    """The rejection path, against a fixture built to be rejected.
+
+    This previously asserted that configs/pricing.yaml itself was an unverified
+    placeholder. That was true while the sweeps were blocked on missing prices
+    and false the moment real, sourced figures were entered — which is the
+    intended end state, not a regression. What must stay pinned is that a file
+    without provenance is rejected; whether the shipped file has provenance is
+    checked separately, and in the opposite direction.
+    """
+    problems = placeholder_pricing.verification_problems()
+    assert problems, "a file with no source or access date must not be reportable"
     assert any("source" in problem for problem in problems)
 
 
