@@ -8,10 +8,16 @@ dist/
 .pytest_cache/
 .ruff_cache/
 
-# Sweep output. The three reported figures and results/.gitkeep are tracked;
-# the per-run JSONs and the summary parquet are not.
+# Sweep output. The reported figures, results/.gitkeep and the preserved v1
+# evidence are tracked; the per-run JSONs are not (66MB for the v1 pilots alone).
 results/*
 !results/.gitkeep
 !results/detection_vs_overhead.png
 !results/overhead_composition.png
 !results/detection_vs_alert_budget.png
+# The seed-collapsed summaries behind docs/v1-result.md. Tracked because the
+# v1 result is a finding the project builds on: v2 exists to be compared
+# against these numbers, so they have to survive the container they were
+# computed in.
+!results/v1/
+!results/v1/*.parquet
