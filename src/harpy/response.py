@@ -43,6 +43,16 @@ class ResponseController:
         # graph gets walked dozens of times in a row. Cache it by size.
         self._graph_cache: tuple[int, dict[str, list[str]]] | None = None
 
+    @property
+    def accountant(self):
+        """The cost accountant, for the world to file attributions against.
+
+        Exposed read-only so :mod:`harpy.simulation` can split an isolation's
+        already-charged bill into true and false without this module ever
+        learning which it was.
+        """
+        return self._accountant
+
     # -- the five actions --------------------------------------------------
 
     def isolate(self, agent_id: str) -> ActionRecord:

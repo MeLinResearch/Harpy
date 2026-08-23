@@ -13,8 +13,13 @@ import multiprocessing as mp
 from dataclasses import dataclass
 from pathlib import Path
 
-from .ledger import Pricing, load_pricing
-from .metrics import result_document, run_metrics
+from .ledger import (
+    Pricing,
+    PricingNotVerifiedError,
+    load_pricing,
+    require_verified_pricing,
+)
+from .metrics import attach_incremental_detection_over_tier0, result_document, run_metrics
 from .simulation import RunSpec, rescale, run_simulation
 from .types import Arm, Severity
 
@@ -31,10 +36,12 @@ RESERVE_FRACTIONS: tuple[float, ...] = (0.0, 0.25, 0.5, 0.75, 1.0)
 FLEET_SCALES: tuple[float, ...] = (1.0, 10.0, 100.0, 1000.0)
 #: The second budget's cap. ``inf`` is the no-cap control.
 ALERT_CAPS: tuple[float, ...] = (0.01, 0.05, 0.25, 1.0, float("inf"))
-
-
-class PricingNotVerifiedError(RuntimeError):
-    """Raised when a sweep is asked to run on placeholder prices."""
+#: ``None`` is the shipped operating point: the configured
+#: ``sentinel.detection_prob[severity]`` and ``sentinel.false_positive_rate``.
+#: The default grid is therefore the same size it was before these axes existed,
+#: and a diagnostic sweep supplies its own values.
+DETECTION_PROBS: tuple[float | None, ...] = (None,)
+FALSE_POSITIVE_RATES: tuple[float | None, ...] = (None,)
 
 
 @dataclass(frozen=True)
@@ -47,6 +54,20 @@ class SweepGrid:
     reserve_fractions: tuple[float, ...] = RESERVE_FRACTIONS
     fleet_scales: tuple[float, ...] = FLEET_SCALES
     alert_caps: tuple[float, ...] = ALERT_CAPS
+    detection_probs: tuple[float | None, ...] = DETECTION_PROBS
+    false_positive_rates: tuple[float | None, ...] = FALSE_POSITIVE_RATES
+    #: Worker tiers to price runs at, by name. ``None`` means "every tier
+    #: configs/pricing.yaml defines" — resolved by :meth:`resolved_for`, which is
+    #: what makes adding a tier a YAML edit and not a code change.
+    worker_models: tuple[str, ...] | None = None
+
+    def resolved_for(self, pricing: Pricing) -> SweepGrid:
+        """This grid with its worker axis filled in from the pricing file."""
+        if self.worker_models is not None:
+            for name in self.worker_models:
+                pricing.worker_price(name)  # fail now, not mid-sweep
+            return self
+        return dataclasses.replace(self, worker_models=pricing.worker_model_names())
 
     def base_specs(self) -> list[RunSpec]:
         """One spec per distinct simulation, at ``fleet_scales[0]``.
@@ -54,6 +75,11 @@ class SweepGrid:
         Every axis here changes the run. ``fleet_scale`` does not, so it is not
         one of them — see :meth:`specs`.
         """
+        if self.worker_models is None:
+            raise ValueError(
+                "worker_models is unresolved; call grid.resolved_for(pricing) first so the "
+                "worker axis comes from the pricing file rather than from Python"
+            )
         specs: list[RunSpec] = []
         for seed in self.seeds:
             for arm in self.arms:
@@ -65,18 +91,24 @@ class SweepGrid:
                         for fidelity in self.lineage_fidelities:
                             for reserve in reserves:
                                 for cap in self.alert_caps:
-                                    specs.append(
-                                        RunSpec(
-                                            seed=seed,
-                                            severity=severity,
-                                            arm=arm,
-                                            budget_pct=budget,
-                                            lineage_fidelity=fidelity,
-                                            reserve_fraction=reserve,
-                                            fleet_scale=self.fleet_scales[0],
-                                            max_alerts_per_agent_hour=cap,
-                                        )
-                                    )
+                                    for detection in self.detection_probs:
+                                        for fpr in self.false_positive_rates:
+                                            for worker in self.worker_models:
+                                                specs.append(
+                                                    RunSpec(
+                                                        seed=seed,
+                                                        severity=severity,
+                                                        arm=arm,
+                                                        budget_pct=budget,
+                                                        lineage_fidelity=fidelity,
+                                                        reserve_fraction=reserve,
+                                                        fleet_scale=self.fleet_scales[0],
+                                                        max_alerts_per_agent_hour=cap,
+                                                        detection_prob=detection,
+                                                        false_positive_rate=fpr,
+                                                        worker_model=worker,
+                                                    )
+                                                )
         return specs
 
     def specs(self) -> list[RunSpec]:
@@ -98,25 +130,18 @@ class SweepGrid:
 def check_pricing(pricing: Pricing, allow_unverified: bool = False) -> list[str]:
     """Return the problems with this pricing file, raising unless waived.
 
-    The waiver exists for smoke runs and CI only. Every run produced under it is
-    stamped ``pricing_verified: false`` in its results JSON and the plot is
-    watermarked, so an unverified curve cannot be mistaken for a reported one.
+    Thin wrapper over :func:`~harpy.ledger.require_verified_pricing`, which is
+    where the guard now lives so that every entry point honours it — including
+    a bare :func:`~harpy.simulation.run_simulation` call that never touches this
+    module.
     """
-    problems = pricing.verification_problems()
-    if problems and not allow_unverified:
-        raise PricingNotVerifiedError(
-            "refusing to sweep on unverified pricing:\n  - "
-            + "\n  - ".join(problems)
-            + f"\nEdit {pricing.path}, or pass --allow-unverified-pricing for a smoke run "
-            "whose numbers will be stamped unverified."
-        )
-    return problems
+    return require_verified_pricing(pricing, allow_unverified=allow_unverified, context="sweep")
 
 
 def _worker(payload: tuple) -> list[dict]:
     """One simulation, costed at every fleet scale it is asked for."""
-    config, spec, pricing, fleet_scales = payload
-    record = run_simulation(config, spec, pricing)
+    config, spec, pricing, fleet_scales, allow_unverified = payload
+    record = run_simulation(config, spec, pricing, allow_unverified=allow_unverified)
     return [result_document(rescale(record, scale)) for scale in fleet_scales]
 
 
@@ -136,12 +161,14 @@ def run_sweep(
         for problem in problems:
             print(f"  - {problem}")
 
-    grid = grid or SweepGrid()
+    grid = (grid or SweepGrid()).resolved_for(pricing)
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     base_specs = grid.base_specs()
     n_cells = len(base_specs) * len(grid.fleet_scales)
-    payloads = [(config, spec, pricing, grid.fleet_scales) for spec in base_specs]
+    payloads = [
+        (config, spec, pricing, grid.fleet_scales, allow_unverified) for spec in base_specs
+    ]
 
     processes = processes or max(mp.cpu_count() - 1, 1)
     rows: list[dict] = []
@@ -167,6 +194,11 @@ def run_sweep(
         with ctx.Pool(processes) as pool:
             drain(pool.imap_unordered(_worker, payloads, chunksize=4))
 
+    # The baseline subtraction needs the whole grid, so it runs once here rather
+    # than per run. The individual JSONs on disk keep null for it — they were
+    # written as they landed, which is what makes a crash mid-sweep survivable —
+    # and load_result_rows re-derives it whenever they are read back.
+    attach_incremental_detection_over_tier0(rows)
     return write_summary(rows, out_dir)
 
 
@@ -188,11 +220,24 @@ def write_summary(rows: list[dict], out_dir: str | Path) -> Path:
     return path
 
 
-def run_single(config: dict, spec: RunSpec, pricing: Pricing, out_dir: str | Path) -> Path:
-    """One run, one JSON. Used by ``harpy run``; no pricing gate."""
+def run_single(
+    config: dict,
+    spec: RunSpec,
+    pricing: Pricing,
+    out_dir: str | Path,
+    allow_unverified: bool = False,
+) -> Path:
+    """One run, one JSON. Used by ``harpy run``.
+
+    Gated on pricing exactly like the sweep is: the gate lives inside
+    :func:`~harpy.simulation.run_simulation` now, so there is no longer a path
+    that quietly produces a costed run off placeholders.
+    """
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    document = result_document(run_simulation(config, spec, pricing))
+    document = result_document(
+        run_simulation(config, spec, pricing, allow_unverified=allow_unverified)
+    )
     path = out_dir / f"{document['metrics']['run_id']}.json"
     path.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     return path
@@ -206,12 +251,15 @@ def load_result_rows(results_dir: str | Path) -> list[dict]:
         if document.get("schema") != "harpy-sim/run/1":
             continue
         rows.append(document["metrics"])
-    return rows
+    # Re-derived on read: the baseline is a different run, so it is a property
+    # of the set of results, not of any file in it.
+    return attach_incremental_detection_over_tier0(rows)
 
 
 __all__ = [
     "SweepGrid",
     "PricingNotVerifiedError",
+    "attach_incremental_detection_over_tier0",
     "check_pricing",
     "load_pricing",
     "load_result_rows",

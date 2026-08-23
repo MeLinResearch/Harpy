@@ -9,7 +9,7 @@ from pathlib import Path
 
 import yaml
 
-from .ledger import load_pricing
+from .ledger import PricingEntryMissingError, load_pricing
 from .plot import (
     detection_vs_alert_budget,
     detection_vs_overhead,
@@ -71,8 +71,20 @@ def _cmd_run(args: argparse.Namespace) -> int:
             if args.max_alerts_per_agent_hour is not None
             else float(config["alert_budget"]["max_alerts_per_agent_hour"])
         ),
+        # None on either of these means the shipped operating point.
+        detection_prob=args.detection_prob,
+        false_positive_rate=args.false_positive_rate,
+        # Which tier to price at is a pricing-file question, so ask the pricing
+        # file rather than defaulting to a name that may not be defined in it.
+        worker_model=args.worker_model or pricing.default_worker_model_name(),
     )
-    path = run_single(config, spec, pricing, args.out)
+    try:
+        path = run_single(
+            config, spec, pricing, args.out, allow_unverified=args.allow_unverified_pricing
+        )
+    except (PricingNotVerifiedError, PricingEntryMissingError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
     document = json.loads(path.read_text(encoding="utf-8"))
     metrics = document["metrics"]
     viability = metrics["min_fleet_dollars_per_hour_for_viability"]
@@ -94,8 +106,30 @@ def _cmd_run(args: argparse.Namespace) -> int:
         f" suppressed={metrics['suppressed_alerts']}"
         f" detections_lost={metrics['detections_lost_to_alert_cap']}"
     )
+    print(
+        f"  audits on faulty agent={metrics['audits_on_faulty_agent']}"
+        f"/{metrics['audits_after_fault_onset']} after onset"
+        f" coverage={_fmt_pct(metrics['audit_coverage_of_faulty_agent'])}"
+        f" first audit at +{metrics['ticks_faulty_before_first_audit']} ticks"
+    )
+    false_dollars = metrics["discard_rerun_dollars_from_false_isolations"]
+    true_dollars = metrics["discard_rerun_dollars_from_true_isolations"]
+    print(
+        f"  false isolations={metrics['false_isolation_count']}"
+        f" costing ${false_dollars:,.2f} of ${false_dollars + true_dollars:,.2f} discard+rerun"
+    )
+    print(
+        f"  worker_model={metrics['worker_model']}"
+        f" detection_prob={metrics['effective_detection_prob']:g}"
+        f" false_positive_rate={metrics['effective_false_positive_rate']:g}"
+    )
     print(f"  pricing_verified={metrics['pricing_verified']}")
     return 0
+
+
+def _fmt_pct(value: float | None) -> str:
+    """``None`` is a real answer here — never printed as 0%."""
+    return "n/a" if value is None else f"{value * 100:.1f}%"
 
 
 def _cmd_sweep(args: argparse.Namespace) -> int:
@@ -108,6 +142,14 @@ def _cmd_sweep(args: argparse.Namespace) -> int:
         narrowed["fleet_scales"] = tuple(_parse_floats(args.fleet_scales))
     if args.alert_caps:
         narrowed["alert_caps"] = tuple(_parse_floats(args.alert_caps))
+    if args.detection_probs:
+        narrowed["detection_probs"] = tuple(_parse_floats(args.detection_probs))
+    if args.false_positive_rates:
+        narrowed["false_positive_rates"] = tuple(_parse_floats(args.false_positive_rates))
+    if args.worker_models:
+        narrowed["worker_models"] = tuple(
+            part.strip() for part in args.worker_models.split(",") if part.strip()
+        )
     grid = SweepGrid(**narrowed)
     try:
         summary = run_sweep(
@@ -118,7 +160,7 @@ def _cmd_sweep(args: argparse.Namespace) -> int:
             processes=args.processes,
             allow_unverified=args.allow_unverified_pricing,
         )
-    except PricingNotVerifiedError as exc:
+    except (PricingNotVerifiedError, PricingEntryMissingError) as exc:
         print(str(exc), file=sys.stderr)
         return 2
     print(f"wrote {summary}")
@@ -183,6 +225,28 @@ def build_parser() -> argparse.ArgumentParser:
         default=None,
         help="alert budget cap; pass inf to disable (default: from config)",
     )
+    run.add_argument(
+        "--detection-prob",
+        type=float,
+        default=None,
+        help="override sentinel detection_prob for this run's severity (default: from config)",
+    )
+    run.add_argument(
+        "--false-positive-rate",
+        type=float,
+        default=None,
+        help="override sentinel false_positive_rate (default: from config)",
+    )
+    run.add_argument(
+        "--worker-model",
+        default=None,
+        help="worker tier to price this run at, by name from the pricing file",
+    )
+    run.add_argument(
+        "--allow-unverified-pricing",
+        action="store_true",
+        help="smoke runs only; stamps the result pricing_verified=false",
+    )
     run.add_argument("--out", default="results/")
     run.set_defaults(func=_cmd_run)
 
@@ -200,6 +264,21 @@ def build_parser() -> argparse.ArgumentParser:
         "--alert-caps",
         default=None,
         help="narrow the alert-cap axis, e.g. 0.05,inf (default 0.01,0.05,0.25,1,inf)",
+    )
+    sweep.add_argument(
+        "--detection-probs",
+        default=None,
+        help="sweep sentinel detection_prob, e.g. 0.2,0.5,0.8,1.0 (default: config value)",
+    )
+    sweep.add_argument(
+        "--false-positive-rates",
+        default=None,
+        help="sweep sentinel false_positive_rate, e.g. 0,0.001,0.01 (default: config value)",
+    )
+    sweep.add_argument(
+        "--worker-models",
+        default=None,
+        help="worker tiers by name, e.g. budget,mid,flagship (default: every tier in pricing)",
     )
     sweep.add_argument("--processes", type=int, default=None)
     sweep.add_argument(

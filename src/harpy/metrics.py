@@ -62,6 +62,42 @@ def contaminated_claims_at_isolation(record: RunRecord) -> int | None:
     return record.contaminated_at_isolation
 
 
+def audit_coverage_of_faulty_agent(record: RunRecord) -> float | None:
+    """Share of post-onset audits that were spent on the actual fault source.
+
+    The denominator is every audit at or after ``fault_onset_tick``, not every
+    audit in the run: audits drawn before there was a fault could not have found
+    one, and counting them would make a targeting failure look like bad luck.
+
+    ``None`` when no audit was drawn after onset — a run that never looked at
+    anything has no coverage, which is a different statement from covering 0%
+    of what it looked at. This is the number that separates the two failure
+    modes: near-zero coverage with a perfect detector is a targeting failure,
+    while high coverage with no detections is a detection failure.
+    """
+    if record.audits_after_fault_onset <= 0:
+        return None
+    return record.audits_on_faulty_agent / record.audits_after_fault_onset
+
+
+def ticks_faulty_before_first_audit(record: RunRecord) -> int | None:
+    """Ticks the fault ran before the sentinel first looked at its source.
+
+    ``None`` means it was never audited while faulty. Not zero, and not the run
+    length: both would quietly turn "never looked" into a measurement.
+    """
+    first = record.first_audit_tick_on_faulty_agent
+    if first is None:
+        return None
+    return first - record.fault_onset_tick
+
+
+def false_isolation_count(record: RunRecord) -> int:
+    """Isolations of agents that were not the fault source. See the note in
+    :func:`false_isolations_per_agent_hour` on why relays count as false."""
+    return sum(1 for event in record.isolations if not event.was_faulty)
+
+
 def overhead_pct(record: RunRecord) -> float:
     return record.ledger.overhead_pct()
 
@@ -117,8 +153,15 @@ def run_metrics(record: RunRecord) -> dict:
         **record.spec.as_dict(),
         "detection_rate": detection_rate(record),
         "detected_tick": record.detected_tick,
-        "false_isolations": sum(1 for e in record.isolations if not e.was_faulty),
+        "false_isolations": false_isolation_count(record),
+        "false_isolation_count": false_isolation_count(record),
         "false_isolations_per_agent_hour": false_isolations_per_agent_hour(record),
+        # -- audit targeting ------------------------------------------------
+        "audits_on_faulty_agent": record.audits_on_faulty_agent,
+        "audits_on_faulty_agent_all_ticks": record.audits_on_faulty_agent_all_ticks,
+        "audits_after_fault_onset": record.audits_after_fault_onset,
+        "audit_coverage_of_faulty_agent": audit_coverage_of_faulty_agent(record),
+        "ticks_faulty_before_first_audit": ticks_faulty_before_first_audit(record),
         "median_interactions_to_detection": median_interactions_to_detection(record),
         "contaminated_claims_at_isolation": contaminated_claims_at_isolation(record),
         "corrupt_claims_total": record.corrupt_claims_total,
@@ -135,6 +178,26 @@ def run_metrics(record: RunRecord) -> dict:
         "tier0_dollars": ledger["tier0_dollars"],
         "discarded_work_dollars": ledger["discarded_work_dollars"],
         "rerun_work_dollars": ledger["rerun_work_dollars"],
+        # The same two components split by whether the isolation was of the
+        # actual fault source. Parts of the totals above, never added to them.
+        "discarded_work_dollars_from_false_isolations": ledger[
+            "discarded_work_dollars_from_false_isolations"
+        ],
+        "rerun_work_dollars_from_false_isolations": ledger[
+            "rerun_work_dollars_from_false_isolations"
+        ],
+        "discarded_work_dollars_from_true_isolations": ledger[
+            "discarded_work_dollars_from_true_isolations"
+        ],
+        "rerun_work_dollars_from_true_isolations": ledger[
+            "rerun_work_dollars_from_true_isolations"
+        ],
+        "discard_rerun_dollars_from_false_isolations": ledger[
+            "discard_rerun_dollars_from_false_isolations"
+        ],
+        "discard_rerun_dollars_from_true_isolations": ledger[
+            "discard_rerun_dollars_from_true_isolations"
+        ],
         "triage_dollars": ledger["triage_dollars"],
         "investigation_dollars": ledger["investigation_dollars"],
         "incremental_dollars": ledger["incremental_dollars"],
@@ -155,11 +218,76 @@ def run_metrics(record: RunRecord) -> dict:
         "reviews_opened": record.reviews_opened,
         "alerts_batched_into_open_reviews": record.alerts_batched,
         "escalated_reviews": record.escalated_reviews,
+        # -- detector characteristics and price, as actually run -------------
+        # The spec fields may be null ("use the shipped operating point"); these
+        # are what the run consumed, so a row is readable without the config.
+        "effective_detection_prob": record.effective_detection_prob,
+        "effective_false_positive_rate": record.effective_false_positive_rate,
+        "worker_model": record.worker_model_name,
+        "worker_model_input_per_mtok": record.worker_model_price.get("input_per_mtok"),
+        "worker_model_output_per_mtok": record.worker_model_price.get("output_per_mtok"),
+        # Cross-run quantity: a single run cannot know its own baseline. Filled
+        # by attach_incremental_detection_over_tier0 once the matched TIER0_ONLY
+        # run exists; null on a run JSON read in isolation. See that function.
+        "incremental_detection_over_tier0_only": None,
         # Echoed so a result can always be read against what produced it.
         "fault_distribution": dict(sorted(record.fault_distribution.items())),
         "lineage_fidelity": record.spec.lineage_fidelity,
         "pricing_verified": bool(record.pricing_dict.get("verified", False)),
     }
+
+
+#: Everything that must match for two runs to be the same world under a
+#: different arm. ``reserve_fraction`` is deliberately absent: it is a
+#: HYBRID-only knob, so TIER0_ONLY exists only at 0.0 and keying on it would
+#: leave every HYBRID cell without a baseline to subtract.
+BASELINE_MATCH_KEYS: tuple[str, ...] = (
+    "seed",
+    "severity",
+    "budget_pct",
+    "lineage_fidelity",
+    "fleet_scale",
+    "max_alerts_per_agent_hour",
+    "effective_detection_prob",
+    "effective_false_positive_rate",
+    "worker_model",
+)
+
+BASELINE_ARM = "TIER0_ONLY"
+
+
+def _baseline_key(row: dict) -> tuple:
+    return tuple(row.get(name) for name in BASELINE_MATCH_KEYS)
+
+
+def attach_incremental_detection_over_tier0(rows: list[dict]) -> list[dict]:
+    """Fill ``incremental_detection_over_tier0_only`` in place, and return rows.
+
+    Detection over and above what mechanical Tier 0 telemetry already gets for
+    free is the only detection number worth paying a sentinel for, so it is
+    scored against the matched TIER0_ONLY run rather than against zero.
+
+    This cannot be computed inside a run: the baseline is a different run. It is
+    therefore a post-pass over a set of rows, applied by the sweep before it
+    writes its summary and by :func:`~harpy.sweep.load_result_rows` when results
+    are read back. A row whose baseline is not in the set keeps ``None`` —
+    absent baselines are never treated as zero detection, which would turn a
+    narrowed grid into a free uplift.
+    """
+    baseline: dict[tuple, list[float]] = {}
+    for row in rows:
+        if row.get("arm") == BASELINE_ARM:
+            baseline.setdefault(_baseline_key(row), []).append(row["detection_rate"])
+
+    for row in rows:
+        rates = baseline.get(_baseline_key(row))
+        if rates is None:
+            row["incremental_detection_over_tier0_only"] = None
+        else:
+            row["incremental_detection_over_tier0_only"] = row["detection_rate"] - statistics.fmean(
+                rates
+            )
+    return rows
 
 
 def result_document(record: RunRecord) -> dict:
@@ -209,12 +337,29 @@ def aggregate(rows: list[dict]) -> list[dict]:
             row["reserve_fraction"],
             row.get("fleet_scale", 1.0),
             row.get("max_alerts_per_agent_hour", float("inf")),
+            # The three new axes key cells like every other axis that changes
+            # the answer. Collapsing detector quality into a blended detection
+            # rate is the same mistake as blending severities.
+            row.get("effective_detection_prob"),
+            row.get("effective_false_positive_rate"),
+            row.get("worker_model"),
         )
         cells.setdefault(key, []).append(row)
 
     out: list[dict] = []
     for key, group in sorted(cells.items(), key=lambda item: tuple(str(p) for p in item[0])):
-        arm, severity, budget, fidelity, reserve, fleet_scale, alert_cap = key
+        (
+            arm,
+            severity,
+            budget,
+            fidelity,
+            reserve,
+            fleet_scale,
+            alert_cap,
+            detection_prob,
+            false_positive_rate,
+            worker_model,
+        ) = key
         viability = [
             r["min_fleet_dollars_per_hour_for_viability"]
             for r in group
@@ -227,6 +372,21 @@ def aggregate(rows: list[dict]) -> list[dict]:
             for r in group
             if r["contaminated_claims_at_isolation"] is not None
         ]
+        coverage = [
+            r["audit_coverage_of_faulty_agent"]
+            for r in group
+            if r.get("audit_coverage_of_faulty_agent") is not None
+        ]
+        first_audit = [
+            r["ticks_faulty_before_first_audit"]
+            for r in group
+            if r.get("ticks_faulty_before_first_audit") is not None
+        ]
+        incremental = [
+            r["incremental_detection_over_tier0_only"]
+            for r in group
+            if r.get("incremental_detection_over_tier0_only") is not None
+        ]
         out.append(
             {
                 "arm": arm,
@@ -236,6 +396,9 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "reserve_fraction": reserve,
                 "fleet_scale": fleet_scale,
                 "max_alerts_per_agent_hour": alert_cap,
+                "effective_detection_prob": detection_prob,
+                "effective_false_positive_rate": false_positive_rate,
+                "worker_model": worker_model,
                 "n_seeds": len(group),
                 "detection_rate": statistics.fmean(r["detection_rate"] for r in group),
                 "overhead_pct": statistics.fmean(r["overhead_pct"] for r in group),
@@ -283,6 +446,38 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 ),
                 "mean_effective_isolation_threshold": statistics.fmean(
                     r["effective_isolation_threshold"] for r in group
+                ),
+                # -- audit targeting --------------------------------------
+                "mean_audits_on_faulty_agent": statistics.fmean(
+                    r["audits_on_faulty_agent"] for r in group
+                ),
+                "mean_audits_after_fault_onset": statistics.fmean(
+                    r["audits_after_fault_onset"] for r in group
+                ),
+                # Coverage and time-to-first-audit are None on runs that never
+                # audited after onset / never audited the faulty agent. Those
+                # runs are dropped from the mean rather than counted as zero,
+                # and the count of them is reported so the drop stays visible.
+                "mean_audit_coverage_of_faulty_agent": (
+                    statistics.fmean(coverage) if coverage else None
+                ),
+                "n_seeds_no_audits_after_onset": len(group) - len(coverage),
+                "median_ticks_faulty_before_first_audit": (
+                    statistics.median(first_audit) if first_audit else None
+                ),
+                "n_seeds_faulty_never_audited": len(group) - len(first_audit),
+                # -- false-positive cost ----------------------------------
+                "mean_false_isolation_count": statistics.fmean(
+                    r["false_isolation_count"] for r in group
+                ),
+                "mean_discard_rerun_dollars_from_false_isolations": statistics.fmean(
+                    r["discard_rerun_dollars_from_false_isolations"] for r in group
+                ),
+                "mean_discard_rerun_dollars_from_true_isolations": statistics.fmean(
+                    r["discard_rerun_dollars_from_true_isolations"] for r in group
+                ),
+                "mean_incremental_detection_over_tier0_only": (
+                    statistics.fmean(incremental) if incremental else None
                 ),
                 "pricing_verified": all(r["pricing_verified"] for r in group),
             }
