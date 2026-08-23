@@ -15,7 +15,13 @@ from dataclasses import dataclass, field
 
 from .alert_budget import AlertBudget, AlertBudgetConfig
 from .faults import sample_severity
-from .ledger import CostAccountant, HumanReviewConfig, Pricing
+from .ledger import (
+    DEFAULT_WORKER_MODEL_NAME,
+    CostAccountant,
+    HumanReviewConfig,
+    Pricing,
+    require_verified_pricing,
+)
 from .lineage import make_pair
 from .mesh import Mesh
 from .response import ResponseController
@@ -38,6 +44,11 @@ def _stream_seed(seed: int, stream: int) -> int:
     return (seed * 1_000_003) + stream
 
 
+def _slug(name: str) -> str:
+    """Filename-safe form of a worker-model name, for ``run_id``."""
+    return "".join(ch if ch.isalnum() else "-" for ch in name)
+
+
 @dataclass(frozen=True)
 class RunSpec:
     seed: int
@@ -52,6 +63,22 @@ class RunSpec:
     fleet_scale: float = 1.0
     #: The alert cap this run was scored under. ``inf`` disables it.
     max_alerts_per_agent_hour: float = float("inf")
+    #: Detector quality for THIS run's severity, overriding the configured
+    #: ``sentinel.detection_prob[severity]``. ``None`` means the shipped
+    #: operating point, which is what keeps the default grid unchanged.
+    detection_prob: float | None = None
+    #: Detector false-positive rate, overriding ``sentinel.false_positive_rate``.
+    #: ``None`` means the shipped operating point.
+    false_positive_rate: float | None = None
+    #: Which worker tier in configs/pricing.yaml this run is costed at. A name,
+    #: never a price and never a model string — both live in the pricing file.
+    worker_model: str = DEFAULT_WORKER_MODEL_NAME
+
+    def __post_init__(self) -> None:
+        for name in ("detection_prob", "false_positive_rate"):
+            value = getattr(self, name)
+            if value is not None and not 0.0 <= float(value) <= 1.0:
+                raise ValueError(f"{name} must be in [0, 1] or None, got {value}")
 
     def as_dict(self) -> dict:
         return {
@@ -63,13 +90,22 @@ class RunSpec:
             "reserve_fraction": self.reserve_fraction,
             "fleet_scale": self.fleet_scale,
             "max_alerts_per_agent_hour": self.max_alerts_per_agent_hour,
+            # Null means "whatever the config shipped"; the value actually used
+            # is reported separately as effective_detection_prob /
+            # effective_false_positive_rate, so a row is never ambiguous.
+            "detection_prob": self.detection_prob,
+            "false_positive_rate": self.false_positive_rate,
+            "worker_model": self.worker_model,
         }
 
     def run_id(self) -> str:
+        detection = "cfg" if self.detection_prob is None else f"{self.detection_prob:g}"
+        fpr = "cfg" if self.false_positive_rate is None else f"{self.false_positive_rate:g}"
         return (
             f"seed{self.seed:03d}_{self.arm.value}_{self.severity.value}"
             f"_b{self.budget_pct:g}_f{self.lineage_fidelity:g}_r{self.reserve_fraction:g}"
             f"_x{self.fleet_scale:g}_a{self.max_alerts_per_agent_hour:g}"
+            f"_d{detection}_p{fpr}_w{_slug(self.worker_model)}"
         )
 
 
@@ -100,6 +136,27 @@ class RunRecord:
     ledger: BudgetLedger
     isolations: list[IsolationEvent] = field(default_factory=list)
     audits_run: int = 0
+    # -- audit targeting ---------------------------------------------------
+    #: Audits spent on the fault source at any point in the run, including
+    #: before it went faulty. Reported alongside the after-onset count because
+    #: the two answer different questions and only one of them is coverage.
+    audits_on_faulty_agent_all_ticks: int = 0
+    #: Audits spent on the fault source at or after ``fault_onset_tick`` — the
+    #: only ones that could possibly have caught anything.
+    audits_on_faulty_agent: int = 0
+    #: Every audit at or after onset, on any agent. The coverage denominator.
+    audits_after_fault_onset: int = 0
+    #: Tick of the first post-onset audit of the fault source. ``None`` means it
+    #: was never audited while faulty — deliberately not zero and not the run
+    #: length, both of which would silently become data.
+    first_audit_tick_on_faulty_agent: int | None = None
+    #: The detector characteristics this run actually ran at, after the spec's
+    #: overrides were resolved against the config.
+    effective_detection_prob: float = 0.0
+    effective_false_positive_rate: float = 0.0
+    #: The worker tier this run was costed at, and the price it resolved to.
+    worker_model_name: str = DEFAULT_WORKER_MODEL_NAME
+    worker_model_price: dict = field(default_factory=dict)
     tier0_messages: int = 0
     total_claims: int = 0
     corrupt_claims_total: int = 0
@@ -134,7 +191,18 @@ def rescale(record: RunRecord, fleet_scale: float) -> RunRecord:
     )
 
 
-def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
+def run_simulation(
+    config: dict, spec: RunSpec, pricing: Pricing, allow_unverified: bool = False
+) -> RunRecord:
+    """One run, costed at ``spec.worker_model``'s price from the pricing file.
+
+    The pricing gate is enforced here, not only in :mod:`harpy.sweep`: a single
+    run costed off placeholder prices is exactly as misleading as a sweep of
+    them. ``allow_unverified`` is the smoke-test waiver, and everything it
+    produces is stamped ``pricing_verified: false``.
+    """
+    require_verified_pricing(pricing, allow_unverified=allow_unverified, context="simulate")
+
     sim_cfg = config["simulation"]
     mesh = Mesh(config, spec.severity, spec.seed)
 
@@ -144,15 +212,28 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
         rerun_multiplier=float(config["response"]["rerun_multiplier"]),
         review_rng=random.Random(_stream_seed(spec.seed, _STREAM_REVIEW)),
         fleet_scale=spec.fleet_scale,
+        worker_model_name=spec.worker_model,
     )
     tier0 = Tier0Telemetry(Tier0Config.from_config(config, pricing.tier0_cost_per_message_dollars))
     suspicion = SuspicionTracker(SuspicionConfig.from_config(config))
     alert_budget = AlertBudget(
         AlertBudgetConfig.from_config(config, spec.max_alerts_per_agent_hour)
     )
+    # Detector quality is an axis now. An override replaces the configured
+    # probability for THIS run's severity only: a run has exactly one severity,
+    # and rewriting the other two would put values in the results block that no
+    # part of the run ever consulted.
+    detection_prob = dict(config["sentinel"]["detection_prob"])
+    if spec.detection_prob is not None:
+        detection_prob[spec.severity.value] = float(spec.detection_prob)
+    false_positive_rate = (
+        float(config["sentinel"]["false_positive_rate"])
+        if spec.false_positive_rate is None
+        else float(spec.false_positive_rate)
+    )
     sentinel = MockSentinel(
-        detection_prob=config["sentinel"]["detection_prob"],
-        false_positive_rate=float(config["sentinel"]["false_positive_rate"]),
+        detection_prob=detection_prob,
+        false_positive_rate=false_positive_rate,
         input_tokens=int(config["sentinel"]["input_tokens"]),
         output_tokens=int(config["sentinel"]["output_tokens"]),
         rng=random.Random(_stream_seed(spec.seed, _STREAM_SENTINEL)),
@@ -212,6 +293,10 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
         ledger=accountant.ledger,
         pricing_dict=pricing.as_dict(),
         base_isolation_threshold=alert_budget.config.base_isolation_threshold,
+        effective_detection_prob=sentinel.detection_prob[spec.severity],
+        effective_false_positive_rate=sentinel.false_positive_rate,
+        worker_model_name=accountant.worker_model_name,
+        worker_model_price=accountant.worker_price.as_dict(),
     )
 
     # NONE is the unsupervised control: no Tier 0, no audits, no isolations, and
@@ -257,6 +342,19 @@ def run_simulation(config: dict, spec: RunSpec, pricing: Pricing) -> RunRecord:
             result = sentinel.audit(agent_id, tuple(recent[agent_id]))
             accountant.charge_audit(result)
             suspicion.apply_audit(result)
+            # Targeting bookkeeping, scored here on the world's side of the
+            # seam. "Was that the faulty agent" is exactly the question the
+            # sampler is not allowed to ask, which is why these counters cannot
+            # live in harpy.sampler.
+            is_faulty_target = agent_id == mesh.faulty_agent_id
+            if is_faulty_target:
+                record.audits_on_faulty_agent_all_ticks += 1
+            if tick >= mesh.fault_onset_tick:
+                record.audits_after_fault_onset += 1
+                if is_faulty_target:
+                    record.audits_on_faulty_agent += 1
+                    if record.first_audit_tick_on_faulty_agent is None:
+                        record.first_audit_tick_on_faulty_agent = tick
 
         # The gate for this tick is whatever the alert budget last settled on.
         suspicion.set_isolation_threshold(alert_budget.isolation_threshold)
@@ -312,7 +410,12 @@ def _isolate(mesh, response, suspicion, tier0, record, recent, agent_id, tick) -
     was_faulty = mesh.is_faulty_now(agent_id)
     contaminated = sum(1 for t in mesh.corrupt_claim_ticks if t <= tick)
 
-    response.isolate(agent_id)
+    isolation = response.isolate(agent_id)
+    # response.isolate charged the totals without knowing which kind of
+    # isolation this was; file it now, from out here, where ground truth is legal.
+    response.accountant.attribute_isolation(
+        isolation.detail["discarded_dollars"], isolation.detail["rerun_dollars"], was_faulty
+    )
     if response.alert_on_isolation:
         response.alert_human(agent_id)
     for message in recent[agent_id]:

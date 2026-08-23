@@ -7,7 +7,13 @@ import pytest
 
 from harpy.alert_budget import AlertBudget, AlertBudgetConfig
 from harpy.cli import load_config
-from harpy.ledger import HumanReviewConfig, ModelPrice, Pricing, load_pricing
+from harpy.ledger import (
+    DEFAULT_WORKER_MODEL_NAME,
+    HumanReviewConfig,
+    ModelPrice,
+    Pricing,
+    load_pricing,
+)
 from harpy.types import Claim, ClaimPayload, Message
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -64,7 +70,27 @@ def test_pricing() -> Pricing:
     thing.
     """
     return Pricing(
-        worker_model=ModelPrice(3.0, 15.0, "test fixture", "n/a"),
+        worker_models={DEFAULT_WORKER_MODEL_NAME: ModelPrice(3.0, 15.0, "test fixture", "n/a")},
+        sentinel_model=ModelPrice(5.0, 25.0, "test fixture", "n/a"),
+        tier0_cost_per_message_dollars=0.0000001,
+        verified=True,
+        path="<test fixture>",
+    )
+
+
+@pytest.fixture
+def tiered_pricing() -> Pricing:
+    """Three named worker tiers against one sentinel — the eventual shape.
+
+    Prices are round fixtures, not provider figures; the tests that use this
+    assert grid arithmetic and metric shape, never an economic conclusion.
+    """
+    return Pricing(
+        worker_models={
+            "budget": ModelPrice(0.5, 2.0, "test fixture", "n/a"),
+            "mid": ModelPrice(3.0, 15.0, "test fixture", "n/a"),
+            "flagship": ModelPrice(10.0, 50.0, "test fixture", "n/a"),
+        },
         sentinel_model=ModelPrice(5.0, 25.0, "test fixture", "n/a"),
         tier0_cost_per_message_dollars=0.0000001,
         verified=True,

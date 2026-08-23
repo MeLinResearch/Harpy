@@ -235,6 +235,17 @@ PER_AGENT_OVERHEAD_COMPONENTS: tuple[str, ...] = (
 #: review cost dominant at scale 1 and negligible at scale 1000.
 REVIEW_COMPONENTS: tuple[str, ...] = ("triage_dollars", "investigation_dollars")
 
+#: The false-isolation share of two of the per-agent components. These are
+#: *parts of* ``discarded_work_dollars`` and ``rerun_work_dollars``, not extra
+#: components: adding them to the overhead would double-count them. They exist
+#: because "what did this architecture spend throwing away innocent agents"
+#: is a different question from "what did containment cost", and a single
+#: blended discard figure answers neither.
+FALSE_ISOLATION_SPLIT_COMPONENTS: tuple[str, ...] = (
+    "discarded_work_dollars_from_false_isolations",
+    "rerun_work_dollars_from_false_isolations",
+)
+
 
 @dataclass
 class BudgetLedger:
@@ -253,6 +264,11 @@ class BudgetLedger:
     rerun_work_dollars: float = 0.0
     triage_dollars: float = 0.0
     investigation_dollars: float = 0.0
+    #: Portions of the two fields above, not additions to them. Filled by
+    #: :meth:`~harpy.ledger.CostAccountant.attribute_isolation` from the world's
+    #: side of the seam, because the true/false split is ground truth.
+    discarded_work_dollars_from_false_isolations: float = 0.0
+    rerun_work_dollars_from_false_isolations: float = 0.0
     #: How many times larger the fleet is than the simulated slice.
     fleet_scale: float = 1.0
 
@@ -265,6 +281,33 @@ class BudgetLedger:
     def review_dollars(self) -> float:
         """Triage plus investigation. Identical at every fleet scale."""
         return sum(getattr(self, name) for name in REVIEW_COMPONENTS)
+
+    # -- the true/false isolation split ------------------------------------
+
+    def discarded_work_dollars_from_true_isolations(self) -> float:
+        """The rest of the discard bill: agents that really were the fault."""
+        return self.discarded_work_dollars - self.discarded_work_dollars_from_false_isolations
+
+    def rerun_work_dollars_from_true_isolations(self) -> float:
+        return self.rerun_work_dollars - self.rerun_work_dollars_from_false_isolations
+
+    def discard_rerun_dollars_from_false_isolations(self) -> float:
+        """Everything a false isolation costs in wasted and repeated work.
+
+        Not the whole cost of a false positive — the human review it triggers is
+        in the review components, which do not scale with the fleet and so
+        cannot be added in here without mixing two different scaling laws.
+        """
+        return (
+            self.discarded_work_dollars_from_false_isolations
+            + self.rerun_work_dollars_from_false_isolations
+        )
+
+    def discard_rerun_dollars_from_true_isolations(self) -> float:
+        return (
+            self.discarded_work_dollars_from_true_isolations()
+            + self.rerun_work_dollars_from_true_isolations()
+        )
 
     # -- fleet-level views -------------------------------------------------
 
@@ -312,6 +355,22 @@ class BudgetLedger:
         }
         for name in PER_AGENT_OVERHEAD_COMPONENTS + REVIEW_COMPONENTS:
             out[name] = self.fleet_component(name)
+        # The split, at the same fleet scale as the totals it partitions. Both
+        # halves are per-agent, so both scale.
+        for name in FALSE_ISOLATION_SPLIT_COMPONENTS:
+            out[name] = self.fleet_component(name)
+        out["discarded_work_dollars_from_true_isolations"] = (
+            self.discarded_work_dollars_from_true_isolations() * self.fleet_scale
+        )
+        out["rerun_work_dollars_from_true_isolations"] = (
+            self.rerun_work_dollars_from_true_isolations() * self.fleet_scale
+        )
+        out["discard_rerun_dollars_from_false_isolations"] = (
+            self.discard_rerun_dollars_from_false_isolations() * self.fleet_scale
+        )
+        out["discard_rerun_dollars_from_true_isolations"] = (
+            self.discard_rerun_dollars_from_true_isolations() * self.fleet_scale
+        )
         out["incremental_dollars"] = self.incremental()
         out["overhead_pct"] = self.overhead_pct()
         out["review_cost_share_of_overhead"] = self.review_cost_share_of_overhead()
