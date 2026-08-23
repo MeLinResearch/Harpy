@@ -16,14 +16,14 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import sys
-from pathlib import Path
 
 from harpy.cli import load_config
 from harpy.ledger import load_pricing
 from harpy.sweep import SweepGrid, run_sweep
 from harpy.types import Arm, Severity
 
+#: The full preregistered seed set. Staged runs narrow it with --seeds; a
+#: reported result uses all of them, and a narrowed run says so in its output.
 SEEDS = tuple(range(50))
 
 #: Shipped operating point, restated here only where a sweep must hold it fixed.
@@ -33,10 +33,10 @@ SHIPPED_FIDELITY = 1.0
 SHIPPED_BUDGET_PCT = 0.05
 
 
-def sweep_a(worker_models: tuple[str, ...] | None) -> SweepGrid:
+def sweep_a(worker_models: tuple[str, ...] | None, seeds: tuple[int, ...] = SEEDS) -> SweepGrid:
     """Detector quality vs detection. SUBTLE only — it is SUBTLE's knob being swept."""
     return SweepGrid(
-        seeds=SEEDS,
+        seeds=seeds,
         arms=tuple(Arm),
         severities=(Severity.SUBTLE,),
         budget_pcts=(SHIPPED_BUDGET_PCT,),
@@ -50,7 +50,7 @@ def sweep_a(worker_models: tuple[str, ...] | None) -> SweepGrid:
     )
 
 
-def sweep_b(worker_models: tuple[str, ...] | None) -> SweepGrid:
+def sweep_b(worker_models: tuple[str, ...] | None, seeds: tuple[int, ...] = SEEDS) -> SweepGrid:
     """False-positive rate vs viability. All arms, all severities.
 
     fleet_scale is listed with both values because it is free: it multiplies
@@ -58,7 +58,7 @@ def sweep_b(worker_models: tuple[str, ...] | None) -> SweepGrid:
     simulates each cell once and re-costs it at each scale.
     """
     return SweepGrid(
-        seeds=SEEDS,
+        seeds=seeds,
         arms=tuple(Arm),
         severities=tuple(Severity),
         budget_pcts=(0.05, 0.10, 0.20),
@@ -75,6 +75,14 @@ def sweep_b(worker_models: tuple[str, ...] | None) -> SweepGrid:
 GRIDS = {"A": sweep_a, "B": sweep_b}
 
 
+def _parse_seeds(text: str) -> list[int]:
+    """Accept ``0..4`` or ``0,1,2``. Same forms ``harpy sweep --seeds`` takes."""
+    if ".." in text:
+        low, high = text.split("..", 1)
+        return list(range(int(low), int(high) + 1))
+    return [int(part) for part in text.split(",") if part.strip()]
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("sweep", choices=sorted(GRIDS))
@@ -87,6 +95,14 @@ def main(argv: list[str] | None = None) -> int:
         default=None,
         help="comma-separated tier names (default: every tier in the pricing file)",
     )
+    parser.add_argument(
+        "--seeds",
+        default=None,
+        help=(
+            "narrow the seed axis, e.g. 0..0 for a smoke run or 0..4 for a pilot "
+            f"(default: 0..{SEEDS[-1]}, the full preregistered set)"
+        ),
+    )
     parser.add_argument("--dry-run", action="store_true", help="print the cell count and stop")
     args = parser.parse_args(argv)
 
@@ -97,7 +113,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.worker_models
         else None
     )
-    grid = GRIDS[args.sweep](names).resolved_for(pricing)
+    seeds = tuple(_parse_seeds(args.seeds)) if args.seeds else SEEDS
+    if not seeds:
+        parser.error("--seeds selected no seeds")
+    grid = GRIDS[args.sweep](names, seeds).resolved_for(pricing)
 
     n_specs = len(grid.base_specs())
     print(
@@ -106,6 +125,14 @@ def main(argv: list[str] | None = None) -> int:
     )
     print(f"  worker tiers: {', '.join(grid.worker_models)}")
     print(f"  pricing: {pricing.path} (verified={pricing.verified})")
+    # Said out loud on every narrowed run: a staged result is a wiring and
+    # signal check, not the preregistered one, and the two must never be
+    # confused in a write-up.
+    if len(seeds) < len(SEEDS):
+        print(
+            f"  SEEDS NARROWED: {len(seeds)} of {len(SEEDS)} ({seeds[0]}..{seeds[-1]}) — "
+            "staged run, not the preregistered result"
+        )
     if args.dry_run:
         return 0
 
