@@ -1,25 +1,66 @@
-# PLACEHOLDER PRICING — NOT VERIFIED.
-# Replace with figures read directly from provider pricing pages and paste
-# the URL and access date below each entry before running any sweep whose
-# results will be reported.
-# worker_model: {input_per_mtok: 0.0, output_per_mtok: 0.0, source: "", accessed: ""}
-# sentinel_model: {input_per_mtok: 0.0, output_per_mtok: 0.0, source: "", accessed: ""}
+# PROVENANCE — read this before trusting any number below.
+#
+# These figures were transcribed from screenshots of the two provider pricing
+# pages, supplied by the project owner on 2026-08-23. The agent that wrote this
+# file did NOT fetch the pages itself: outbound HTTPS to openai.com and
+# www.anthropic.com is refused by this environment's egress proxy (403 on
+# CONNECT). The URLs below are the pages the screenshots were taken from, and
+# `accessed` is the date they were supplied.
+#
+# If you are re-verifying: open both URLs, confirm the four numbers, and leave
+# `verified: true` as it is. If any figure has moved, correct it here — never in
+# Python, and never by editing a results file.
+#
+# ASSUMPTION, stated because it was not confirmed: the OpenAI figures are the
+# SHORT-CONTEXT, Standard-tier columns. The long-context columns are roughly 2x
+# and would raise every worker price accordingly. Changing this is a one-line
+# edit per entry plus a re-run; nothing in Python knows which column was used.
 
-# Flip to true only once BOTH entries below carry a real provider URL and an
-# access date. `harpy sweep` refuses to run while this is false.
-verified: false
+verified: true
 
-worker_model:
-  input_per_mtok: 0.0
-  output_per_mtok: 0.0
-  source: ""
-  accessed: ""
+# Three worker tiers from one provider, keyed by the exact model string as it
+# appears on the pricing page. The sweep's worker_model axis defaults to every
+# tier defined here, so adding or removing one needs no code change.
+#
+#   gpt-5.6-luna  budget    — cheapest 5.6 variant
+#   gpt-5.6-terra mid
+#   gpt-5.6-sol   flagship  — most expensive 5.6 variant
+#
+# The point of sweeping all three is that "which tier can a fleet actually
+# afford to run under oversight" is the question, not an assumption to fix up
+# front.
+worker_models:
+  gpt-5.6-luna:
+    input_per_mtok: 0.20
+    output_per_mtok: 1.20
+    source: "https://openai.com/api/pricing"
+    accessed: "2026-08-23"
 
+  gpt-5.6-terra:
+    input_per_mtok: 2.00
+    output_per_mtok: 12.00
+    source: "https://openai.com/api/pricing"
+    accessed: "2026-08-23"
+
+  gpt-5.6-sol:
+    input_per_mtok: 4.00
+    output_per_mtok: 20.00
+    source: "https://openai.com/api/pricing"
+    accessed: "2026-08-23"
+
+# One fixed cross-family detector. Deliberately singular: the experiment varies
+# the worker tier against a constant sentinel, and a sentinel axis would make the
+# two moving parts inseparable in the results. The 2x / 0.5x sensitivity band is
+# run from separate pricing files, not from an extra entry here.
+#
+# Base input and output columns. No prompt caching is modelled, so the cache-write
+# and cache-hit columns are deliberately not used — a cached-input price would
+# understate what an uncached 20-message audit window actually costs.
 sentinel_model:
-  input_per_mtok: 0.0
-  output_per_mtok: 0.0
-  source: ""
-  accessed: ""
+  input_per_mtok: 1.00
+  output_per_mtok: 5.00
+  source: "https://www.anthropic.com/pricing"
+  accessed: "2026-08-23"
 
 # Tier 0 is mechanical arithmetic on typed fields, not a model call. This is a
 # spec-fixed engineering estimate, not a provider price, so it is exempt from
