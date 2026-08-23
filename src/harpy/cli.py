@@ -10,11 +10,14 @@ from pathlib import Path
 import yaml
 
 from .ledger import PricingEntryMissingError, load_pricing
+from .metrics import KILL_CEILING_PCT, aggregate, max_false_positive_rate_for_viability
 from .plot import (
     detection_vs_alert_budget,
+    detection_vs_detector_quality,
     detection_vs_overhead,
     hybrid_reserve_breakdown,
     overhead_composition,
+    viability_vs_false_positive_rate,
 )
 from .simulation import RunSpec, resolve_severity
 from .sweep import (
@@ -184,7 +187,42 @@ def _cmd_plot(args: argparse.Namespace) -> int:
 
     by_budget = out.with_name("detection_vs_alert_budget.png")
     print(f"wrote {detection_vs_alert_budget(rows, by_budget, args.fleet_scale)}")
+
+    # The two diagnostic figures. Each needs its own axis to have been swept, so
+    # a default sweep has nothing for them to draw and they say so rather than
+    # emitting a one-point curve that looks like a result.
+    quality = out.with_name("subtle_detection_vs_detector_quality.png")
+    try:
+        print(f"wrote {detection_vs_detector_quality(rows, quality, args.severity)}")
+    except ValueError as exc:
+        print(f"skipped {quality.name}: {exc}", file=sys.stderr)
+
+    viability = out.with_name("viability_vs_false_positive_rate.png")
+    try:
+        print(f"wrote {viability_vs_false_positive_rate(rows, viability, args.fleet_scale)}")
+    except ValueError as exc:
+        print(f"skipped {viability.name}: {exc}", file=sys.stderr)
+
+    _print_viability_table(rows)
     return 0
+
+
+def _print_viability_table(rows: list[dict]) -> None:
+    """The derived deliverable, per severity. Null is a finding, not a gap."""
+    table = max_false_positive_rate_for_viability(aggregate(rows))
+    print("\nmax_false_positive_rate_for_viability"
+          f" (incremental detection over TIER0_ONLY under {KILL_CEILING_PCT * 100:g}% overhead)")
+    for severity, entry in table.items():
+        rate = entry["max_false_positive_rate"]
+        if rate is None:
+            swept = entry["false_positive_rates_swept"]
+            detail = (
+                "no FP rate was swept" if not swept else f"none of {[f'{r:g}' for r in swept]}"
+            )
+            print(f"  {severity:<9} null — {detail} clears both halves of the condition")
+        else:
+            arms = ", ".join(entry["arms_clearing"])
+            print(f"  {severity:<9} {rate:g}   (arms clearing: {arms})")
 
 
 def _parse_seeds(text: str) -> list[int]:
@@ -302,6 +340,12 @@ def build_parser() -> argparse.ArgumentParser:
         type=float,
         default=None,
         help="alert cap the primary figure is drawn at (default: largest present)",
+    )
+    plot.add_argument(
+        "--severity",
+        default=Severity.SUBTLE.value,
+        choices=[s.value for s in Severity],
+        help="severity the detector-quality figure is drawn at (default: SUBTLE)",
     )
     plot.set_defaults(func=_cmd_plot)
     return parser

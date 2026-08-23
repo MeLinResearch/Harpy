@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 from matplotlib.lines import Line2D  # noqa: E402
 from matplotlib.patches import Patch  # noqa: E402
 
-from .metrics import aggregate  # noqa: E402
+from .metrics import KILL_CEILING_PCT, aggregate  # noqa: E402
 from .types import Arm, Severity  # noqa: E402
 
 ARM_STYLE: dict[str, dict] = {
@@ -221,6 +221,180 @@ def _watermark_if_unverified(fig, rows: list[dict]) -> None:
         rotation=28,
         zorder=10,
     )
+
+
+def detection_vs_detector_quality(
+    rows: list[dict],
+    out_path: str | Path,
+    severity: str = Severity.SUBTLE.value,
+    fleet_scale: float | None = None,
+    alert_cap: float | None = None,
+) -> Path:
+    """Detection against the detector quality it was bought with, one curve per arm.
+
+    The diagnostic behind SWEEP A. If every arm's curve stays flat on the floor
+    as ``detection_prob`` rises to 1.0, the sentinel is not what is failing —
+    the audits are not landing on the faulty agent in the first place, and the
+    coverage number printed in the subtitle is the evidence for that reading.
+    A curve that climbs with detector quality says the opposite.
+
+    Held at one severity because detector quality is configured per severity and
+    a blended curve would be about no fault in particular.
+    """
+    all_cells = aggregate(rows)
+    cells = [c for c in all_cells if c["severity"] == severity]
+    if not cells:
+        raise ValueError(f"no cells at severity={severity}")
+    fleet_scale = _pick_slice(cells, "fleet_scale", fleet_scale)
+    alert_cap = _pick_slice(cells, "max_alerts_per_agent_hour", alert_cap)
+    cells = [
+        c
+        for c in cells
+        if c["fleet_scale"] == fleet_scale and c["max_alerts_per_agent_hour"] == alert_cap
+    ]
+
+    fig, ax = plt.subplots(figsize=(7.5, 5.0))
+    for arm in ARM_ORDER:
+        points: dict[float, list[dict]] = {}
+        for cell in cells:
+            if cell["arm"] != arm or cell.get("effective_detection_prob") is None:
+                continue
+            points.setdefault(cell["effective_detection_prob"], []).append(cell)
+        if not points:
+            continue
+        xs = sorted(points)
+        ys = [
+            sum(c["detection_rate"] for c in points[x]) / len(points[x]) for x in xs
+        ]
+        ax.plot(xs, ys, label=arm, markersize=5, **ARM_STYLE[arm])
+
+    ax.set_xlabel(f"MockSentinel detection_prob[{severity}]", fontsize=10)
+    ax.set_ylabel("detection rate", fontsize=10)
+    ax.set_ylim(-0.03, 1.03)
+    ax.grid(alpha=0.25, linewidth=0.6)
+    ax.legend(fontsize=8, loc="upper left")
+
+    coverage = [
+        c["mean_audit_coverage_of_faulty_agent"]
+        for c in cells
+        if c.get("mean_audit_coverage_of_faulty_agent") is not None
+    ]
+    # The number that decides which failure mode this figure is showing, put on
+    # the figure itself so the curve cannot be read without it.
+    coverage_note = (
+        "audit coverage of faulty agent: no post-onset audits in any cell"
+        if not coverage
+        else f"mean audit coverage of faulty agent: {sum(coverage) / len(coverage) * 100:.1f}%"
+    )
+    fig.suptitle(
+        f"Detection vs detector quality — {severity}\n"
+        f"fleet_scale {fleet_scale:g}  ·  alert budget {_fmt_cap(alert_cap)}  ·  {coverage_note}",
+        fontsize=11,
+    )
+
+    _watermark_if_unverified(fig, rows)
+    fig.tight_layout(rect=(0, 0, 1, 0.9))
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+    return out_path
+
+
+def viability_vs_false_positive_rate(
+    rows: list[dict],
+    out_path: str | Path,
+    fleet_scale: float | None = None,
+    alert_cap: float | None = None,
+) -> Path:
+    """Incremental detection over TIER0_ONLY against overhead, one curve per FP rate.
+
+    The diagnostic behind SWEEP B, and the figure the kill condition is read off:
+    the shaded band past the ceiling is the region where an arm is disqualified
+    on cost no matter how much detection it bought. A curve that only ever rises
+    inside the shaded region has no viable operating point at that
+    false-positive rate.
+
+    y is *incremental* detection rather than raw detection because detection
+    that Tier 0 already gets for free is not something a sentinel earns.
+    """
+    all_cells = aggregate(rows)
+    fleet_scale = _pick_slice(all_cells, "fleet_scale", fleet_scale)
+    alert_cap = _pick_slice(all_cells, "max_alerts_per_agent_hour", alert_cap)
+    cells = [
+        c
+        for c in all_cells
+        if c["fleet_scale"] == fleet_scale
+        and c["max_alerts_per_agent_hour"] == alert_cap
+        and c["arm"] != Arm.TIER0_ONLY.value
+        and c.get("effective_false_positive_rate") is not None
+        and c.get("mean_incremental_detection_over_tier0_only") is not None
+    ]
+    if not cells:
+        raise ValueError("no cells with an incremental-detection baseline to plot")
+
+    rates = sorted({c["effective_false_positive_rate"] for c in cells})
+    severities = [s for s in SEVERITY_ORDER if any(c["severity"] == s for c in cells)]
+    # Floored so a single-severity sweep still leaves room for the suptitle,
+    # which is where the kill ceiling is explained.
+    fig, axes = plt.subplots(
+        1,
+        len(severities),
+        figsize=(max(4.6 * len(severities), 8.0), 4.6),
+        squeeze=False,
+        sharey=True,
+    )
+    colors = plt.get_cmap("viridis")
+
+    for column, severity in enumerate(severities):
+        ax = axes[0][column]
+        ax.axhline(0.0, color="#444444", linewidth=0.8, linestyle="-")
+        for index, rate in enumerate(rates):
+            points = [
+                c
+                for c in cells
+                if c["severity"] == severity and c["effective_false_positive_rate"] == rate
+            ]
+            if not points:
+                continue
+            points = sorted(points, key=lambda c: c["overhead_pct"])
+            ax.plot(
+                [c["overhead_pct"] * 100 for c in points],
+                [c["mean_incremental_detection_over_tier0_only"] for c in points],
+                marker="o",
+                markersize=4,
+                linewidth=1.4,
+                color=colors(index / max(len(rates) - 1, 1)),
+                label=f"FP {rate:g}",
+            )
+        ax.axvspan(
+            KILL_CEILING_PCT * 100,
+            max(ax.get_xlim()[1], KILL_CEILING_PCT * 100 * 1.05),
+            color="#d62728",
+            alpha=0.07,
+        )
+        ax.axvline(KILL_CEILING_PCT * 100, color="#d62728", linewidth=1.0, linestyle="--")
+        ax.set_title(severity, fontsize=10)
+        ax.set_xlabel("incremental overhead (% of worker fleet cost)", fontsize=9)
+        ax.grid(alpha=0.25, linewidth=0.6)
+        if column == 0:
+            ax.set_ylabel("detection over TIER0_ONLY", fontsize=9)
+
+    axes[0][-1].legend(fontsize=7, loc="best", title="false_positive_rate", title_fontsize=7)
+    fig.suptitle(
+        "Viability vs detector false-positive rate\n"
+        f"fleet_scale {fleet_scale:g}  ·  alert budget {_fmt_cap(alert_cap)}  ·  "
+        f"shaded: past the {KILL_CEILING_PCT * 100:g}% kill ceiling",
+        fontsize=11,
+    )
+
+    _watermark_if_unverified(fig, rows)
+    fig.tight_layout(rect=(0, 0, 1, 0.88))
+    out_path = Path(out_path)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+    return out_path
 
 
 def overhead_composition(

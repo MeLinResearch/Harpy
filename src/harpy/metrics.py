@@ -260,6 +260,64 @@ def _baseline_key(row: dict) -> tuple:
     return tuple(row.get(name) for name in BASELINE_MATCH_KEYS)
 
 
+def max_false_positive_rate_for_viability(
+    rows: list[dict], ceiling_pct: float = KILL_CEILING_PCT
+) -> dict[str, dict]:
+    """Largest detector FP rate at which some arm still earns its keep, per severity.
+
+    "Earns its keep" is both halves of the preregistered condition at once:
+    strictly positive incremental detection over the matched TIER0_ONLY run, and
+    incremental overhead at or under ``ceiling_pct``. An arm that detects more
+    only by isolating half the mesh fails the second; an arm that is cheap
+    because it never audits fails the first.
+
+    Severity is a key and never an axis to collapse — a rate that is survivable
+    for OVERT faults says nothing about the SUBTLE case that motivates having a
+    sentinel at all.
+
+    Returns ``{severity: {"max_false_positive_rate": float | None, ...}}``.
+    ``None`` means no swept FP rate clears the condition for that severity,
+    which is a finding rather than a gap: it says the architecture has no viable
+    operating point at any false-positive rate that was tried.
+
+    Cells are compared at their aggregated (seed-collapsed) values, so this
+    consumes :func:`aggregate` output, not raw run rows.
+    """
+    out: dict[str, dict] = {}
+    for severity in sorted({row["severity"] for row in rows}):
+        rates_seen: set[float] = set()
+        viable: dict[float, list[dict]] = {}
+        for row in rows:
+            if row["severity"] != severity or row["arm"] == BASELINE_ARM:
+                continue
+            rate = row.get("effective_false_positive_rate")
+            if rate is None:
+                continue
+            rates_seen.add(rate)
+            uplift = row.get("incremental_detection_over_tier0_only")
+            # A null baseline is not a zero one: a cell we could not compare is
+            # dropped rather than counted as showing no uplift.
+            if uplift is None or uplift <= 0.0:
+                continue
+            if row["overhead_pct"] > ceiling_pct:
+                continue
+            viable.setdefault(rate, []).append(row)
+
+        best = max(viable) if viable else None
+        out[severity] = {
+            "max_false_positive_rate": best,
+            "ceiling_pct": ceiling_pct,
+            "false_positive_rates_swept": sorted(rates_seen),
+            # Which arms cleared it, so the number is auditable rather than
+            # just asserted.
+            "arms_clearing": (
+                sorted({row["arm"] for row in viable[best]}) if best is not None else []
+            ),
+            "n_cells_clearing": len(viable[best]) if best is not None else 0,
+        }
+    return out
+
+
 def attach_incremental_detection_over_tier0(rows: list[dict]) -> list[dict]:
     """Fill ``incremental_detection_over_tier0_only`` in place, and return rows.
 
