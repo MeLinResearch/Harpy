@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="740" viewBox="0 0 1040 740" role="img" aria-labelledby="title desc">
+  <title id="title">HARPY-SIM oversight flow</title>
+  <desc id="desc">A simulated mesh supplies messages to mechanical Tier 0 checks and to budget-selected mock sentinel audits. Both feed accumulated suspicion, which drives bounded responses. Responses act on the mesh. This depicts audit-enabled simulation arms; the mock sentinel's detector performance is assumed.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#79636e"/></marker>
+    <style>
+      .title { font: 600 23px Georgia, serif; fill: #392633; }
+      .label { font: 600 20px Arial, sans-serif; fill: #392633; }
+      .sub { font: 16px Arial, sans-serif; fill: #5d5158; }
+      .note { font: 14px Arial, sans-serif; fill: #675a60; }
+      .line { fill: none; stroke: #79636e; stroke-width: 2; marker-end: url(#arrow); }
+    </style>
+  </defs>
+  <rect width="1040" height="740" rx="18" fill="#faf7f1"/>
+  <text x="38" y="43" class="title">Oversight within the simulation</text>
+  <text x="38" y="68" class="note">Audit-enabled arms · assumed detector characteristics</text>
+
+  <g>
+    <rect x="360" y="94" width="320" height="84" rx="12" fill="#f1e9ef" stroke="#b59aa9"/>
+    <text x="520" y="127" text-anchor="middle" class="label">Simulated agent mesh</text>
+    <text x="520" y="153" text-anchor="middle" class="sub">Typed claims and planted faults</text>
+  </g>
+  <path d="M 440 178 V 198 H 310 V 230" class="line"/>
+  <path d="M 600 178 V 198 H 770 V 230" class="line"/>
+  <text x="272" y="211" class="note">messages</text>
+  <text x="757" y="211" class="note">worker spend</text>
+
+  <g>
+    <rect x="160" y="230" width="300" height="84" rx="12" fill="#fffdf8" stroke="#b49471"/>
+    <text x="310" y="263" text-anchor="middle" class="label">Tier 0 checks</text>
+    <text x="310" y="289" text-anchor="middle" class="sub">Seven mechanical signals</text>
+  </g>
+  <g>
+    <rect x="620" y="230" width="300" height="84" rx="12" fill="#fffdf8" stroke="#b49471"/>
+    <text x="770" y="263" text-anchor="middle" class="label">Budgeted sampler</text>
+    <text x="770" y="289" text-anchor="middle" class="sub">Select affordable audits</text>
+  </g>
+  <path d="M 460 271 H 620" class="line"/>
+  <text x="540" y="254" text-anchor="middle" class="note">Tier 0 scores</text>
+  <path d="M 770 314 V 356" class="line"/>
+  <text x="786" y="342" class="note">selected agents</text>
+  <g>
+    <rect x="620" y="356" width="300" height="84" rx="12" fill="#efe4ed" stroke="#ad8da2"/>
+    <text x="770" y="389" text-anchor="middle" class="label">Mock sentinel</text>
+    <text x="770" y="415" text-anchor="middle" class="sub">Assumed audit outcomes</text>
+  </g>
+  <path d="M 310 314 V 507 H 360" class="line"/>
+  <text x="324" y="457" class="note">signals</text>
+  <path d="M 770 440 V 507 H 680" class="line"/>
+  <text x="787" y="473" class="note">audit evidence</text>
+  <g>
+    <rect x="360" y="475" width="320" height="84" rx="12" fill="#f1e9ef" stroke="#b59aa9"/>
+    <text x="520" y="508" text-anchor="middle" class="label">Accumulated suspicion</text>
+    <text x="520" y="534" text-anchor="middle" class="sub">Decay, evidence, isolation gate</text>
+  </g>
+  <path d="M 520 559 V 601" class="line"/>
+  <g>
+    <rect x="360" y="601" width="320" height="84" rx="12" fill="#fffdf8" stroke="#b49471"/>
+    <text x="520" y="634" text-anchor="middle" class="label">Bounded response</text>
+    <text x="520" y="660" text-anchor="middle" class="sub">Scoped actions + human-alert cap</text>
+  </g>
+  <path d="M 360 643 H 92 V 136 H 360" class="line" stroke-dasharray="6 5"/>
+  <text x="62" y="465" transform="rotate(-90 62 465)" class="note">Scoped actions on the simulated mesh</text>
+  <text x="520" y="718" text-anchor="middle" class="note">The world scores outcomes separately. MockSentinel is the explicit ground-truth exception.</text>
+</svg>
