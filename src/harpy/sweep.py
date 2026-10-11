@@ -20,6 +20,7 @@ from .ledger import (
     require_verified_pricing,
 )
 from .metrics import attach_incremental_detection_over_tier0, result_document, run_metrics
+from .provenance import write_manifest
 from .simulation import RunSpec, rescale, run_simulation
 from .types import Arm, Severity
 
@@ -60,6 +61,13 @@ class SweepGrid:
     #: configs/pricing.yaml defines" — resolved by :meth:`resolved_for`, which is
     #: what makes adding a tier a YAML edit and not a code change.
     worker_models: tuple[str, ...] | None = None
+    review_scalings: tuple[str, ...] = ("fixed",)
+
+    def __post_init__(self) -> None:
+        if not self.review_scalings or not set(self.review_scalings).issubset({"fixed", "linear"}):
+            raise ValueError("review_scalings must select fixed and/or linear")
+        if len(set(self.review_scalings)) != len(self.review_scalings):
+            raise ValueError("review_scalings must be unique")
 
     def resolved_for(self, pricing: Pricing) -> SweepGrid:
         """This grid with its worker axis filled in from the pricing file."""
@@ -107,6 +115,7 @@ class SweepGrid:
                                                         detection_prob=detection,
                                                         false_positive_rate=fpr,
                                                         worker_model=worker,
+                                                        review_scaling=self.review_scalings[0],
                                                     )
                                                 )
         return specs
@@ -121,8 +130,9 @@ class SweepGrid:
         and this enumeration is what a cell count should be read off.
         """
         return [
-            dataclasses.replace(spec, fleet_scale=scale)
+            dataclasses.replace(spec, fleet_scale=scale, review_scaling=review_scaling)
             for spec in self.base_specs()
+            for review_scaling in self.review_scalings
             for scale in self.fleet_scales
         ]
 
@@ -140,9 +150,10 @@ def check_pricing(pricing: Pricing, allow_unverified: bool = False) -> list[str]
 
 def _worker(payload: tuple) -> list[dict]:
     """One simulation, costed at every fleet scale it is asked for."""
-    config, spec, pricing, fleet_scales, allow_unverified = payload
+    config, spec, pricing, fleet_scales, review_scalings, allow_unverified = payload
     record = run_simulation(config, spec, pricing, allow_unverified=allow_unverified)
-    return [result_document(rescale(record, scale)) for scale in fleet_scales]
+    return [result_document(rescale(record, scale, review_scaling))
+            for review_scaling in review_scalings for scale in fleet_scales]
 
 
 def run_sweep(
@@ -165,9 +176,10 @@ def run_sweep(
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     base_specs = grid.base_specs()
-    n_cells = len(base_specs) * len(grid.fleet_scales)
+    n_cells = len(base_specs) * len(grid.fleet_scales) * len(grid.review_scalings)
     payloads = [
-        (config, spec, pricing, grid.fleet_scales, allow_unverified) for spec in base_specs
+        (config, spec, pricing, grid.fleet_scales, grid.review_scalings, allow_unverified)
+        for spec in base_specs
     ]
 
     processes = processes or max(mp.cpu_count() - 1, 1)
@@ -180,9 +192,7 @@ def run_sweep(
         for batch in batches:
             for document in batch:
                 run_id = document["metrics"]["run_id"]
-                (out_dir / f"{run_id}.json").write_text(
-                    json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-                )
+                _write_run_document(out_dir / f"{run_id}.json", document)
                 rows.append(document["metrics"])
             if progress and len(rows) % 400 < len(batch):
                 print(f"  {len(rows)}/{n_cells} cells", flush=True)
@@ -199,7 +209,9 @@ def run_sweep(
     # written as they landed, which is what makes a crash mid-sweep survivable —
     # and load_result_rows re-derives it whenever they are read back.
     attach_incremental_detection_over_tier0(rows)
-    return write_summary(rows, out_dir)
+    summary = write_summary(rows, out_dir)
+    write_manifest(out_dir)
+    return summary
 
 
 def write_summary(rows: list[dict], out_dir: str | Path) -> Path:
@@ -239,8 +251,16 @@ def run_single(
         run_simulation(config, spec, pricing, allow_unverified=allow_unverified)
     )
     path = out_dir / f"{document['metrics']['run_id']}.json"
-    path.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    _write_run_document(path, document)
+    write_manifest(out_dir)
     return path
+
+
+def _write_run_document(path: Path, document: dict) -> None:
+    content = json.dumps(document, indent=2, sort_keys=True) + "\n"
+    if path.exists() and path.read_text(encoding="utf-8") != content:
+        raise ValueError("run ID already exists with different inputs; use a new output directory")
+    path.write_text(content, encoding="utf-8")
 
 
 def load_result_rows(results_dir: str | Path) -> list[dict]:
@@ -248,7 +268,7 @@ def load_result_rows(results_dir: str | Path) -> list[dict]:
     rows: list[dict] = []
     for path in sorted(Path(results_dir).glob("*.json")):
         document = json.loads(path.read_text(encoding="utf-8"))
-        if document.get("schema") != "harpy-sim/run/1":
+        if document.get("schema") not in ("harpy-sim/run/1", "harpy-sim/run/2"):
             continue
         rows.append(document["metrics"])
     # Re-derived on read: the baseline is a different run, so it is a property
@@ -268,3 +288,4 @@ __all__ = [
     "run_metrics",
     "write_summary",
 ]
+

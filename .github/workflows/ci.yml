@@ -29,6 +29,11 @@ jobs:
       - name: pytest
         run: uv run pytest -q
 
+      - name: observable-only replay and evidence verification
+        run: |
+          uv run harpy replay --corpus examples/replay/synthetic --out replay-smoke/
+          uv run harpy verify --manifest replay-smoke/manifest.json
+
       - name: sweep refuses placeholder pricing
         shell: bash
         run: |
@@ -52,3 +57,5 @@ jobs:
             --out smoke-results/
           uv run harpy plot --results smoke-results/ \
             --out smoke-results/detection_vs_overhead.png
+          uv run harpy verify --manifest smoke-results/manifest.json
+

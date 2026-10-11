@@ -6,9 +6,9 @@ lineage fidelity a row facet because both change the answer and neither may be
 averaged away.
 
 Two companions sit alongside it. ``overhead_composition`` breaks the overhead
-back out into its six components by fleet scale, which is the only way to see
-that the number on the primary figure's x axis is mostly human review at scale 1
-and almost none of it at scale 1000. ``detection_vs_alert_budget`` puts the
+back out into its six components by fleet scale and a stated review policy.
+Only the fixed policy amortises human review as the fleet grows.
+``detection_vs_alert_budget`` puts the
 second budget on the x axis, because a run that clears the dollar ceiling by
 paging a person every other minute has not cleared anything.
 """
@@ -38,9 +38,7 @@ ARM_STYLE: dict[str, dict] = {
 SEVERITY_ORDER: tuple[str, ...] = tuple(s.value for s in Severity)
 ARM_ORDER: tuple[str, ...] = tuple(a.value for a in Arm)
 
-#: The six oversight components, in stacking order, with the two that do not
-#: scale with the fleet last so they sit on top of the bar and stay legible as
-#: they shrink away.
+#: The six components, with review last to expose the selected scaling policy.
 COST_COMPONENTS: tuple[tuple[str, str, str], ...] = (
     ("mean_sentinel_dollars", "sentinel", "#1f77b4"),
     ("mean_tier0_dollars", "Tier 0", "#17becf"),
@@ -57,8 +55,7 @@ def _pick_slice(cells: list[dict], key: str, requested: float | None) -> float:
     Facets cannot absorb every axis, so the ones a figure holds fixed have to be
     held at a *stated* value rather than averaged: a curve blended across fleet
     scales is a curve about no fleet in particular. The default is the largest
-    value present, which for fleet_scale is the one least distorted by the
-    slice's size and for the alert cap is the uncapped control.
+    value present. The figure always names that scale and attention cap.
     """
     present = sorted({c.get(key, 1.0) for c in cells})
     if requested is None:
@@ -70,6 +67,19 @@ def _pick_slice(cells: list[dict], key: str, requested: float | None) -> float:
 
 def _fmt_cap(cap: float) -> str:
     return "uncapped" if math.isinf(cap) else f"{cap:g}/agent-h"
+
+
+def _checked_cells(rows: list[dict]) -> list[dict]:
+    for key, default in (("review_scaling", "fixed"), ("experiment_fingerprint", None),
+                         ("worker_model", None)):
+        if len({row.get(key, default) for row in rows}) > 1:
+            raise ValueError(f"plot would blend {key}; select one experiment/model/cost policy")
+    for severity in {row["severity"] for row in rows}:
+        group = [r for r in rows if r["severity"] == severity]
+        for key in ("effective_detection_prob", "effective_false_positive_rate"):
+            if len({r.get(key) for r in group}) > 1:
+                raise ValueError(f"plot would blend {key}; select one detector setting")
+    return aggregate(rows)
 
 
 def _cells_by_arm(cells: list[dict], severity: str, fidelity: float) -> dict[str, list[dict]]:
@@ -116,7 +126,7 @@ def detection_vs_overhead(
     """
     if not rows:
         raise ValueError("no results to plot")
-    all_cells = aggregate(rows)
+    all_cells = _checked_cells(rows)
     fleet_scale = _pick_slice(all_cells, "fleet_scale", fleet_scale)
     alert_cap = _pick_slice(all_cells, "max_alerts_per_agent_hour", alert_cap)
     cells = [
@@ -193,6 +203,7 @@ def detection_vs_overhead(
         "HARPY-SIM phase 1 — detection vs incremental overhead "
         "(MockSentinel, assumed detection)\n"
         f"fleet_scale {fleet_scale:g}  ·  alert budget {_fmt_cap(alert_cap)}"
+        f"  ·  review {rows[0].get('review_scaling', 'fixed')}"
     )
     fig.suptitle(title, fontsize=12)
 
@@ -228,17 +239,12 @@ def overhead_composition(
 ) -> Path:
     """Stacked bars of the six oversight components, by arm, faceted by scale.
 
-    This is the figure that makes the review-cost problem legible. Four of the
-    six components are per-agent and scale with the fleet; triage and
-    investigation do not, because a person reviews the alerts HARPY raised and
-    the alert count belongs to the simulated slice. So at fleet_scale 1 the two
-    review bands are most of the bar and at fleet_scale 1000 they are a line you
-    have to look for. Facets do not share a y axis: the bars grow a thousandfold
-    down the rows, and a shared axis would flatten every row but the last.
+    Four components always scale with the fleet. Review scales only under the
+    linear policy. Facets do not share a y axis so smaller fleets remain legible.
     """
     if not rows:
         raise ValueError("no results to plot")
-    all_cells = aggregate(rows)
+    all_cells = _checked_cells(rows)
     alert_cap = _pick_slice(all_cells, "max_alerts_per_agent_hour", alert_cap)
     cells = [c for c in all_cells if c["max_alerts_per_agent_hour"] == alert_cap]
 
@@ -296,8 +302,7 @@ def overhead_composition(
     fig.legend(handles=handles, loc="lower center", ncol=6, frameon=False, fontsize=8.5)
     fig.suptitle(
         "HARPY-SIM phase 1 — overhead composition by fleet scale\n"
-        f"alert budget {_fmt_cap(alert_cap)}  ·  triage and investigation do not scale; "
-        "the other four do",
+        f"alert budget {_fmt_cap(alert_cap)}  ·  review {rows[0].get('review_scaling', 'fixed')}",
         fontsize=11.5,
     )
     _watermark_if_unverified(fig, rows)
@@ -321,7 +326,7 @@ def detection_vs_alert_budget(
     """
     if not rows:
         raise ValueError("no results to plot")
-    all_cells = aggregate(rows)
+    all_cells = _checked_cells(rows)
     fleet_scale = _pick_slice(all_cells, "fleet_scale", fleet_scale)
     cells = [c for c in all_cells if c["fleet_scale"] == fleet_scale]
 
@@ -390,7 +395,7 @@ def hybrid_reserve_breakdown(rows: list[dict], out_path: str | Path) -> Path | N
     The main figure averages HYBRID's reserve fractions into one curve. This one
     shows what that average is hiding, at the highest lineage fidelity present.
     """
-    all_cells = aggregate(rows)
+    all_cells = _checked_cells(rows)
     fleet_scale = _pick_slice(all_cells, "fleet_scale", None)
     alert_cap = _pick_slice(all_cells, "max_alerts_per_agent_hour", None)
     cells = [
@@ -436,7 +441,8 @@ def hybrid_reserve_breakdown(rows: list[dict], out_path: str | Path) -> Path | N
     fig.legend(handles, labels, loc="lower center", ncol=len(labels), frameon=False, fontsize=9)
     fig.suptitle(
         f"HYBRID reserve_fraction, lineage fidelity {fidelity:g}\n"
-        f"fleet_scale {fleet_scale:g}  ·  alert budget {_fmt_cap(alert_cap)}",
+        f"fleet_scale {fleet_scale:g}  ·  alert budget {_fmt_cap(alert_cap)}"
+        f"  ·  review {rows[0].get('review_scaling', 'fixed')}",
         fontsize=12,
     )
     fig.tight_layout(rect=(0, 0.08, 1, 0.88))
@@ -445,3 +451,4 @@ def hybrid_reserve_breakdown(rows: list[dict], out_path: str | Path) -> Path | N
     fig.savefig(out_path, dpi=150)
     plt.close(fig)
     return out_path
+
