@@ -80,6 +80,8 @@ uv run harpy verify --manifest results/study-v2-packet/manifest.json
 
 The publishing script recomputes the report from compressed seed metrics before copying it. The packet records both Git revision and executing-source content identity. Documentation changes do not change the hashed simulation source; code or lockfile changes do.
 
+To reproduce the published historical simulation packet exactly, check out the `analysis_source_revision` from `evidence/study-v2/build.json` first. Current replay fixes are recorded separately in `evidence/replay-reference/`; they do not replace the frozen simulation evidence.
+
 ## Review-cost policy and plot selection
 
 Use `harpy run --review-scaling linear`, or `harpy sweep --review-scalings fixed,linear`, to select the accounting assumption. Both policies preserve simulation decisions. A plot must select one policy and one worker tier:
