@@ -1,0 +1,5 @@
+# Evidence hashes must survive checkout on every supported operating system.
+* text=auto eol=lf
+*.jsonl text eol=lf
+*.png binary
+*.gz binary

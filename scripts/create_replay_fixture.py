@@ -52,7 +52,9 @@ def main() -> None:
         labels.append({"case_id": observation["case_id"], "fault_present": index in range(3, 10)})
     for name, values in (("observations", observations), ("labels", labels)):
         (directory / f"{name}.jsonl").write_text(
-            "".join(json.dumps(row, sort_keys=True) + "\n" for row in values), encoding="utf-8"
+            "".join(json.dumps(row, sort_keys=True) + "\n" for row in values),
+            encoding="utf-8",
+            newline="\n",
         )
     metadata = {
         "schema": "harpy/replay-corpus/1",
@@ -71,7 +73,7 @@ def main() -> None:
         "that label or has enough evidence to infer its truth reliably.",
     }
     (directory / "dataset.json").write_text(
-        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n"
     )
 
 

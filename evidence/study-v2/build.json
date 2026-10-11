@@ -1,0 +1,18 @@
+{
+  "analysis_source_revision": "1ea1409f0c007ed169d0b35849a1d59c97ff3f16",
+  "n_base_simulations": 1800,
+  "n_recosted_records": 7200,
+  "output_license": "MIT",
+  "real_model_calls": 0,
+  "runtime": {
+    "packages": {
+      "matplotlib": "3.10.8",
+      "pandas": "2.2.3",
+      "pyarrow": "26.0.0",
+      "pyyaml": "6.0.3"
+    },
+    "python": "3.12.14"
+  },
+  "schema": "harpy/evidence-build/1",
+  "source_tree_sha256": "2f4e443f90ca1dfbc27305b15b37c107d332072cca9e32cc2e351cd8e8ac87de"
+}

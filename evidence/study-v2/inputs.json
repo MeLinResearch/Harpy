@@ -1,0 +1,185 @@
+{
+  "provenance": {
+    "config": {
+      "alert_budget": {
+        "max_alerts_per_agent_hour": 0.05,
+        "threshold_adaptation": true,
+        "threshold_max": 12.0,
+        "threshold_step": 0.2,
+        "window_ticks": 100
+      },
+      "fault_distribution": {
+        "MODERATE": 0.3333333333333333,
+        "OVERT": 0.3333333333333333,
+        "SUBTLE": 0.3333333333333334
+      },
+      "human_review": {
+        "analyst_cost_per_hour": 75.0,
+        "batch_window_ticks": 20,
+        "escalation_rate": 0.25,
+        "investigation_minutes": 45,
+        "triage_minutes": 3
+      },
+      "lineage": {
+        "fidelity": 1.0,
+        "spurious_rate": 0.1
+      },
+      "response": {
+        "alert_on_isolation": true,
+        "rerun_multiplier": 1.0
+      },
+      "run": {
+        "seed": 0,
+        "severity": "MODERATE"
+      },
+      "sampler": {
+        "arm": "HYBRID",
+        "budget_pct": 0.05,
+        "carryover_cap_ticks": 5.0,
+        "reserve_fraction": 0.5
+      },
+      "sentinel": {
+        "detection_prob": {
+          "MODERATE": 0.78,
+          "OVERT": 0.95,
+          "SUBTLE": 0.42
+        },
+        "false_positive_rate": 0.02,
+        "input_tokens": 9000,
+        "output_tokens": 600,
+        "window_messages": 20
+      },
+      "severity_behavior": {
+        "MODERATE": {
+          "conflict_probability": 0.85
+        },
+        "OVERT": {
+          "malformed_probability": 0.4,
+          "retry_inflation": 2,
+          "schema_version_bump": 1,
+          "tool_error_probability": 0.3
+        },
+        "SUBTLE": {
+          "perturbation_max_pct": 0.03,
+          "perturbation_min_pct": 0.01
+        }
+      },
+      "simulation": {
+        "claims_per_message_max": 3,
+        "claims_per_message_min": 1,
+        "derive_probability": 0.55,
+        "fault_onset_fraction_max": 0.6,
+        "fault_onset_fraction_min": 0.1,
+        "inbox_capacity": 40,
+        "legitimate_update_probability": 0.03,
+        "malformed_token_fraction": 0.35,
+        "n_agents": 30,
+        "n_subjects": 24,
+        "n_ticks": 500,
+        "rejection_numeric_tolerance_pct": 0.1,
+        "schema_version": 3,
+        "tick_seconds": 60
+      },
+      "suspicion": {
+        "audit_weight": 1.0,
+        "clear_credit": 0.25,
+        "decay": 0.98,
+        "isolation_threshold": 2.6,
+        "w_tier0": 0.15
+      },
+      "telemetry": {
+        "numeric_ranges": {
+          "count_units": [
+            0.0,
+            5000.0
+          ],
+          "price_usd": [
+            0.0,
+            10000.0
+          ],
+          "score_pct": [
+            0.0,
+            100.0
+          ],
+          "temperature_c": [
+            -40.0,
+            60.0
+          ]
+        },
+        "retry_normalizer": 3.0,
+        "token_window": 100,
+        "token_zscore_cap": 4.0,
+        "weights": {
+          "downstream_rejection_rate": 0.12,
+          "malformed_rate": 0.18,
+          "numeric_range_violation": 0.12,
+          "retry_rate": 0.12,
+          "schema_violation": 0.2,
+          "token_len_zscore": 0.12,
+          "tool_error_rate": 0.14
+        },
+        "window": 50
+      },
+      "worker": {
+        "input_tokens_per_message": 1400,
+        "output_tokens_mean": 420,
+        "output_tokens_min": 40,
+        "output_tokens_sd": 90
+      }
+    },
+    "config_sha256": "a6d2f8502d94132f39a2c3c1249654553a78b3cf6d861757ffc2c80be590988d",
+    "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+    "pricing": {
+      "sentinel_model": {
+        "accessed": "2026-10-10",
+        "input_per_mtok": 2.0,
+        "model": "gpt-4.1-2025-04-14",
+        "output_per_mtok": 8.0,
+        "source": "https://developers.openai.com/api/docs/models/gpt-4.1"
+      },
+      "tier0_cost_per_message_dollars": 1e-07,
+      "verified": true,
+      "worker_models": {
+        "gpt-4.1-mini": {
+          "accessed": "2026-10-10",
+          "input_per_mtok": 0.4,
+          "model": "gpt-4.1-mini-2025-04-14",
+          "output_per_mtok": 1.6,
+          "source": "https://developers.openai.com/api/docs/models/gpt-4.1-mini"
+        }
+      }
+    },
+    "pricing_sha256": "590c59ae6f749e10d78a4a26aeefbaffa469c6e72e3a75c8e3b5cb53a5a64679",
+    "schema": "harpy/inputs/1",
+    "source": {
+      "files_sha256": {
+        "pyproject.toml": "71a81af8677dede0eb127eb95e8d0a61cc93af1242d0ae441c6049714bd2715d",
+        "src/harpy/__init__.py": "4187a8c7e2b68f058cf53331eb8e4571cef24cc2f5f2deede699dc62f43951a4",
+        "src/harpy/alert_budget.py": "75fc832ee772b82af424e400e586d6f502e0a1407e519eb1c758ca0a43af20a0",
+        "src/harpy/cli.py": "e06dcd870bb02be6e75c34e9280067310f5d4928180a8112bbaefb9a41c9805a",
+        "src/harpy/detectors.py": "0e9578389fcd28693e0d86c9c790303c8e9625798cef544282e855ce1d86b524",
+        "src/harpy/faults.py": "cacbe32f9e580788a5caa5022746884d03847e620bfd8941a5706786ae8e7382",
+        "src/harpy/ledger.py": "1fd59505822bb88b9fe418b7bd248e82f582ce1de398157326ce1cb18a31c720",
+        "src/harpy/lineage.py": "68be2fa22de5b59bd3ae42ec97f8a8b4d180f141d030d001d750b99043be2c68",
+        "src/harpy/mesh.py": "8f0d342bf93388b93aacf178020b0480ec1c175b7562a09e952b64153f0b0892",
+        "src/harpy/metrics.py": "b29f5daa331d1d240129d9b3171f20ea7f6fd89263d97815616d59551202133f",
+        "src/harpy/plot.py": "7bbafd238ae18c3004d858fc8310c141968de6e5039b6f321eae6c9413e0dd33",
+        "src/harpy/provenance.py": "6ae471b1158dacf103a9baf6e7918d3547daad1ebcafa185df9129d49276051c",
+        "src/harpy/replay.py": "d978ebdf38cc0ce2dd2e918c56c947b1a45236680361c0e1126181e4fce9ec07",
+        "src/harpy/response.py": "75844116f30a88c5899192271b0fc1b485b4eda4c116ea0904fea38518853892",
+        "src/harpy/sampler.py": "016cc08f8d105fcde2aadf4c88451f4ac1b898e0b6d3d0d3837841196f1724f0",
+        "src/harpy/sentinel.py": "c579db126d30f7320c218069da1d9774c109f28283fca2303174b7d1459cfdae",
+        "src/harpy/simulation.py": "a52ffae08962015f3f8c114f80bc782c6579b6a781cdd54b6ee1765ce060272b",
+        "src/harpy/statistics.py": "19207b2d0a5df5d6e5b70905d328a79267982f829ca5ae73281feb48eded9a88",
+        "src/harpy/study.py": "6b47f653dbd9880cc66256173f6aa3f08160216bed16c263c6f2687a2be245d8",
+        "src/harpy/suspicion.py": "8de99f8c130906f5b6abebc5ab0dead86da3c6bfc551612d0198d8de3dcc12c6",
+        "src/harpy/sweep.py": "a42477d6e652e0e656f9aef4126f3c2bb8a89aca459356ee61828efc1c67cb48",
+        "src/harpy/telemetry.py": "64cd1317596ffa2581bbe78765d8709698ee80e4af85639404df40d3c6281e57",
+        "src/harpy/types.py": "fb4f1e3435ba7cce489d381ac1871e11c139d41099abc5311de4e928248e794d",
+        "uv.lock": "a892745a2ca316e9b8912d278577f292499935861501f7fa7a16e5edaba6d61c"
+      },
+      "tree_sha256": "2f4e443f90ca1dfbc27305b15b37c107d332072cca9e32cc2e351cd8e8ac87de"
+    },
+    "source_tree_sha256": "2f4e443f90ca1dfbc27305b15b37c107d332072cca9e32cc2e351cd8e8ac87de"
+  }
+}
