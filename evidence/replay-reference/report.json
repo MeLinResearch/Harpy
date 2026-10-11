@@ -19,7 +19,7 @@
   "detector": {
     "kind": "mechanical",
     "model": null,
-    "version": "typed-checks/1"
+    "version": "typed-checks/2"
   },
   "estimated_plus_reserved_dollars": 0.0,
   "estimated_uncached_dollars": 0.0,
@@ -42,12 +42,12 @@
       0.43448246478317465
     ],
     "false_positive_rate": 0.0,
-    "mean_duration_seconds": 6.684083321791452e-06,
+    "mean_duration_seconds": 2.2373083301848357e-05,
     "true_negative": 5,
     "true_positive": 6,
     "unattempted_cases": 0
   },
-  "predictions_sha256": "153b1e578d54fa8e963b89801ad44d518971cda792b4043e6a98c0d8dc45d3f6",
+  "predictions_sha256": "e97033a1fd692258507724fbf582a57b9463fa0db997b14447690ea75624216a",
   "pricing": null,
   "real_model_called": false,
   "schema": "harpy/replay-report/1",
@@ -57,7 +57,7 @@
       "src/harpy/__init__.py": "4187a8c7e2b68f058cf53331eb8e4571cef24cc2f5f2deede699dc62f43951a4",
       "src/harpy/alert_budget.py": "aee114da36041829ac608880d7feeec05a8886e8b3dae9b60ea45618f7a21280",
       "src/harpy/cli.py": "e06dcd870bb02be6e75c34e9280067310f5d4928180a8112bbaefb9a41c9805a",
-      "src/harpy/detectors.py": "0e9578389fcd28693e0d86c9c790303c8e9625798cef544282e855ce1d86b524",
+      "src/harpy/detectors.py": "95d311317192a1d2fc60b58730ce661f8d926054db2b8c74323638c4029ea01f",
       "src/harpy/faults.py": "bad4cf34137a6787d807b0ecde6bd7f2b4c6de17a5658504b29d3148c42dd7d0",
       "src/harpy/ledger.py": "1fd59505822bb88b9fe418b7bd248e82f582ce1de398157326ce1cb18a31c720",
       "src/harpy/lineage.py": "5c2793693d766127d1f9a2ae81a856b2adfb17b152bb84ef87d8502154c2a7e1",
@@ -78,7 +78,7 @@
       "src/harpy/types.py": "fb4f1e3435ba7cce489d381ac1871e11c139d41099abc5311de4e928248e794d",
       "uv.lock": "a892745a2ca316e9b8912d278577f292499935861501f7fa7a16e5edaba6d61c"
     },
-    "tree_sha256": "da351558f7adbcad85cc881185daa1ad8fc7ace788d351636445886e7358ddf0"
+    "tree_sha256": "e6f16afc9e94c1ef89e1fdf550974cc3a98917b29a0b77f9bbeee145ff0a89b6"
   },
   "stop_reason": null,
   "unknown_charge_reserved_dollars": 0.0
