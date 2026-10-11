@@ -14,6 +14,8 @@ jobs:
         os: [ubuntu-latest, macos-latest, windows-latest]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Install uv
         uses: astral-sh/setup-uv@v5
@@ -29,17 +31,27 @@ jobs:
       - name: pytest
         run: uv run pytest -q
 
-      - name: published evidence matches checkout
+      - name: published evidence matches its recorded source
         shell: bash
         run: |
           uv run harpy verify --manifest evidence/study-v2/manifest.json
           uv run harpy verify --manifest evidence/replay-reference/manifest.json
           uv run python - <<'PY'
+          import hashlib
           import json
+          import re
+          import subprocess
           from pathlib import Path
           from harpy.provenance import source_identity
           recorded = json.loads(Path("evidence/study-v2/inputs.json").read_text())
-          assert recorded["provenance"]["source"] == source_identity(), "source identity mismatch"
+          build = json.loads(Path("evidence/study-v2/build.json").read_text())
+          revision = build["analysis_source_revision"]
+          assert re.fullmatch(r"[0-9a-f]{40}", revision), "expected immutable study revision"
+          for path, expected in recorded["provenance"]["source"]["files_sha256"].items():
+              original = subprocess.check_output(["git", "show", f"{revision}:{path}"])
+              assert hashlib.sha256(original).hexdigest() == expected, f"study source mismatch: {path}"
+          replay = json.loads(Path("evidence/replay-reference/report.json").read_text())
+          assert replay["source"] == source_identity(), "replay source differs from checkout"
           PY
 
       - name: observable-only replay and evidence verification

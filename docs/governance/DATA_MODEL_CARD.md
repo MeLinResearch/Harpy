@@ -9,7 +9,7 @@ HARPY supports research on selective agent oversight. It helps identify which de
 | Component | Identity and evidence |
 | --- | --- |
 | Simulation sentinel | `MockSentinel`; configured weighted coin flips. It intentionally reads corruption labels as a simulation exception. |
-| Replay reference | `MechanicalDetector`, `typed-checks/1`; deterministic structural/typed checks, measured on the included synthetic fixture. |
+| Replay reference | `MechanicalDetector`, `typed-checks/2`; deterministic structural/typed checks, measured on the included synthetic fixture. |
 | Optional model adapter | `OpenAIResponsesDetector`; externally hosted `gpt-4.1-2025-04-14`; strict JSON decisions and observable evidence IDs. Adapter behavior is tested with an injected transport. No live-model accuracy has been measured. |
 | Worker pricing identity | `gpt-4.1-mini-2025-04-14` in the v2 pricing file. Simulation workers do not call this model. |
 | Training | No training, fine-tuning, learned parameters, or model weights are supplied by HARPY. Upstream model training is outside this project's evidence. |
