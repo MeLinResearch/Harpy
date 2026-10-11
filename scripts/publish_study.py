@@ -139,7 +139,7 @@ def plot_sensitivity(report: dict, path: Path) -> None:
         ncol=2,
         frameon=False,
         loc="upper center",
-        bbox_to_anchor=(0.5, 0.84),
+        bbox_to_anchor=(0.5, 0.90),
         fontsize=9,
     )
     fig.suptitle(

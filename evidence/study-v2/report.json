@@ -1,7 +1,7 @@
 {
   "evidence_kind": "conditional_simulation",
   "experiment_fingerprints": [
-    "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682"
+    "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b"
   ],
   "exploratory_cells": [
     {
@@ -16,7 +16,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -29,8 +29,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0469760371180683,
-        0.04701264861817946
+        0.046974732456706234,
+        0.04701357653159136
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -54,7 +54,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -67,8 +67,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697492430357486,
-        0.04701430292355729
+        0.04697587877108596,
+        0.04701372268712455
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -92,7 +92,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -105,8 +105,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0469757876351063,
-        0.04701307486756133
+        0.04697570827463994,
+        0.04701358269234509
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -130,7 +130,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -143,8 +143,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046974909657937707,
-        0.04701345919518284
+        0.04697531022623671,
+        0.04701276255883335
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -168,7 +168,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -181,8 +181,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697633363011366,
-        0.04701289294686584
+        0.04697543322979759,
+        0.04701367502063483
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -206,7 +206,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -219,8 +219,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975828292221605,
-        0.04701381889489966
+        0.04697636911936937,
+        0.047012816425535404
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -244,7 +244,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -257,8 +257,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697538648699037,
-        0.047012449112313
+        0.04697542006128209,
+        0.04701360921820272
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -282,7 +282,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -295,8 +295,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697466440433131,
-        0.047013791935039635
+        0.04697566815973611,
+        0.04701384137958938
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -320,7 +320,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -333,8 +333,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697626615432785,
-        0.04701285397883034
+        0.04697480022670255,
+        0.04701377039905933
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -358,7 +358,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -371,8 +371,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697609152993313,
-        0.04701296259524084
+        0.046976328828602365,
+        0.04701379962860622
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -396,7 +396,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -409,8 +409,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697542867295723,
-        0.04701407384194152
+        0.0469736571917375,
+        0.04701364682415967
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -434,7 +434,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -447,8 +447,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697597078572134,
-        0.04701391067896299
+        0.04697601411443474,
+        0.04701347201462238
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -472,7 +472,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -485,8 +485,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774129807637328,
-        0.44680548969804096
+        0.08773419322210388,
+        0.4551928626143164
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -510,7 +510,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -523,8 +523,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0877425302569746,
-        0.44679386976587854
+        0.08773712098709989,
+        0.44676220495792773
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -548,7 +548,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -561,8 +561,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771644402235114,
-        0.15726318959425176
+        0.08771369258138441,
+        0.15724285295316534
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -586,7 +586,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -599,8 +599,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773624913145904,
-        0.1014484547262534
+        0.08774745063813415,
+        0.10151264873006824
       ],
       "overhead_pct": 0.09387707927104276,
       "paired_bootstrap_delta_ci95": [
@@ -624,7 +624,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -637,8 +637,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773996077797322,
-        0.10131624325807091
+        0.08774505077982003,
+        0.10149612454642862
       ],
       "overhead_pct": 0.09387707927104276,
       "paired_bootstrap_delta_ci95": [
@@ -662,7 +662,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -675,8 +675,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771567772562278,
-        0.10363718629252604
+        0.087716802534425,
+        0.10368510987871707
       ],
       "overhead_pct": 0.09379357817894966,
       "paired_bootstrap_delta_ci95": [
@@ -700,7 +700,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -713,8 +713,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774163807151529,
-        0.45488570033593273
+        0.08773628730140844,
+        0.455470648368304
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -738,7 +738,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -751,8 +751,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774363851454844,
-        0.4467843478393097
+        0.08773807423624362,
+        0.45466533066421394
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -776,7 +776,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -789,8 +789,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771358123517757,
-        0.1572327634107405
+        0.0877130029026459,
+        0.1572615463024779
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -814,7 +814,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -827,8 +827,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.087739966788064,
-        0.10120920853297238
+        0.0877406685298509,
+        0.10125031294453388
       ],
       "overhead_pct": 0.09387707927104276,
       "paired_bootstrap_delta_ci95": [
@@ -852,7 +852,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -865,8 +865,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774119638556747,
-        0.10148732998643452
+        0.08774646524088801,
+        0.10129725354974425
       ],
       "overhead_pct": 0.09387707927104276,
       "paired_bootstrap_delta_ci95": [
@@ -890,7 +890,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -903,8 +903,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771310749095294,
-        0.10360341650470609
+        0.08771542186121119,
+        0.10365500807953897
       ],
       "overhead_pct": 0.09379357817894966,
       "paired_bootstrap_delta_ci95": [
@@ -928,7 +928,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -941,8 +941,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6973995965245792,
-        1.6289135125038423
+        0.5988077922409359,
+        1.6277218909040088
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -966,7 +966,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -979,8 +979,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6969122872264897,
-        1.6294085673323275
+        0.6959047740672121,
+        1.6311183460800907
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -1004,7 +1004,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1017,8 +1017,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6971625960675408,
-        1.630300395302872
+        0.5981127501226996,
+        1.629595954943599
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -1042,7 +1042,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1055,8 +1055,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08282885911119733,
-        0.09523616833054367
+        0.08282016139028099,
+        0.09613909630304444
       ],
       "overhead_pct": 0.08928699714441463,
       "paired_bootstrap_delta_ci95": [
@@ -1080,7 +1080,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1093,8 +1093,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0828690257908927,
-        0.09622703238097882
+        0.08300721408222665,
+        0.09557536164196345
       ],
       "overhead_pct": 0.08928699714441463,
       "paired_bootstrap_delta_ci95": [
@@ -1118,7 +1118,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1131,8 +1131,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.084637554543723,
-        0.09677421316484443
+        0.08462559583812367,
+        0.0970136993477877
       ],
       "overhead_pct": 0.09052971163244279,
       "paired_bootstrap_delta_ci95": [
@@ -1156,7 +1156,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1169,8 +1169,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5967297260289764,
-        1.6292321870313424
+        0.5976119109422713,
+        1.6298276886505514
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -1194,7 +1194,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1207,8 +1207,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.597006999254507,
-        1.6301437250587438
+        0.6967275461444961,
+        1.6299595699497544
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -1232,7 +1232,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1245,8 +1245,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6976925370876974,
-        1.627817553611745
+        0.6980622868457449,
+        1.6298592028940682
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -1270,7 +1270,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1283,8 +1283,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08325855598350194,
-        0.09589022799499196
+        0.08318053332826861,
+        0.09582079618448563
       ],
       "overhead_pct": 0.08928699714441463,
       "paired_bootstrap_delta_ci95": [
@@ -1308,7 +1308,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1321,8 +1321,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08303650959068944,
-        0.09576804520257402
+        0.08303209724134311,
+        0.0955162053287984
       ],
       "overhead_pct": 0.08928699714441463,
       "paired_bootstrap_delta_ci95": [
@@ -1346,7 +1346,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1359,8 +1359,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08459978885705387,
-        0.09693436997613222
+        0.08456974971584295,
+        0.09699334495158336
       ],
       "overhead_pct": 0.09052971163244279,
       "paired_bootstrap_delta_ci95": [
@@ -1384,7 +1384,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1397,8 +1397,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7375826685860142,
-        1.6706002318642226
+        0.7353453587243693,
+        1.670576153633704
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -1422,7 +1422,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1435,8 +1435,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6383004494804301,
-        1.6709295615154518
+        0.6380799029703841,
+        1.6699590642415623
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -1460,7 +1460,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1473,8 +1473,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7381072881801274,
-        1.6707075733327033
+        0.7381645843939896,
+        1.6704469452799704
       ],
       "overhead_pct": 1.1541024669854063,
       "paired_bootstrap_delta_ci95": [
@@ -1498,7 +1498,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1511,8 +1511,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.12379179790906722,
-        0.13590290274468372
+        0.12403688571709587,
+        0.1358589201140366
       ],
       "overhead_pct": 0.12981011351957597,
       "paired_bootstrap_delta_ci95": [
@@ -1536,7 +1536,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1549,8 +1549,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.12380144618448811,
-        0.1361619922843139
+        0.12403790216586906,
+        0.1361086886820704
       ],
       "overhead_pct": 0.12981011351957597,
       "paired_bootstrap_delta_ci95": [
@@ -1574,7 +1574,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1587,8 +1587,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.12550835587525647,
-        0.13825992950786234
+        0.1261156840575745,
+        0.13849583902210022
       ],
       "overhead_pct": 0.1317468531916012,
       "paired_bootstrap_delta_ci95": [
@@ -1612,7 +1612,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1625,8 +1625,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6386840415948077,
-        1.67151778542145
+        0.7368148955804139,
+        1.6709689127020784
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -1650,7 +1650,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1663,8 +1663,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7385550084103237,
-        1.670591542462405
+        0.7380244750325484,
+        1.5701477165596116
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -1688,7 +1688,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1701,8 +1701,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6401029619990645,
-        1.6712922518264852
+        0.7374087639812181,
+        1.6701282527511574
       ],
       "overhead_pct": 1.1541024669854063,
       "paired_bootstrap_delta_ci95": [
@@ -1726,7 +1726,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1739,8 +1739,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.1238948068995224,
-        0.13627945254843526
+        0.12376489093853076,
+        0.1361668544285139
       ],
       "overhead_pct": 0.12981011351957597,
       "paired_bootstrap_delta_ci95": [
@@ -1764,7 +1764,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1777,8 +1777,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.12363996184596843,
-        0.13603195559836934
+        0.12387562580229629,
+        0.13601643695931903
       ],
       "overhead_pct": 0.12981011351957597,
       "paired_bootstrap_delta_ci95": [
@@ -1802,7 +1802,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1815,8 +1815,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.12580960785747292,
-        0.13814689413655126
+        0.1258822262748495,
+        0.13819657947987748
       ],
       "overhead_pct": 0.1317468531916012,
       "paired_bootstrap_delta_ci95": [
@@ -1840,7 +1840,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1853,8 +1853,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046964957940483415,
-        0.046992313651007665
+        0.046965019194330146,
+        0.046992965630430115
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -1878,7 +1878,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1891,8 +1891,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696597425781509,
-        0.046992986430529245
+        0.046965558148946665,
+        0.04699362259974152
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -1916,7 +1916,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1929,8 +1929,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696582493757584,
-        0.046992586615400816
+        0.04696517235766559,
+        0.04699405614401297
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -1954,7 +1954,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -1967,8 +1967,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696471851589376,
-        0.046994021740288404
+        0.04696527194141216,
+        0.046992963020078715
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -1992,7 +1992,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2005,8 +2005,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046965746553591384,
-        0.04699394384981972
+        0.04696551293613571,
+        0.04699249565186777
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -2030,7 +2030,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2043,8 +2043,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696540662309625,
-        0.046993248814022524
+        0.04696531762590238,
+        0.046993183579864324
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -2068,7 +2068,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2081,8 +2081,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696481084243314,
-        0.046993336509141725
+        0.046965601444184525,
+        0.046993541583322654
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -2106,7 +2106,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2119,8 +2119,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046965082779113675,
-        0.04699335336937926
+        0.0469649251279014,
+        0.04699337437867146
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -2144,7 +2144,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2157,8 +2157,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696492312547809,
-        0.04699344292946357
+        0.04696502332689553,
+        0.046993005315002084
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -2182,7 +2182,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2195,8 +2195,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696507945348351,
-        0.046993234885504075
+        0.04696494530072004,
+        0.046993471747434186
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -2220,7 +2220,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2233,8 +2233,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696559311459607,
-        0.04699317385219863
+        0.04696575337226902,
+        0.046993084856426566
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -2258,7 +2258,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2271,8 +2271,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696517396562797,
-        0.04699328099002652
+        0.04696523286003053,
+        0.046993045803173115
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -2296,7 +2296,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2309,8 +2309,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768631325812472,
-        0.11376710234525539
+        0.0876849725367245,
+        0.11376502152130515
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -2334,7 +2334,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2347,8 +2347,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768502630469645,
-        0.11376611376444624
+        0.08768392067322747,
+        0.11376771394134395
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -2372,7 +2372,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2385,8 +2385,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768069282846665,
-        0.08773283827614646
+        0.08768143914883254,
+        0.0877315805721944
       ],
       "overhead_pct": 0.08770640244102099,
       "paired_bootstrap_delta_ci95": [
@@ -2410,7 +2410,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2423,8 +2423,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768608685240607,
-        0.09364202842281996
+        0.08768434539204355,
+        0.09364727095783128
       ],
       "overhead_pct": 0.08968009622520291,
       "paired_bootstrap_delta_ci95": [
@@ -2448,7 +2448,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2461,8 +2461,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768556220400896,
-        0.09364344631205461
+        0.0876846530367579,
+        0.09364778944885295
       ],
       "overhead_pct": 0.08968009622520291,
       "paired_bootstrap_delta_ci95": [
@@ -2486,7 +2486,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2499,8 +2499,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08767984383512518,
-        0.0877317727908436
+        0.08768014760710234,
+        0.08773217810590907
       ],
       "overhead_pct": 0.08770640244102097,
       "paired_bootstrap_delta_ci95": [
@@ -2524,7 +2524,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2537,8 +2537,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768468312603286,
-        0.11376240816991706
+        0.08768287460297877,
+        0.11376662073415651
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -2562,7 +2562,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2575,8 +2575,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768394265451794,
-        0.11376113381891964
+        0.08768527854401295,
+        0.1137589393280955
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -2600,7 +2600,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2613,8 +2613,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768020867678511,
-        0.08773313213957477
+        0.0876796378222857,
+        0.08773301027205012
       ],
       "overhead_pct": 0.08770640244102099,
       "paired_bootstrap_delta_ci95": [
@@ -2638,7 +2638,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2651,8 +2651,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768480227727483,
-        0.09364731000362142
+        0.08768442198796814,
+        0.09364725402436667
       ],
       "overhead_pct": 0.08968009622520291,
       "paired_bootstrap_delta_ci95": [
@@ -2676,7 +2676,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2689,8 +2689,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768489268949489,
-        0.09364369160262777
+        0.08768516636916962,
+        0.09364541909463081
       ],
       "overhead_pct": 0.08968009622520291,
       "paired_bootstrap_delta_ci95": [
@@ -2714,7 +2714,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2727,8 +2727,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0876797646747486,
-        0.0877322810824484
+        0.08768109106818849,
+        0.08773286445822759
       ],
       "overhead_pct": 0.08770640244102097,
       "paired_bootstrap_delta_ci95": [
@@ -2752,7 +2752,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2765,8 +2765,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697570976635989,
-        0.047013691367061815
+        0.04697568028078274,
+        0.04701417044756115
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2790,7 +2790,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2803,8 +2803,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697570011674634,
-        0.04701358592197234
+        0.04697594555449185,
+        0.04701361415622658
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2828,7 +2828,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2841,8 +2841,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975544309038685,
-        0.047012871974455854
+        0.046975122523653476,
+        0.04701330910791018
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2866,7 +2866,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2879,8 +2879,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697472100942769,
-        0.04701347126987448
+        0.04697637167770478,
+        0.04701364688603084
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2904,7 +2904,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2917,8 +2917,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697530688346444,
-        0.04701412501043856
+        0.046974431611617566,
+        0.04701391997934643
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2942,7 +2942,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2955,8 +2955,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975269886805844,
-        0.047013839714631224
+        0.0469753431655612,
+        0.047013862307684375
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -2980,7 +2980,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -2993,8 +2993,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975302560826174,
-        0.047012890868610706
+        0.046976082615836794,
+        0.04701340907709496
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3018,7 +3018,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3031,8 +3031,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0469762883002888,
-        0.04701443511565285
+        0.046974723153174656,
+        0.0470131402649194
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3056,7 +3056,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3069,8 +3069,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975720900845376,
-        0.047013558773300705
+        0.046975691554466056,
+        0.04701433908805503
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3094,7 +3094,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3107,8 +3107,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046974867004904726,
-        0.04701244893920411
+        0.046975018608834726,
+        0.047013076429588
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3132,7 +3132,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3145,8 +3145,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04697553100319461,
-        0.04701315502069844
+        0.04697438838977929,
+        0.04701303657459024
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3170,7 +3170,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3183,8 +3183,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046975411157714066,
-        0.04701362253757307
+        0.04697474138353636,
+        0.047015099922995636
       ],
       "overhead_pct": 0.046994592363180966,
       "paired_bootstrap_delta_ci95": [
@@ -3208,7 +3208,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3221,8 +3221,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774366332910002,
-        0.45466474377617155
+        0.08774111810470257,
+        0.446804294235586
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3246,7 +3246,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3259,8 +3259,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773486020158025,
-        0.4467837623819721
+        0.08774352183997115,
+        0.4554746156351975
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3284,7 +3284,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3297,8 +3297,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771486303351071,
-        0.1572741133372125
+        0.08771313579092264,
+        0.15725178425796665
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -3322,7 +3322,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3335,8 +3335,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773945118563153,
-        0.45519452252848625
+        0.08774650501870844,
+        0.4549335298413215
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3360,7 +3360,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3373,8 +3373,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773480269528271,
-        0.4548899457723659
+        0.08774078456739345,
+        0.44650797071655
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3398,7 +3398,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3411,8 +3411,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771729662184041,
-        0.1572427334045071
+        0.08771751903029007,
+        0.15650999916256128
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -3436,7 +3436,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3449,8 +3449,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773734889439003,
-        0.44679066666131384
+        0.08774277925761176,
+        0.4630657317532313
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3474,7 +3474,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3487,8 +3487,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774396915044622,
-        0.4546340930986326
+        0.08773497887468594,
+        0.4549420517547176
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3512,7 +3512,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3525,8 +3525,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771557933300983,
-        0.15647625709707286
+        0.08771350737729794,
+        0.15724175534659537
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -3550,7 +3550,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3563,8 +3563,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08774484385766732,
-        0.4467884552451924
+        0.08774077550792403,
+        0.4554824682491876
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3588,7 +3588,7 @@
       "detection_rate": 0.06666666666666667,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.06666666666666667,
       "incremental_detection_ci95": [
@@ -3601,8 +3601,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08773959571142818,
-        0.44679256506934767
+        0.08773780502043073,
+        0.44678916373816635
       ],
       "overhead_pct": 0.21592722919358004,
       "paired_bootstrap_delta_ci95": [
@@ -3626,7 +3626,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.78,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3639,8 +3639,8 @@
       "mean_false_isolations": 0.1,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08771833517879495,
-        0.15723242751041325
+        0.08771571201494627,
+        0.15648491053258182
       ],
       "overhead_pct": 0.11390067578741482,
       "paired_bootstrap_delta_ci95": [
@@ -3664,7 +3664,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3677,8 +3677,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5976461310864811,
-        1.6288188910926287
+        0.5966939151129178,
+        1.6289366109609487
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3702,7 +3702,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3715,8 +3715,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5984180548811449,
-        1.6295693710611252
+        0.59625230990131,
+        1.630218565705699
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3740,7 +3740,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3753,8 +3753,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5978381912463447,
-        1.6300556964772184
+        0.5998077671265416,
+        1.6294897292577397
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -3778,7 +3778,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3791,8 +3791,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5984569740150558,
-        1.6319434244903444
+        0.6969338085887351,
+        1.6282250971075094
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3816,7 +3816,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3829,8 +3829,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5965667114549559,
-        1.6294744423518144
+        0.6963316933981214,
+        1.629757192560671
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3854,7 +3854,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3867,8 +3867,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6973213622144071,
-        1.6296554149120817
+        0.5970580227781349,
+        1.629293016961487
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -3892,7 +3892,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3905,8 +3905,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6947606776352541,
-        1.629512755414106
+        0.6973802680493448,
+        1.6305769709504905
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3930,7 +3930,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3943,8 +3943,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6959704245472546,
-        1.6296271562146871
+        0.6973315834373026,
+        1.6294136349008899
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -3968,7 +3968,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -3981,8 +3981,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5985878446022191,
-        1.6300296170900357
+        0.6982245215797789,
+        1.6299272616185723
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -4006,7 +4006,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4019,8 +4019,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6965735095353637,
-        1.629479919103248
+        0.5992638442152404,
+        1.6302540395494718
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -4044,7 +4044,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4057,8 +4057,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6973124536795531,
-        1.6301636069490966
+        0.5987423325592653,
+        1.629483875653708
       ],
       "overhead_pct": 1.1125739745727943,
       "paired_bootstrap_delta_ci95": [
@@ -4082,7 +4082,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4095,8 +4095,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.5982970226214771,
-        1.630362857287218
+        0.697727044792266,
+        1.6296382870022519
       ],
       "overhead_pct": 1.1129920822696209,
       "paired_bootstrap_delta_ci95": [
@@ -4120,7 +4120,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4133,8 +4133,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7372396667179583,
-        1.6715919810588764
+        0.7383126657332575,
+        1.6697399477773254
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4158,7 +4158,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4171,8 +4171,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7373402261555889,
-        1.6714015719050115
+        0.6385763683361912,
+        1.6708746931677438
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4196,7 +4196,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4209,8 +4209,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6384498297142926,
-        1.6712174303796383
+        0.6386069922357346,
+        1.66879451225359
       ],
       "overhead_pct": 1.1541024669854063,
       "paired_bootstrap_delta_ci95": [
@@ -4234,7 +4234,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4247,8 +4247,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6396245182697,
-        1.671358757762251
+        0.6388282030753203,
+        1.6707531319597386
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4272,7 +4272,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4285,8 +4285,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7370788010043043,
-        1.6705378873407168
+        0.6384122655326243,
+        1.6698595830273435
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4310,7 +4310,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4323,8 +4323,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6396252078642694,
-        1.6710800480534762
+        0.7385809612548522,
+        1.6699903581345221
       ],
       "overhead_pct": 1.1541024669854065,
       "paired_bootstrap_delta_ci95": [
@@ -4348,7 +4348,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4361,8 +4361,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.735888010247751,
-        1.6693189589641533
+        0.6385828636994834,
+        1.6702397625221483
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4386,7 +4386,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4399,8 +4399,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7378664801356202,
-        1.671165547922927
+        0.7373305556234768,
+        1.6711841889926118
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4424,7 +4424,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4437,8 +4437,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.7375099386042405,
-        1.6715899548494886
+        0.6385293290006493,
+        1.671161376514943
       ],
       "overhead_pct": 1.1541024669854063,
       "paired_bootstrap_delta_ci95": [
@@ -4462,7 +4462,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4475,8 +4475,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.735611418806998,
-        1.670537090418851
+        0.7373528977681113,
+        1.6701234585470246
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4500,7 +4500,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4513,8 +4513,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6377501614099733,
-        1.6708658868480133
+        0.7358351379716025,
+        1.6705971348947855
       ],
       "overhead_pct": 1.1535344222539272,
       "paired_bootstrap_delta_ci95": [
@@ -4538,7 +4538,7 @@
       "detection_rate": 1.0,
       "effective_detection_prob": 0.95,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4551,8 +4551,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.6401419782067304,
-        1.6713851187795856
+        0.7385149071121878,
+        1.6710820869991558
       ],
       "overhead_pct": 1.1541024669854065,
       "paired_bootstrap_delta_ci95": [
@@ -4576,7 +4576,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4589,8 +4589,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046965204856402605,
-        0.04699284233244198
+        0.046965695898594055,
+        0.04699401357415743
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4614,7 +4614,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4627,8 +4627,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046964820302572235,
-        0.04699266369799943
+        0.04696510893869211,
+        0.0469932270741886
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4652,7 +4652,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4665,8 +4665,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696569380020922,
-        0.046992627301764366
+        0.04696584056085142,
+        0.04699257464526044
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4690,7 +4690,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4703,8 +4703,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696457285133155,
-        0.046993516250858826
+        0.04696527496062979,
+        0.04699372548307879
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -4728,7 +4728,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4741,8 +4741,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696509303112931,
-        0.046992974642464866
+        0.04696534108668,
+        0.046992781717089524
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -4766,7 +4766,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4779,8 +4779,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696496575935831,
-        0.04699306463862913
+        0.04696536018891686,
+        0.04699286354411111
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -4804,7 +4804,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4817,8 +4817,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696528552933417,
-        0.04699272559289587
+        0.04696560540943269,
+        0.04699387863251382
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4842,7 +4842,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4855,8 +4855,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0469653637197082,
-        0.04699264153943095
+        0.04696556220595883,
+        0.046992071470949616
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4880,7 +4880,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4893,8 +4893,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696546066972965,
-        0.04699321772381336
+        0.04696565740478054,
+        0.04699354496427741
       ],
       "overhead_pct": 0.04697919316087281,
       "paired_bootstrap_delta_ci95": [
@@ -4918,7 +4918,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4931,8 +4931,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.04696533207897998,
-        0.04699311692134113
+        0.046965518972690454,
+        0.046993567373290863
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -4956,7 +4956,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -4969,8 +4969,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046965204729311406,
-        0.04699333439543309
+        0.0469656541869127,
+        0.04699362852805784
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -4994,7 +4994,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5007,8 +5007,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.046966187421579694,
-        0.04699347533907464
+        0.04696535567263498,
+        0.04699294416981283
       ],
       "overhead_pct": 0.046979193160872804,
       "paired_bootstrap_delta_ci95": [
@@ -5032,7 +5032,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5045,8 +5045,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768475697195323,
-        0.11376862309855468
+        0.0876839373334069,
+        0.11376589678538745
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -5070,7 +5070,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5083,8 +5083,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768618212670386,
-        0.1137629411980796
+        0.08768450567709586,
+        0.11376904845426423
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -5108,7 +5108,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5121,8 +5121,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.0876818181799949,
-        0.08773262975216989
+        0.08768094737750984,
+        0.08773302779084695
       ],
       "overhead_pct": 0.08770640244102099,
       "paired_bootstrap_delta_ci95": [
@@ -5146,7 +5146,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5159,8 +5159,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768474360733339,
-        0.11376688872144643
+        0.08768481562005957,
+        0.1137685248762649
       ],
       "overhead_pct": 0.09638654614894612,
       "paired_bootstrap_delta_ci95": [
@@ -5184,7 +5184,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5197,8 +5197,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768372608540892,
-        0.11376050628999201
+        0.08768398950186344,
+        0.11377269174248737
       ],
       "overhead_pct": 0.09638654614894612,
       "paired_bootstrap_delta_ci95": [
@@ -5222,7 +5222,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5235,8 +5235,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768152948106762,
-        0.0877333182083526
+        0.0876797788467822,
+        0.08773217875770235
       ],
       "overhead_pct": 0.08770640244102097,
       "paired_bootstrap_delta_ci95": [
@@ -5260,7 +5260,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5273,8 +5273,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768417926888332,
-        0.1137643543651868
+        0.08768647994396493,
+        0.11376712734138042
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -5298,7 +5298,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5311,8 +5311,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768276128339392,
-        0.11376873658697735
+        0.08768407977298269,
+        0.1137667900843224
       ],
       "overhead_pct": 0.09638654614894614,
       "paired_bootstrap_delta_ci95": [
@@ -5336,7 +5336,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 1.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5349,8 +5349,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768131113543928,
-        0.08773184306911327
+        0.08768036945558257,
+        0.08773303745040623
       ],
       "overhead_pct": 0.08770640244102099,
       "paired_bootstrap_delta_ci95": [
@@ -5374,7 +5374,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5387,8 +5387,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768381832109758,
-        0.11376222979141384
+        0.08768432586331656,
+        0.11376656473255256
       ],
       "overhead_pct": 0.09638654614894612,
       "paired_bootstrap_delta_ci95": [
@@ -5412,7 +5412,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5425,8 +5425,8 @@
       "mean_false_isolations": 0.03333333333333333,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768555158266883,
-        0.11376897849461441
+        0.08768535208734789,
+        0.1137637518474487
       ],
       "overhead_pct": 0.09638654614894612,
       "paired_bootstrap_delta_ci95": [
@@ -5450,7 +5450,7 @@
       "detection_rate": 0.0,
       "effective_detection_prob": 0.42,
       "effective_false_positive_rate": 0.02,
-      "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+      "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
       "fleet_scale": 100.0,
       "incremental_detection": 0.0,
       "incremental_detection_ci95": [
@@ -5463,8 +5463,8 @@
       "mean_false_isolations": 0.0,
       "n_seeds": 30,
       "overhead_ci95": [
-        0.08768150452725934,
-        0.0877334881069185
+        0.08768052307990479,
+        0.08773226036843577
       ],
       "overhead_pct": 0.08770640244102097,
       "paired_bootstrap_delta_ci95": [
@@ -5491,7 +5491,7 @@
     "detection_rate": 0.0,
     "effective_detection_prob": 0.42,
     "effective_false_positive_rate": 0.02,
-    "experiment_fingerprint": "fb8b7658e50693132996922caa084615f88e5b53bc0d1498b88e28bd752da682",
+    "experiment_fingerprint": "24ff642a1dce6ce5bde1061f7400e4216777f342a9cd4bba662b0dbe4b70cb5b",
     "fleet_scale": 100.0,
     "incremental_detection": 0.0,
     "incremental_detection_ci95": [
@@ -5504,8 +5504,8 @@
     "mean_false_isolations": 0.0,
     "n_seeds": 30,
     "overhead_ci95": [
-      0.046965204729311406,
-      0.04699333439543309
+      0.0469656541869127,
+      0.04699362852805784
     ],
     "overhead_pct": 0.046979193160872804,
     "paired_bootstrap_delta_ci95": [

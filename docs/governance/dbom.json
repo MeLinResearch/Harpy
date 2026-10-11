@@ -6,11 +6,11 @@
       "files": [
         {
           "path": "src/harpy/mesh.py",
-          "sha256": "8f0d342bf93388b93aacf178020b0480ec1c175b7562a09e952b64153f0b0892"
+          "sha256": "ec912d0f8336962e2d55e6b222180238ba01a0c057b91e90c2cfaa7015b6d6f8"
         },
         {
           "path": "src/harpy/faults.py",
-          "sha256": "cacbe32f9e580788a5caa5022746884d03847e620bfd8941a5706786ae8e7382"
+          "sha256": "bad4cf34137a6787d807b0ecde6bd7f2b4c6de17a5658504b29d3148c42dd7d0"
         }
       ],
       "human_records": false,
@@ -29,7 +29,7 @@
         },
         {
           "path": "src/harpy/mesh.py",
-          "sha256": "8f0d342bf93388b93aacf178020b0480ec1c175b7562a09e952b64153f0b0892"
+          "sha256": "ec912d0f8336962e2d55e6b222180238ba01a0c057b91e90c2cfaa7015b6d6f8"
         }
       ],
       "human_records": false,
@@ -44,7 +44,7 @@
       "files": [
         {
           "path": "src/harpy/lineage.py",
-          "sha256": "68be2fa22de5b59bd3ae42ec97f8a8b4d180f141d030d001d750b99043be2c68"
+          "sha256": "5c2793693d766127d1f9a2ae81a856b2adfb17b152bb84ef87d8502154c2a7e1"
         }
       ],
       "human_records": false,
@@ -59,7 +59,7 @@
       "files": [
         {
           "path": "configs/default.yaml",
-          "sha256": "b710e0336166799c98ac25311ebf30a799f9637eaff0095eb6ad5b9c3c04f85c"
+          "sha256": "ef3cff907173a1ab902b65b700f82f112170276c783e3e3702cc7273fb495cf4"
         }
       ],
       "human_records": false,
@@ -89,11 +89,11 @@
       "files": [
         {
           "path": "configs/pricing.yaml",
-          "sha256": "4327f993360f69de94b860c8cb80c9243e203eb284296acc8df4ce5e8872e3c2"
+          "sha256": "50d5f00e0722fe79c09c72eb46ab91d21970052143dc3d570d8804367c5246c0"
         },
         {
           "path": "configs/pricing.smoke.yaml",
-          "sha256": "10ef3f8a9e4c5bc3b4cd94dfe1ff5936713e4a140be60426f7c0a3450598ee76"
+          "sha256": "d602bb30d6cc0c9a7ada87330f73c998f1baed95e2bed164c5ebfd1d33a182c4"
         }
       ],
       "human_records": false,
@@ -108,7 +108,7 @@
       "files": [
         {
           "path": "configs/default.yaml",
-          "sha256": "b710e0336166799c98ac25311ebf30a799f9637eaff0095eb6ad5b9c3c04f85c"
+          "sha256": "ef3cff907173a1ab902b65b700f82f112170276c783e3e3702cc7273fb495cf4"
         },
         {
           "path": "src/harpy/ledger.py",
@@ -192,27 +192,27 @@
       "files": [
         {
           "path": "evidence/study-v2/report.json",
-          "sha256": "857d25403d0c7b7aafa022d10d2a37f652933ef5fe919ac34139ab8c2dcdd8aa"
+          "sha256": "7133cd6260028ff859585760e3f0e5c481f35b02b555c9b4e2774ea4c0763cc3"
         },
         {
           "path": "evidence/study-v2/seed-metrics.json.gz",
-          "sha256": "70e3397c42910cbe3cb6235482036c7bb94d53e0dcfd1576b37288e2c79891b2"
+          "sha256": "b518f3474214efcaaffaebdefaa263c04e201fde684b0c727a7014c617428387"
         },
         {
           "path": "evidence/study-v2/inputs.json",
-          "sha256": "376b7c322773b4e21259cade7592cfe225e9b55b1e20b25a6e53a7e21b12399e"
+          "sha256": "b3865e519bef82639fe265672f021fcf64b22ba59294b647ab3eb1d7b740a19c"
         },
         {
           "path": "evidence/study-v2/build.json",
-          "sha256": "d0cac2426e4d5cdfabccb5be868d2f54393208f019569bc784e81edfa6f9c5af"
+          "sha256": "a6c1f23e8015c08a7d21aa579688e7a59d00a6e62d9db28e308918b5c88349ac"
         },
         {
           "path": "evidence/study-v2/cost_sensitivity.png",
-          "sha256": "0ed0c6625260ac8fd96ea5f321b40e7f27262149efe7c2db25aaab5640e1fc01"
+          "sha256": "843b547327fcf237d2321d75450f801e7019889c81e751def55251306b31e715"
         },
         {
           "path": "evidence/study-v2/manifest.json",
-          "sha256": "c9ee607ac0527f215312402cb652e9cdf1b06307b4ed311e4df6626b41465982"
+          "sha256": "9943b102daf03ad13464ac39aca9f997896a5f0f4e121ea05aad9842c19ab063"
         }
       ],
       "human_records": false,
@@ -227,15 +227,15 @@
       "files": [
         {
           "path": "evidence/replay-reference/report.json",
-          "sha256": "f66c3728d0141f31570ca3275b67c38d4a105ca1004eb869c19fa4f568ee75e8"
+          "sha256": "3f081cb32b82f45d23b7a100cd6ecf2077c47d321a5a959a01194232d99a9661"
         },
         {
           "path": "evidence/replay-reference/predictions.jsonl",
-          "sha256": "373a674a9e473633e94e540ecdc01708a2060001992db121c1d9c7c9acaace1d"
+          "sha256": "153b1e578d54fa8e963b89801ad44d518971cda792b4043e6a98c0d8dc45d3f6"
         },
         {
           "path": "evidence/replay-reference/manifest.json",
-          "sha256": "227fdf1845c6435f49d8a109e67f01fa3b4f7cb201853cdca6cc25072f6ed702"
+          "sha256": "30db239a85aa0b5e819fef516a9e864ae7aa6d0d6e3dcc808279d6cd12b9d845"
         }
       ],
       "human_records": false,
@@ -258,7 +258,7 @@
         },
         {
           "path": "evidence/study-v2/inputs.json",
-          "sha256": "376b7c322773b4e21259cade7592cfe225e9b55b1e20b25a6e53a7e21b12399e"
+          "sha256": "b3865e519bef82639fe265672f021fcf64b22ba59294b647ab3eb1d7b740a19c"
         }
       ],
       "human_records": false,
