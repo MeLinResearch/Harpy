@@ -1,0 +1,474 @@
+{
+  "analysis_source_revision": "1ea1409f0c007ed169d0b35849a1d59c97ff3f16",
+  "assets": [
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "src/harpy/mesh.py",
+          "sha256": "8f0d342bf93388b93aacf178020b0480ec1c175b7562a09e952b64153f0b0892"
+        },
+        {
+          "path": "src/harpy/faults.py",
+          "sha256": "cacbe32f9e580788a5caa5022746884d03847e620bfd8941a5706786ae8e7382"
+        }
+      ],
+      "human_records": false,
+      "id": "D01",
+      "name": "synthetic_claims_messages",
+      "origin": "Seeded mesh generator",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Simulation workload"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "src/harpy/types.py",
+          "sha256": "fb4f1e3435ba7cce489d381ac1871e11c139d41099abc5311de4e928248e794d"
+        },
+        {
+          "path": "src/harpy/mesh.py",
+          "sha256": "8f0d342bf93388b93aacf178020b0480ec1c175b7562a09e952b64153f0b0892"
+        }
+      ],
+      "human_records": false,
+      "id": "D02",
+      "name": "fault_labels_true_lineage",
+      "origin": "Planted simulated faults",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Scoring; explicit mock exception"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "src/harpy/lineage.py",
+          "sha256": "68be2fa22de5b59bd3ae42ec97f8a8b4d180f141d030d001d750b99043be2c68"
+        }
+      ],
+      "human_records": false,
+      "id": "D03",
+      "name": "observable_lineage",
+      "origin": "Lossy projection with missing and spurious edges",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Oversight and downstream flags"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "configs/default.yaml",
+          "sha256": "b710e0336166799c98ac25311ebf30a799f9637eaff0095eb6ad5b9c3c04f85c"
+        }
+      ],
+      "human_records": false,
+      "id": "D04",
+      "name": "frozen_v1_configuration",
+      "origin": "Authored v1 experiment assumptions",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Simulation parameters"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "configs/pricing.study.yaml",
+          "sha256": "a004dc9f7f177f078749bceec60ebf0737f02d6c33a2f55c3e2e9bca3b9da689"
+        }
+      ],
+      "human_records": false,
+      "id": "D05",
+      "name": "sourced_study_prices",
+      "origin": "Official provider list rates accessed 2026-10-10",
+      "rights": "Provider source pages retain their terms",
+      "use": "Hypothetical cost accounting"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "configs/pricing.yaml",
+          "sha256": "4327f993360f69de94b860c8cb80c9243e203eb284296acc8df4ce5e8872e3c2"
+        },
+        {
+          "path": "configs/pricing.smoke.yaml",
+          "sha256": "10ef3f8a9e4c5bc3b4cd94dfe1ff5936713e4a140be60426f7c0a3450598ee76"
+        }
+      ],
+      "human_records": false,
+      "id": "D06",
+      "name": "placeholder_smoke_prices",
+      "origin": "Authored unverified assumptions",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Rejected default or explicitly waived smoke"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "configs/default.yaml",
+          "sha256": "b710e0336166799c98ac25311ebf30a799f9637eaff0095eb6ad5b9c3c04f85c"
+        },
+        {
+          "path": "src/harpy/ledger.py",
+          "sha256": "1fd59505822bb88b9fe418b7bd248e82f582ce1de398157326ce1cb18a31c720"
+        },
+        {
+          "path": "src/harpy/types.py",
+          "sha256": "fb4f1e3435ba7cce489d381ac1871e11c139d41099abc5311de4e928248e794d"
+        }
+      ],
+      "human_records": false,
+      "id": "D07",
+      "name": "human_review_assumptions",
+      "origin": "Authored review effort and cost policies",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Six-component ledger"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "configs/study.v2.yaml",
+          "sha256": "7f47c0ecc2e157ca90c8d767487d510553b03749b0713c6db7c666d686404155"
+        },
+        {
+          "path": "evidence/study-v2/preregistration.json",
+          "sha256": "facb24d70ba2bf8e91f38fae44cc827cac502a924fba151c7872054bfe04b67d"
+        }
+      ],
+      "human_records": false,
+      "id": "D08",
+      "name": "frozen_v2_study",
+      "origin": "Prespecified hypothesis before collection",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Matched statistical analysis"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "examples/replay/synthetic/dataset.json",
+          "sha256": "ef191e734a33028573c6b8049e4961593f3b4637eb3daa119ce1d081e8878bce"
+        },
+        {
+          "path": "examples/replay/synthetic/observations.jsonl",
+          "sha256": "f03277041d3cb017ce31432ef6cc44884fe1ef693558da08b540fee8b05862d2"
+        },
+        {
+          "path": "examples/replay/synthetic/labels.jsonl",
+          "sha256": "a663d6ea12db07baaca721c31094ada7a162948ea11c39443b98d618732bde79"
+        }
+      ],
+      "human_records": false,
+      "id": "D09",
+      "name": "synthetic_replay_corpus",
+      "origin": "Hand-authored development fixture",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Separated observables and scoring labels"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "src/harpy/detectors.py",
+          "sha256": "0e9578389fcd28693e0d86c9c790303c8e9625798cef544282e855ce1d86b524"
+        },
+        {
+          "path": "src/harpy/sentinel.py",
+          "sha256": "c579db126d30f7320c218069da1d9774c109f28283fca2303174b7d1459cfdae"
+        }
+      ],
+      "human_records": false,
+      "id": "D10",
+      "name": "detector_prompt_schema_adapter",
+      "origin": "Authored prompt and hosted optional provider model",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Observable-only detection"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "evidence/study-v2/report.json",
+          "sha256": "857d25403d0c7b7aafa022d10d2a37f652933ef5fe919ac34139ab8c2dcdd8aa"
+        },
+        {
+          "path": "evidence/study-v2/seed-metrics.json.gz",
+          "sha256": "70e3397c42910cbe3cb6235482036c7bb94d53e0dcfd1576b37288e2c79891b2"
+        },
+        {
+          "path": "evidence/study-v2/inputs.json",
+          "sha256": "376b7c322773b4e21259cade7592cfe225e9b55b1e20b25a6e53a7e21b12399e"
+        },
+        {
+          "path": "evidence/study-v2/build.json",
+          "sha256": "d0cac2426e4d5cdfabccb5be868d2f54393208f019569bc784e81edfa6f9c5af"
+        },
+        {
+          "path": "evidence/study-v2/cost_sensitivity.png",
+          "sha256": "0ed0c6625260ac8fd96ea5f321b40e7f27262149efe7c2db25aaab5640e1fc01"
+        },
+        {
+          "path": "evidence/study-v2/manifest.json",
+          "sha256": "c9ee607ac0527f215312402cb652e9cdf1b06307b4ed311e4df6626b41465982"
+        }
+      ],
+      "human_records": false,
+      "id": "D11",
+      "name": "study_evidence",
+      "origin": "Conditional simulation and paired analysis",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Report and seed-level recomputation"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "evidence/replay-reference/report.json",
+          "sha256": "f66c3728d0141f31570ca3275b67c38d4a105ca1004eb869c19fa4f568ee75e8"
+        },
+        {
+          "path": "evidence/replay-reference/predictions.jsonl",
+          "sha256": "373a674a9e473633e94e540ecdc01708a2060001992db121c1d9c7c9acaace1d"
+        },
+        {
+          "path": "evidence/replay-reference/manifest.json",
+          "sha256": "227fdf1845c6435f49d8a109e67f01fa3b4f7cb201853cdca6cc25072f6ed702"
+        }
+      ],
+      "human_records": false,
+      "id": "D12",
+      "name": "replay_reference_evidence",
+      "origin": "Measured mechanical detector on synthetic fixture",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Confusion matrix; no live model"
+    },
+    {
+      "consent": "not_applicable_synthetic_or_authored",
+      "files": [
+        {
+          "path": "pyproject.toml",
+          "sha256": "71a81af8677dede0eb127eb95e8d0a61cc93af1242d0ae441c6049714bd2715d"
+        },
+        {
+          "path": "uv.lock",
+          "sha256": "a892745a2ca316e9b8912d278577f292499935861501f7fa7a16e5edaba6d61c"
+        },
+        {
+          "path": "evidence/study-v2/inputs.json",
+          "sha256": "376b7c322773b4e21259cade7592cfe225e9b55b1e20b25a6e53a7e21b12399e"
+        }
+      ],
+      "human_records": false,
+      "id": "D13",
+      "name": "source_dependency_identity",
+      "origin": "Executing source and locked package versions",
+      "rights": "MIT authored code/fixture/output; upstream package and model terms separate",
+      "use": "Reproducibility"
+    }
+  ],
+  "controls": [
+    "Full parsed input snapshots and source/lock hashes",
+    "Blinded observations and labels",
+    "Trusted SHA-256 artifact manifests",
+    "Independent dollar and attention budgets"
+  ],
+  "dependency_versions": [
+    {
+      "license_review": "not_audited",
+      "name": "colorama",
+      "version": "0.4.6"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "contourpy",
+      "version": "1.3.3"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "cycler",
+      "version": "0.12.1"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "fonttools",
+      "version": "4.63.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "iniconfig",
+      "version": "2.3.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "kiwisolver",
+      "version": "1.5.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "matplotlib",
+      "version": "3.11.1"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "numpy",
+      "version": "2.4.6"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "numpy",
+      "version": "2.5.2"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "packaging",
+      "version": "26.3"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pandas",
+      "version": "3.0.5"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pillow",
+      "version": "12.3.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pluggy",
+      "version": "1.6.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pyarrow",
+      "version": "25.0.1"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pygments",
+      "version": "2.20.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pyparsing",
+      "version": "3.3.2"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pytest",
+      "version": "9.1.1"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "python-dateutil",
+      "version": "2.9.0.post0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "pyyaml",
+      "version": "6.0.3"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "ruff",
+      "version": "0.16.2"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "six",
+      "version": "1.17.0"
+    },
+    {
+      "license_review": "not_audited",
+      "name": "tzdata",
+      "version": "2026.3"
+    }
+  ],
+  "limitations": [
+    "Conditional simulation",
+    "Synthetic development replay only",
+    "No live-model accuracy",
+    "No signed attestations",
+    "No external lineage catalog",
+    "Not a certified software SBOM",
+    "Metadata declarations do not prove consent or sanitization for future real traces"
+  ],
+  "models": [
+    {
+      "id": "MockSentinel",
+      "kind": "assumed_probabilities",
+      "trained": false
+    },
+    {
+      "id": "typed-checks/1",
+      "kind": "measured_mechanical_reference",
+      "trained": false
+    },
+    {
+      "id": "gpt-4.1-2025-04-14",
+      "kind": "optional_external_replay_detector",
+      "live_accuracy_measured": false
+    },
+    {
+      "id": "gpt-4.1-mini-2025-04-14",
+      "kind": "hypothetical_worker_pricing_only",
+      "live_called": false
+    }
+  ],
+  "owner": "Melinda Emerson",
+  "project": "MeLinResearch/Harpy",
+  "reviewed": "2026-10-11",
+  "schema": "harpy/dbom/1",
+  "transformations": [
+    {
+      "inputs": [
+        "D01",
+        "D02",
+        "D04"
+      ],
+      "operation": "Project observable lineage",
+      "outputs": [
+        "D03"
+      ]
+    },
+    {
+      "inputs": [
+        "D01",
+        "D03",
+        "D04",
+        "D05",
+        "D07",
+        "D13"
+      ],
+      "operation": "Simulate oversight and score using D02",
+      "outputs": [
+        "D11"
+      ]
+    },
+    {
+      "inputs": [
+        "D08",
+        "D11"
+      ],
+      "operation": "Pair seeds with Tier 0 and estimate uncertainty",
+      "outputs": [
+        "D11"
+      ]
+    },
+    {
+      "inputs": [
+        "D09",
+        "D10",
+        "D13"
+      ],
+      "operation": "Predict from observations; join separate labels only in scorer",
+      "outputs": [
+        "D12"
+      ]
+    }
+  ],
+  "version": "0.2.0.dev0"
+}

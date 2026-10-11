@@ -1,0 +1,15 @@
+{
+  "artifacts": [
+    {
+      "path": "predictions.jsonl",
+      "sha256": "373a674a9e473633e94e540ecdc01708a2060001992db121c1d9c7c9acaace1d",
+      "size_bytes": 4530
+    },
+    {
+      "path": "report.json",
+      "sha256": "f66c3728d0141f31570ca3275b67c38d4a105ca1004eb869c19fa4f568ee75e8",
+      "size_bytes": 4497
+    }
+  ],
+  "schema": "harpy/artifact-manifest/1"
+}

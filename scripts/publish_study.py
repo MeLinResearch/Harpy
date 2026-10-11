@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import argparse
 import gzip
+import importlib.metadata
 import json
+import platform
 import shutil
 from pathlib import Path
 
@@ -28,11 +30,18 @@ def publish(results: Path, output: Path, revision: str) -> None:
         raise ValueError("use an empty evidence directory")
     output.mkdir(parents=True, exist_ok=True)
     for name in ("report.json", "preregistration.json", "seed-metrics.json.gz"):
-        shutil.copyfile(results / name, output / name)
+        if name.endswith(".gz"):
+            shutil.copyfile(results / name, output / name)
+        else:
+            (output / name).write_text(
+                (results / name).read_text(encoding="utf-8"), encoding="utf-8", newline="\n"
+            )
     first = next(p for p in sorted((results / "runs").glob("*.json")) if p.name != "manifest.json")
     inputs = json.loads(first.read_text())["provenance"]
     (output / "inputs.json").write_text(
-        json.dumps({"provenance": inputs}, indent=2, sort_keys=True) + "\n"
+        json.dumps({"provenance": inputs}, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     (output / "build.json").write_text(
         json.dumps(
@@ -40,15 +49,28 @@ def publish(results: Path, output: Path, revision: str) -> None:
                 "schema": "harpy/evidence-build/1",
                 "analysis_source_revision": revision,
                 "source_tree_sha256": inputs["source_tree_sha256"],
-                "n_base_simulations": report["n_run_records"] // 4,
+                "n_base_simulations": report["n_run_records"]
+                // (
+                    len(report["study"]["grid"]["fleet_scales"])
+                    * len(report["study"]["grid"]["review_scalings"])
+                ),
                 "n_recosted_records": report["n_run_records"],
                 "output_license": "MIT",
                 "real_model_calls": 0,
+                "runtime": {
+                    "python": platform.python_version(),
+                    "packages": {
+                        name: importlib.metadata.version(name)
+                        for name in ("pyyaml", "matplotlib", "pandas", "pyarrow")
+                    },
+                },
             },
             indent=2,
             sort_keys=True,
         )
-        + "\n"
+        + "\n",
+        encoding="utf-8",
+        newline="\n",
     )
     plot_sensitivity(report, output / "cost_sensitivity.png")
     write_manifest(output)
@@ -101,14 +123,25 @@ def plot_sensitivity(report: dict, path: Path) -> None:
         axes[0, col].axhline(0, color="#ccc6be", linewidth=0.7)
         axes[1, col].axhline(10, color="#82796c", linestyle="--", linewidth=1)
         axes[1, col].set_yscale("log")
-        axes[1, col].legend(title="Review scaling", fontsize=8, frameon=False)
+        axes[1, col].set_ylim(1, 250)
         for ax in axes[:, col]:
             ax.set_xticks(range(3), arms, fontsize=8)
             ax.spines[["top", "right"]].set_visible(False)
             ax.grid(axis="y", alpha=0.15)
         if col == 0:
-            axes[0, col].set_ylabel("Detection gain over Tier 0 (percentage points)", fontsize=9)
-            axes[1, col].set_ylabel("Oversight / worker cost (%) • log scale", fontsize=9)
+            axes[0, col].set_ylabel("Added detections (percentage points)", fontsize=9)
+            axes[1, col].set_ylabel("Overhead (%; log scale)", fontsize=9)
+    handles, labels = axes[1, 0].get_legend_handles_labels()
+    fig.legend(
+        handles,
+        labels,
+        title="Review cost policy",
+        ncol=2,
+        frameon=False,
+        loc="upper center",
+        bbox_to_anchor=(0.5, 0.84),
+        fontsize=9,
+    )
     fig.suptitle(
         "HARPY v2 • conditional simulation with assumed detector accuracy\n"
         "30 paired seeds • 5% audit budget • lineage fidelity 1 • fleet scale 100",
