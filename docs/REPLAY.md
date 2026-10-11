@@ -26,7 +26,7 @@ Use a directory containing the following files.
 
 The loader verifies hashes and rejects duplicate, missing, or extra case IDs. Known answer fields such as `is_corrupt`, `ground_truth`, `fault_present`, and `severity` are forbidden even when nested inside observations. Labels are supplied only to the scorer. This structural check cannot detect answers hidden in arbitrary prose or identifiers; dataset review must address that leakage.
 
-The mechanical reference implements structural failures, typed payload presence, numeric ranges, and large within-case conflicts. It is not the complete seven-signal simulation Tier 0, and it is not a semantic oracle. The model adapter can ingest free-text observables too; those must be treated as untrusted content and sanitized before uploading.
+The mechanical reference implements structural failures, typed payload presence, numeric ranges, and large within-case conflicts. Missing or malformed claim payloads, including absent subject or field identifiers, are flagged using the claim ID. Invalid message/claim containers or missing evidence IDs stop replay with a recorded error and a report; they are not scored as clear verdicts. It is not the complete seven-signal simulation Tier 0, and it is not a semantic oracle. The model adapter can ingest free-text observables too; those must be treated as untrusted content and sanitized before uploading.
 
 For a real-trace study, document the actual recording source, lawful rights and consent, secret/PII removal, annotation procedure, and a held-out partition. Do not infer those properties from a nonempty metadata field. Measure appropriate task labels, inter-annotator agreement, task coverage, and prompt-injection behavior in a separately frozen study.
 
