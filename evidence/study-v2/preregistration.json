@@ -1,0 +1,70 @@
+{
+  "specification": {
+    "decision": {
+      "bootstrap_samples": 2000,
+      "maximum_overhead": 0.1,
+      "minimum_incremental_detection": 0.1,
+      "minimum_seeds": 30
+    },
+    "grid": {
+      "alert_caps": [
+        0.05
+      ],
+      "arms": [
+        "NONE",
+        "TIER0_ONLY",
+        "RANDOM",
+        "DIRECTED",
+        "HYBRID"
+      ],
+      "budget_pcts": [
+        0.05,
+        0.1
+      ],
+      "fleet_scales": [
+        1.0,
+        100.0
+      ],
+      "lineage_fidelities": [
+        0.5,
+        1.0
+      ],
+      "reserve_fractions": [
+        0.5
+      ],
+      "review_scalings": [
+        "fixed",
+        "linear"
+      ],
+      "seeds": [
+        0,
+        29
+      ],
+      "severities": [
+        "OVERT",
+        "MODERATE",
+        "SUBTLE"
+      ],
+      "worker_models": [
+        "gpt-4.1-mini"
+      ]
+    },
+    "pricing": "configs/pricing.study.yaml",
+    "primary_cell": {
+      "arm": "HYBRID",
+      "budget_pct": 0.05,
+      "fleet_scale": 100.0,
+      "lineage_fidelity": 1.0,
+      "max_alerts_per_agent_hour": 0.05,
+      "reserve_fraction": 0.5,
+      "review_scaling": "linear",
+      "severity": "SUBTLE",
+      "worker_model": "gpt-4.1-mini"
+    },
+    "schema": "harpy/study/2",
+    "simulation_config": "configs/default.yaml",
+    "study_id": "harpy-v2-cost-sensitivity-2026-10-10",
+    "v1_source_revision": "babf4b12d71830840787e0784326a68a5bd7cc87"
+  },
+  "yaml_sha256": "7f47c0ecc2e157ca90c8d767487d510553b03749b0713c6db7c666d686404155"
+}

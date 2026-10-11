@@ -1,0 +1,32 @@
+# Separate from the frozen v1 experiment. Freeze this file before collecting data.
+schema: harpy/study/2
+study_id: harpy-v2-cost-sensitivity-2026-10-10
+v1_source_revision: babf4b12d71830840787e0784326a68a5bd7cc87
+simulation_config: configs/default.yaml
+pricing: configs/pricing.study.yaml
+grid:
+  seeds: [0, 29]
+  arms: [NONE, TIER0_ONLY, RANDOM, DIRECTED, HYBRID]
+  severities: [OVERT, MODERATE, SUBTLE]
+  budget_pcts: [0.05, 0.10]
+  lineage_fidelities: [0.5, 1.0]
+  reserve_fractions: [0.5]
+  fleet_scales: [1.0, 100.0]
+  review_scalings: [fixed, linear]
+  alert_caps: [0.05]
+  worker_models: [gpt-4.1-mini]
+decision:
+  minimum_seeds: 30
+  minimum_incremental_detection: 0.10
+  maximum_overhead: 0.10
+  bootstrap_samples: 2000
+primary_cell:
+  arm: HYBRID
+  severity: SUBTLE
+  budget_pct: 0.05
+  lineage_fidelity: 1.0
+  reserve_fraction: 0.5
+  fleet_scale: 100.0
+  review_scaling: linear
+  max_alerts_per_agent_hour: 0.05
+  worker_model: gpt-4.1-mini

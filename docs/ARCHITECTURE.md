@@ -2,7 +2,7 @@
 
 [← Project overview](../README.md) · [Methodology](METHODOLOGY.md) · [Run and inspect](RUNNING.md)
 
-HARPY-SIM is a local batch simulation. It contains no live worker fleet, model API integration, production control plane, or web service. The implementation separates the simulated world from the oversight inputs and from ground-truth scoring.
+HARPY-SIM is a local batch simulation. HARPY-REPLAY is a separate local evaluation harness with a mechanical detector and an optional real model API adapter. Neither is a production control plane or web service. The implementation separates world generation, observable detector inputs, and ground-truth scoring.
 
 ## Oversight flow
 
@@ -47,7 +47,7 @@ See [`run_simulation`](../src/harpy/simulation.py) and `_isolate` for the exact 
 | Dollars | Accrue a fraction of worker spend, subtract Tier 0 cost, and buy only affordable audits. | Audit counts and costs are recorded. |
 | Human attention | Bound alerts per active agent-hour; optionally adapt the isolation threshold. | Suppressed alerts, effective threshold, and lost detections are scored. |
 
-The cost ledger separates sentinel audits, Tier 0, discarded work, reruns, triage, and investigation. In the current fleet-scale model, four components scale with worker-fleet size while the two review components do not. That assumption makes a stated fleet scale essential to interpreting overhead.
+The cost ledger separates sentinel audits, Tier 0, discarded work, reruns, triage, and investigation. Four components always scale with worker-fleet size. The legacy `fixed` policy holds review cost constant; `linear` scales review with the fleet too. Both are accounting assumptions. Fleet scale and review policy are recorded in every v2 result.
 
 ## Five permitted controller actions
 
@@ -69,6 +69,11 @@ Separate RNG streams keep a sampler change from reshuffling the simulated world 
 
 ## Outputs and next boundary
 
-Each run records its inputs, assumed detector characteristics, pricing verification state, fault distribution, metrics, and cost ledger. Sweeps write per-run JSON and a Parquet summary; plotting derives figures from those records.
+Each v2 run embeds the full configuration and pricing snapshot, hashes executing source and lockfiles, and records a shared experiment fingerprint. Sweeps write per-run JSON, a Parquet summary, and an artifact manifest. Baseline matching includes the experiment fingerprint and review policy; plotting refuses to combine different input identities, worker tiers, or detector assumptions.
 
-`RealSentinel` raises `NotImplementedError`. HARPY-REPLAY would measure real candidate detectors on recorded traces. The current mock's performance is assumed, and every result downstream inherits that assumption.
+`RealSentinel` serializes message observables explicitly and passes them to a detector without corruption labels. Replay validates a corpus's file hashes and separate label map. The detector receives one observation object; the scorer uses labels after predictions are recorded. This catches accidental answer leakage, but arbitrary Python code is not sandboxed.
+
+`OpenAIResponsesDetector` calls the official Responses API with strict JSON output, no tools, and `store: false`. The requested model must match sourced pricing; the response must identify the same snapshot. Replay reserves a conservative token-cost bound before a call, records usage and provider hashes afterward, and stops on errors or unknown charges. A refusal or incomplete response is scored as a failed case rather than a negative detection.
+
+The included replay corpus is a synthetic development fixture. Real traces, permissions, sanitization, and held-out evaluation remain necessary to measure real-world detector capability; see [the replay guide](REPLAY.md).
+

@@ -4,11 +4,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
 import yaml
 
+from .detectors import MechanicalDetector, OpenAIResponsesDetector
 from .ledger import PricingEntryMissingError, load_pricing
 from .plot import (
     detection_vs_alert_budget,
@@ -16,7 +18,10 @@ from .plot import (
     hybrid_reserve_breakdown,
     overhead_composition,
 )
+from .provenance import verify_manifest, write_manifest
+from .replay import run_replay
 from .simulation import RunSpec, resolve_severity
+from .study import run_study
 from .sweep import (
     PricingNotVerifiedError,
     SweepGrid,
@@ -77,6 +82,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         # Which tier to price at is a pricing-file question, so ask the pricing
         # file rather than defaulting to a name that may not be defined in it.
         worker_model=args.worker_model or pricing.default_worker_model_name(),
+        review_scaling=args.review_scaling,
     )
     try:
         path = run_single(
@@ -150,6 +156,8 @@ def _cmd_sweep(args: argparse.Namespace) -> int:
         narrowed["worker_models"] = tuple(
             part.strip() for part in args.worker_models.split(",") if part.strip()
         )
+    if args.review_scalings:
+        narrowed["review_scalings"] = tuple(args.review_scalings.split(","))
     grid = SweepGrid(**narrowed)
     try:
         summary = run_sweep(
@@ -169,6 +177,15 @@ def _cmd_sweep(args: argparse.Namespace) -> int:
 
 def _cmd_plot(args: argparse.Namespace) -> int:
     rows = load_result_rows(args.results)
+    if args.review_scaling:
+        rows = [r for r in rows if r.get("review_scaling", "fixed") == args.review_scaling]
+    if args.worker_model:
+        rows = [r for r in rows if r.get("worker_model") == args.worker_model]
+    if args.detection_prob is not None:
+        rows = [r for r in rows if r.get("effective_detection_prob") == args.detection_prob]
+    if args.false_positive_rate is not None:
+        rows = [r for r in rows
+                if r.get("effective_false_positive_rate") == args.false_positive_rate]
     if not rows:
         print(f"no run JSONs found in {args.results}", file=sys.stderr)
         return 2
@@ -184,6 +201,32 @@ def _cmd_plot(args: argparse.Namespace) -> int:
 
     by_budget = out.with_name("detection_vs_alert_budget.png")
     print(f"wrote {detection_vs_alert_budget(rows, by_budget, args.fleet_scale)}")
+    write_manifest(Path(args.results))
+    return 0
+
+
+def _cmd_verify(args: argparse.Namespace) -> int:
+    errors = verify_manifest(args.manifest)
+    for error in errors:
+        print(error, file=sys.stderr)
+    if not errors:
+        print("all artifacts match their manifest")
+    return 2 if errors else 0
+
+
+def _cmd_study(args: argparse.Namespace) -> int:
+    path = run_study(args.spec, args.out, args.processes)
+    report = json.loads(path.read_text(encoding="utf-8"))
+    print(f"wrote {path}; primary decision={report['primary']['decision']}")
+    return 0
+
+
+def _cmd_replay(args: argparse.Namespace) -> int:
+    detector = MechanicalDetector() if args.detector == "mechanical" else OpenAIResponsesDetector(
+        os.environ.get("OPENAI_API_KEY", ""), args.model)
+    pricing = load_pricing(args.pricing) if args.detector == "openai" else None
+    path = run_replay(args.corpus, detector, args.out, pricing, args.max_dollars, args.max_cases)
+    print(f"wrote {path}")
     return 0
 
 
@@ -248,6 +291,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="smoke runs only; stamps the result pricing_verified=false",
     )
     run.add_argument("--out", default="results/")
+    run.add_argument("--review-scaling", choices=["fixed", "linear"], default="fixed")
     run.set_defaults(func=_cmd_run)
 
     sweep = sub.add_parser("sweep", help="the full grid, across processes")
@@ -255,6 +299,7 @@ def build_parser() -> argparse.ArgumentParser:
     sweep.add_argument("--pricing", default=None)
     sweep.add_argument("--out", default="results/")
     sweep.add_argument("--seeds", default=None, help="e.g. 0..2 or 0,1,2 (default 0..49)")
+    sweep.add_argument("--review-scalings", default=None, help="fixed,linear cost policies")
     sweep.add_argument(
         "--fleet-scales",
         default=None,
@@ -290,6 +335,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     plot = sub.add_parser("plot", help="all three figures")
     plot.add_argument("--results", default="results/")
+    plot.add_argument("--review-scaling", choices=["fixed", "linear"], default=None)
+    plot.add_argument("--worker-model", default=None)
+    plot.add_argument("--detection-prob", type=float, default=None)
+    plot.add_argument("--false-positive-rate", type=float, default=None)
     plot.add_argument("--out", default="results/detection_vs_overhead.png")
     plot.add_argument(
         "--fleet-scale",
@@ -304,13 +353,38 @@ def build_parser() -> argparse.ArgumentParser:
         help="alert cap the primary figure is drawn at (default: largest present)",
     )
     plot.set_defaults(func=_cmd_plot)
+
+    verify = sub.add_parser("verify", help="check artifact bytes against a trusted manifest")
+    verify.add_argument("--manifest", required=True)
+    verify.set_defaults(func=_cmd_verify)
+
+    study = sub.add_parser("study", help="run the preregistered v2 sensitivity study")
+    study.add_argument("--spec", default="configs/study.v2.yaml")
+    study.add_argument("--out", required=True)
+    study.add_argument("--processes", type=int, default=2)
+    study.set_defaults(func=_cmd_study)
+
+    replay = sub.add_parser("replay", help="evaluate a detector on observable-only recorded cases")
+    replay.add_argument("--corpus", required=True)
+    replay.add_argument("--detector", choices=["mechanical", "openai"], default="mechanical")
+    replay.add_argument("--model", default="gpt-4.1-2025-04-14")
+    replay.add_argument("--pricing", default="configs/pricing.study.yaml")
+    replay.add_argument("--max-dollars", type=float, default=0.25)
+    replay.add_argument("--max-cases", type=int, default=20)
+    replay.add_argument("--out", required=True)
+    replay.set_defaults(func=_cmd_replay)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    return int(args.func(args))
+    try:
+        return int(args.func(args))
+    except (ValueError, OSError, PricingNotVerifiedError, PricingEntryMissingError) as exc:
+        print(str(exc), file=sys.stderr)
+        return 2
 
 
 if __name__ == "__main__":  # pragma: no cover
     raise SystemExit(main())
+

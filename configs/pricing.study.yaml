@@ -1,0 +1,18 @@
+# Standard uncached text-token list prices, checked October 10, 2026.
+# These price a hypothetical fleet; no model calls occur in HARPY-SIM.
+verified: true
+worker_models:
+  gpt-4.1-mini:
+    model: gpt-4.1-mini-2025-04-14
+    input_per_mtok: 0.40
+    output_per_mtok: 1.60
+    source: https://developers.openai.com/api/docs/models/gpt-4.1-mini
+    accessed: "2026-10-10"
+sentinel_model:
+  model: gpt-4.1-2025-04-14
+  input_per_mtok: 2.00
+  output_per_mtok: 8.00
+  source: https://developers.openai.com/api/docs/models/gpt-4.1
+  accessed: "2026-10-10"
+tier0:
+  cost_per_message_dollars: 0.0000001

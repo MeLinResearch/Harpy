@@ -253,8 +253,8 @@ class BudgetLedger:
 
     Every field holds the **slice** figure — what the simulated mesh actually
     spent. The fleet-level figure is the slice times ``fleet_scale`` for the
-    four per-agent components (and for workers), and the slice unchanged for the
-    two review components.
+    four per-agent components (and for workers). Review either remains fixed
+    (the legacy policy) or scales linearly with the fleet.
     """
 
     worker_dollars: float = 0.0
@@ -271,6 +271,7 @@ class BudgetLedger:
     rerun_work_dollars_from_false_isolations: float = 0.0
     #: How many times larger the fleet is than the simulated slice.
     fleet_scale: float = 1.0
+    review_scaling: str = "fixed"
 
     # -- slice-level views -------------------------------------------------
 
@@ -279,7 +280,7 @@ class BudgetLedger:
         return sum(getattr(self, name) for name in PER_AGENT_OVERHEAD_COMPONENTS)
 
     def review_dollars(self) -> float:
-        """Triage plus investigation. Identical at every fleet scale."""
+        """Slice-level triage plus investigation, before review scaling."""
         return sum(getattr(self, name) for name in REVIEW_COMPONENTS)
 
     # -- the true/false isolation split ------------------------------------
@@ -295,8 +296,8 @@ class BudgetLedger:
         """Everything a false isolation costs in wasted and repeated work.
 
         Not the whole cost of a false positive — the human review it triggers is
-        in the review components, which do not scale with the fleet and so
-        cannot be added in here without mixing two different scaling laws.
+        in the review components and reported separately under their selected
+        scaling policy.
         """
         return (
             self.discarded_work_dollars_from_false_isolations
@@ -312,10 +313,10 @@ class BudgetLedger:
     # -- fleet-level views -------------------------------------------------
 
     def fleet_component(self, name: str) -> float:
-        """One component at fleet scale, scaled iff it is a per-agent component."""
+        """One component at fleet scale under the selected review policy."""
         value = getattr(self, name)
         if name in REVIEW_COMPONENTS:
-            return value
+            return value * (self.fleet_scale if self.review_scaling == "linear" else 1.0)
         return value * self.fleet_scale
 
     def fleet_worker_dollars(self) -> float:
@@ -323,7 +324,9 @@ class BudgetLedger:
 
     def incremental(self) -> float:
         """Everything the oversight layer costs, i.e. everything but the workers."""
-        return self.per_agent_overhead_dollars() * self.fleet_scale + self.review_dollars()
+        return self.per_agent_overhead_dollars() * self.fleet_scale + sum(
+            self.fleet_component(name) for name in REVIEW_COMPONENTS
+        )
 
     def overhead_pct(self) -> float:
         """Incremental cost as a fraction of worker-fleet cost.
@@ -339,18 +342,19 @@ class BudgetLedger:
     def review_cost_share_of_overhead(self) -> float:
         """Fraction of incremental cost that is human review.
 
-        Falls as ``1 / fleet_scale`` by construction, which is the finding the
-        fleet_scale sweep exists to make visible.
+        The fixed policy amortises review at larger scales; the linear policy
+        keeps its share constant. Neither is a measured staffing model.
         """
         incremental = self.incremental()
         if incremental <= 0.0:
             return 0.0
-        return self.review_dollars() / incremental
+        return sum(self.fleet_component(name) for name in REVIEW_COMPONENTS) / incremental
 
     def as_dict(self) -> dict:
         """Fleet-level dollars, plus the scale they were computed at."""
         out = {
             "fleet_scale": self.fleet_scale,
+            "review_scaling": self.review_scaling,
             "worker_dollars": self.fleet_worker_dollars(),
         }
         for name in PER_AGENT_OVERHEAD_COMPONENTS + REVIEW_COMPONENTS:
@@ -384,3 +388,4 @@ class AuditResult:
     flagged: bool
     input_tokens: int
     output_tokens: int
+
