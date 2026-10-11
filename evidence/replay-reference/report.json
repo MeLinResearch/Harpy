@@ -1,0 +1,85 @@
+{
+  "cost_note": "Measured token usage priced at uncached list rates; not an invoice. An error may have unknown usage/charges.",
+  "dataset": {
+    "consent": "not_applicable_synthetic",
+    "data_origin": "synthetic_fixture",
+    "dataset_id": "harpy-synthetic-development/1",
+    "files_sha256": {
+      "labels.jsonl": "a663d6ea12db07baaca721c31094ada7a162948ea11c39443b98d618732bde79",
+      "observations.jsonl": "f03277041d3cb017ce31432ef6cc44884fe1ef693558da08b540fee8b05862d2"
+    },
+    "license": "MIT",
+    "limitation": "The slight numeric error is labelled by construction; no model sees that label or has enough evidence to infer its truth reliably.",
+    "partition": "development",
+    "sanitization": "Synthetic identifiers and values; no human records",
+    "schema": "harpy/replay-corpus/1",
+    "source": "Hand-authored typed/structural fixtures; scripts/create_replay_fixture.py"
+  },
+  "dataset_metadata_sha256": "ef191e734a33028573c6b8049e4961593f3b4637eb3daa119ce1d081e8878bce",
+  "detector": {
+    "kind": "mechanical",
+    "model": null,
+    "version": "typed-checks/1"
+  },
+  "estimated_plus_reserved_dollars": 0.0,
+  "estimated_uncached_dollars": 0.0,
+  "evidence_kind": "synthetic_fixture",
+  "max_cases": 20,
+  "max_dollars": 0.25,
+  "metrics": {
+    "completed_cases": 12,
+    "corpus_cases": 12,
+    "detection_ci95": [
+      0.48687217072568123,
+      0.9743203756552564
+    ],
+    "detection_rate": 0.8571428571428571,
+    "failed_cases": 0,
+    "false_negative": 1,
+    "false_positive": 0,
+    "false_positive_ci95": [
+      2.7755575615628914e-17,
+      0.43448246478317465
+    ],
+    "false_positive_rate": 0.0,
+    "mean_duration_seconds": 6.684083321791452e-06,
+    "true_negative": 5,
+    "true_positive": 6,
+    "unattempted_cases": 0
+  },
+  "predictions_sha256": "153b1e578d54fa8e963b89801ad44d518971cda792b4043e6a98c0d8dc45d3f6",
+  "pricing": null,
+  "real_model_called": false,
+  "schema": "harpy/replay-report/1",
+  "source": {
+    "files_sha256": {
+      "pyproject.toml": "71a81af8677dede0eb127eb95e8d0a61cc93af1242d0ae441c6049714bd2715d",
+      "src/harpy/__init__.py": "4187a8c7e2b68f058cf53331eb8e4571cef24cc2f5f2deede699dc62f43951a4",
+      "src/harpy/alert_budget.py": "aee114da36041829ac608880d7feeec05a8886e8b3dae9b60ea45618f7a21280",
+      "src/harpy/cli.py": "e06dcd870bb02be6e75c34e9280067310f5d4928180a8112bbaefb9a41c9805a",
+      "src/harpy/detectors.py": "0e9578389fcd28693e0d86c9c790303c8e9625798cef544282e855ce1d86b524",
+      "src/harpy/faults.py": "bad4cf34137a6787d807b0ecde6bd7f2b4c6de17a5658504b29d3148c42dd7d0",
+      "src/harpy/ledger.py": "1fd59505822bb88b9fe418b7bd248e82f582ce1de398157326ce1cb18a31c720",
+      "src/harpy/lineage.py": "5c2793693d766127d1f9a2ae81a856b2adfb17b152bb84ef87d8502154c2a7e1",
+      "src/harpy/mesh.py": "ec912d0f8336962e2d55e6b222180238ba01a0c057b91e90c2cfaa7015b6d6f8",
+      "src/harpy/metrics.py": "b29f5daa331d1d240129d9b3171f20ea7f6fd89263d97815616d59551202133f",
+      "src/harpy/plot.py": "7bbafd238ae18c3004d858fc8310c141968de6e5039b6f321eae6c9413e0dd33",
+      "src/harpy/provenance.py": "6ae471b1158dacf103a9baf6e7918d3547daad1ebcafa185df9129d49276051c",
+      "src/harpy/replay.py": "d978ebdf38cc0ce2dd2e918c56c947b1a45236680361c0e1126181e4fce9ec07",
+      "src/harpy/response.py": "36c655a9751ea3ef032b1107a8c633b659365e963f06692948cd7a0adf1ed02e",
+      "src/harpy/sampler.py": "86d7a93122ad41ca96df902ecd796edf92a6b1189feb1f67c642e2d65852f1c0",
+      "src/harpy/sentinel.py": "c579db126d30f7320c218069da1d9774c109f28283fca2303174b7d1459cfdae",
+      "src/harpy/simulation.py": "a52ffae08962015f3f8c114f80bc782c6579b6a781cdd54b6ee1765ce060272b",
+      "src/harpy/statistics.py": "19207b2d0a5df5d6e5b70905d328a79267982f829ca5ae73281feb48eded9a88",
+      "src/harpy/study.py": "6b47f653dbd9880cc66256173f6aa3f08160216bed16c263c6f2687a2be245d8",
+      "src/harpy/suspicion.py": "7c2ec21884a99e40233f814f93245a0f06b8b5ac753f82d7b45f2156e1e4be3b",
+      "src/harpy/sweep.py": "a42477d6e652e0e656f9aef4126f3c2bb8a89aca459356ee61828efc1c67cb48",
+      "src/harpy/telemetry.py": "4134ee04f09fa1fb5cc35dff9515da28045088f0fafc203830dc12f795224626",
+      "src/harpy/types.py": "fb4f1e3435ba7cce489d381ac1871e11c139d41099abc5311de4e928248e794d",
+      "uv.lock": "a892745a2ca316e9b8912d278577f292499935861501f7fa7a16e5edaba6d61c"
+    },
+    "tree_sha256": "da351558f7adbcad85cc881185daa1ad8fc7ace788d351636445886e7358ddf0"
+  },
+  "stop_reason": null,
+  "unknown_charge_reserved_dollars": 0.0
+}

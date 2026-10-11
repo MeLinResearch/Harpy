@@ -1,0 +1,15 @@
+{
+  "consent": "not_applicable_synthetic",
+  "data_origin": "synthetic_fixture",
+  "dataset_id": "harpy-synthetic-development/1",
+  "files_sha256": {
+    "labels.jsonl": "a663d6ea12db07baaca721c31094ada7a162948ea11c39443b98d618732bde79",
+    "observations.jsonl": "f03277041d3cb017ce31432ef6cc44884fe1ef693558da08b540fee8b05862d2"
+  },
+  "license": "MIT",
+  "limitation": "The slight numeric error is labelled by construction; no model sees that label or has enough evidence to infer its truth reliably.",
+  "partition": "development",
+  "sanitization": "Synthetic identifiers and values; no human records",
+  "schema": "harpy/replay-corpus/1",
+  "source": "Hand-authored typed/structural fixtures; scripts/create_replay_fixture.py"
+}

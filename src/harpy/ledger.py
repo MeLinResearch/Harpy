@@ -60,6 +60,7 @@ class ModelPrice:
     output_per_mtok: float
     source: str
     accessed: str
+    model: str | None = None
 
     def cost(self, input_tokens: int, output_tokens: int) -> float:
         return (
@@ -67,12 +68,15 @@ class ModelPrice:
         ) / 1_000_000.0
 
     def as_dict(self) -> dict:
-        return {
+        out = {
             "input_per_mtok": self.input_per_mtok,
             "output_per_mtok": self.output_per_mtok,
             "source": self.source,
             "accessed": self.accessed,
         }
+        if self.model is not None:
+            out["model"] = self.model
+        return out
 
 
 @dataclass(frozen=True)
@@ -222,6 +226,7 @@ def _price_from_entry(entry: dict, label: str) -> ModelPrice:
         output_per_mtok=float(entry.get("output_per_mtok", 0.0)),
         source=str(entry.get("source", "")),
         accessed=str(entry.get("accessed", "")),
+        model=str(entry["model"]) if entry.get("model") else None,
     )
 
 
@@ -469,3 +474,4 @@ class CostAccountant:
             self.escalations_charged += 1
             cost += investigation
         return cost, True
+

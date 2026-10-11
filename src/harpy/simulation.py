@@ -9,6 +9,7 @@ and the lossy lineage projection.
 from __future__ import annotations
 
 import dataclasses
+import math
 import random
 from collections import deque
 from dataclasses import dataclass, field
@@ -24,6 +25,7 @@ from .ledger import (
 )
 from .lineage import make_pair
 from .mesh import Mesh
+from .provenance import capture_inputs
 from .response import ResponseController
 from .sampler import Sampler, SamplerConfig
 from .sentinel import MockSentinel
@@ -73,8 +75,13 @@ class RunSpec:
     #: Which worker tier in configs/pricing.yaml this run is costed at. A name,
     #: never a price and never a model string — both live in the pricing file.
     worker_model: str = DEFAULT_WORKER_MODEL_NAME
+    review_scaling: str = "fixed"
 
     def __post_init__(self) -> None:
+        if self.review_scaling not in ("fixed", "linear"):
+            raise ValueError("review_scaling must be fixed or linear")
+        if not math.isfinite(self.fleet_scale) or self.fleet_scale <= 0:
+            raise ValueError("fleet_scale must be finite and positive")
         for name in ("detection_prob", "false_positive_rate"):
             value = getattr(self, name)
             if value is not None and not 0.0 <= float(value) <= 1.0:
@@ -96,6 +103,7 @@ class RunSpec:
             "detection_prob": self.detection_prob,
             "false_positive_rate": self.false_positive_rate,
             "worker_model": self.worker_model,
+            "review_scaling": self.review_scaling,
         }
 
     def run_id(self) -> str:
@@ -105,7 +113,7 @@ class RunSpec:
             f"seed{self.seed:03d}_{self.arm.value}_{self.severity.value}"
             f"_b{self.budget_pct:g}_f{self.lineage_fidelity:g}_r{self.reserve_fraction:g}"
             f"_x{self.fleet_scale:g}_a{self.max_alerts_per_agent_hour:g}"
-            f"_d{detection}_p{fpr}_w{_slug(self.worker_model)}"
+            f"_d{detection}_p{fpr}_w{_slug(self.worker_model)}_h{self.review_scaling}"
         )
 
 
@@ -175,9 +183,12 @@ class RunRecord:
     detections_lost_to_alert_cap: int = 0
     effective_isolation_threshold: float = 0.0
     base_isolation_threshold: float = 0.0
+    provenance: dict = field(default_factory=dict)
 
 
-def rescale(record: RunRecord, fleet_scale: float) -> RunRecord:
+def rescale(
+    record: RunRecord, fleet_scale: float, review_scaling: str | None = None
+) -> RunRecord:
     """The same run, costed for a fleet ``fleet_scale`` times the slice.
 
     ``fleet_scale`` touches no RNG stream and no decision, so re-costing is
@@ -186,8 +197,10 @@ def rescale(record: RunRecord, fleet_scale: float) -> RunRecord:
     """
     return dataclasses.replace(
         record,
-        spec=dataclasses.replace(record.spec, fleet_scale=float(fleet_scale)),
-        ledger=dataclasses.replace(record.ledger, fleet_scale=float(fleet_scale)),
+        spec=dataclasses.replace(record.spec, fleet_scale=float(fleet_scale),
+                                 review_scaling=review_scaling or record.spec.review_scaling),
+        ledger=dataclasses.replace(record.ledger, fleet_scale=float(fleet_scale),
+                                   review_scaling=review_scaling or record.spec.review_scaling),
     )
 
 
@@ -291,6 +304,7 @@ def run_simulation(
         faulty_agent_id=mesh.faulty_agent_id,
         fault_onset_tick=mesh.fault_onset_tick,
         ledger=accountant.ledger,
+        provenance=capture_inputs(config, pricing.as_dict()),
         pricing_dict=pricing.as_dict(),
         base_isolation_threshold=alert_budget.config.base_isolation_threshold,
         effective_detection_prob=sentinel.detection_prob[spec.severity],
@@ -298,6 +312,8 @@ def run_simulation(
         worker_model_name=accountant.worker_model_name,
         worker_model_price=accountant.worker_price.as_dict(),
     )
+
+    record.ledger.review_scaling = spec.review_scaling
 
     # NONE is the unsupervised control: no Tier 0, no audits, no isolations, and
     # therefore no incremental cost. It is the baseline every other arm's
@@ -457,3 +473,4 @@ def resolve_severity(config: dict, spec_severity: Severity | str | None, seed: i
     return sample_severity(
         config["fault_distribution"], random.Random(_stream_seed(seed, _STREAM_MESH))
     )
+

@@ -1,217 +1,69 @@
 # Methodology
 
-[← Project overview](../README.md) · [Architecture](ARCHITECTURE.md) · [Run and inspect](RUNNING.md)
+[Project](../README.md) · [Architecture](ARCHITECTURE.md) · [Run and inspect](RUNNING.md)
 
-The detailed experiment design, assumptions, cost model, and scope of HARPY-SIM.
+HARPY-SIM asks which detector characteristics and costs would make selective agent oversight worth testing. HARPY-REPLAY separately measures a detector on recorded observable cases. The two workflows do not exchange accuracy assumptions automatically.
 
-## What this is
+## Simulation design
 
-Phase 1 of two. HARPY-SIM answers: **under what detector characteristics and
-costs is this architecture economically viable?**
+A seeded mesh of 30 agents exchanges typed claims for 500 one-minute ticks. One agent develops a planted malfunction. Fault severities are OVERT structural failure, MODERATE typed conflict, and SUBTLE numeric perturbation. True lineage propagates corrupted claims; oversight receives a lossy projected graph.
 
-A mesh of agents passes typed claims to each other. One of them goes faulty at a
-random point, at one of three severities, and corruption spreads through claim
-derivation. Watching them is a two-tier oversight layer: Tier 0 is seven
-mechanical checks on typed fields, effectively free; the sentinel is a
-model-backed auditor that costs real money and is therefore rationed. A sampler
-decides who gets audited within a dollar budget, a decaying suspicion score
-decides when to act, and five permitted responses are all the layer can do.
+Seven mechanical Tier 0 checks feed decaying suspicion. A dollar allowance tied to worker spend buys selective mock audits under RANDOM, DIRECTED, or HYBRID sampling. NONE and TIER0_ONLY are controls. Isolation needs accumulated evidence; an independent human-attention budget caps alerts and can adapt the gate. The controller exposes five scoped actions; the default loop uses a subset.
 
-The output is a cost curve: detection probability against total incremental
-overhead as a percentage of worker-fleet cost, one curve per sampling arm,
-faceted by fault severity and by how good the lineage plumbing is.
+`MockSentinel` reads corruption labels and returns a weighted coin flip. Its default audit probabilities (95%, 78%, 42% by severity; 2% false-positive probability) are assumptions. Detection rates downstream of that mock are conditional simulation outcomes, never measured AI accuracy.
 
-## What this CANNOT show
+Independent RNG streams keep matched worlds stable across arms. `configs/default.yaml`, including its fault distribution, is preserved from [the v1 source revision](https://github.com/MeLinResearch/Harpy/tree/babf4b12d71830840787e0784326a68a5bd7cc87). Changing the workload, fault distribution, or thresholds requires a new versioned experiment.
 
-**MockSentinel returns its configured detection probability.** It reads ground
-truth and flips a weighted coin. It is the one component allowed to see the
-answer key, precisely because it is not detecting anything — it is standing in
-for a detector whose accuracy is an input to the model.
+## Six-component cost model
 
-So: a phase 1 result of 80% detection is arithmetic. It is the number you get by
-assuming a detector with those characteristics, sampling it under a budget, and
-counting. It is **not** evidence that any model detects anything at that rate,
-at that price, or at all.
+Costs are sentinel audits, Tier 0 checks, discarded work, reruns, triage, and investigation, divided by worker-fleet spend. Discard and rerun accounting separately attributes true and false isolations. Token usage is simulated in HARPY-SIM and measured by the provider adapter in replay.
 
-Only phase 2 (**HARPY-REPLAY**: recorded traces, real candidate sentinels)
-answers whether a detector with the required characteristics exists at an
-acceptable price. Phase 1's job is to tell phase 2 what to go looking for — what
-accuracy, at what audit price, would have to hold for any of this to pay for
-itself.
+Human review uses minutes and an analyst hourly rate: triage plus probabilistically escalated investigation, with a separate RNG stream and per-agent batching window. The default $75/hour, 3-minute triage, 45-minute investigation, 25% escalation, and 20-tick batching are modeling assumptions. They are not observed analyst behavior or a imported wage dataset.
 
-Everything downstream of that assumption inherits it. The severity facets are
-not empirical difficulty levels; they are three assumed detection probabilities
-attached to three synthetic fault behaviours.
+Let W be slice worker cost, A the sum of four per-agent oversight costs, R review cost, and s fleet scale. V2 makes the review policy explicit:
 
-## Preregistered kill condition
+| Policy | Fleet overhead fraction | Interpretation |
+| --- | --- | --- |
+| fixed | (sA + R) / (sW) | Legacy assumption: one fixed review pool, with no demonstrated staffing capacity. Review amortises as the fleet grows. |
+| linear | (sA + sR) / (sW) | Review demand grows with agents; the overhead fraction is independent of fleet scale. |
 
-HARPY fails if it cannot show **substantial incremental detection over the
-TIER0_ONLY arm while total incremental cost stays under 10% of worker-fleet
-cost**.
+Scale and policy re-cost the same simulation. They change no RNG stream, threshold, alert count, or detection decision. Recosted records are sensitivity scenarios, not independent observations. Neither policy models queueing, staffing economies, capacity limits, or correlated fleet failures.
 
-TIER0_ONLY is the arm to beat because Tier 0 is nearly free: if paying for a
-sentinel does not buy detection that mechanical checks were not already getting,
-there is no architecture here worth building.
+`min_fleet_dollars_per_hour_for_viability` solves the fixed-policy 10% cost boundary. Under linear scaling, it is zero when every positive scale clears the cost ceiling, and null when no scale can clear it. It does not forecast minimum operational staffing.
 
-No detection floor is preregistered until the fault distribution is fixed. The
-distribution in `configs/default.yaml` is frozen before the sweep and **must not
-be edited afterwards**; it is echoed into every results JSON so any figure can be
-checked against the distribution it was scored under.
+## Frozen v2 decision
 
-### The ceiling is only meaningful at a stated fleet scale
+[configs/study.v2.yaml](../configs/study.v2.yaml) freezes the study before collection: 30 seeds, five arms, three severities, two budgets, two lineage fidelities, two fleet scales, and fixed/linear review. There are 1,800 distinct simulations and 7,200 recosted records. The primary cell is HYBRID/SUBTLE, 5% audit budget, lineage fidelity 1, 50% random reserve, fleet scale 100, linear review, 0.05 alerts per active agent-hour, and the gpt-4.1-mini worker pricing tier.
 
-The 10% ceiling is a **ratio**, and one of its terms does not scale with the
-fleet. Four of the six oversight components — sentinel audits, Tier 0, discarded
-work and rerun work — are per-agent, so they grow with the fleet exactly as
-worker spend does and their contribution to the ratio is scale-invariant. The
-other two — triage and investigation — do not. A person reviews the alerts HARPY
-actually raised, and the alert count is a property of the simulated slice, not
-of how many agents that slice stands in for.
+The target is at least 0.10 added detection probability over matched TIER0_ONLY, with mean total incremental cost below 0.10 of worker-fleet cost. Matching includes source/input fingerprint, seed, severity, audit budget, lineage fidelity, fleet scale, attention cap, detector assumptions, worker tier, and review policy. HYBRID's reserve fraction is absent from the baseline key because Tier 0 does not use that knob.
 
-So the ratio falls monotonically as the fleet grows, and any statement of the
-form "HARPY costs X% overhead" is incomplete until it names a fleet scale. Every
-results JSON therefore carries `fleet_scale`, `review_cost_share_of_overhead`,
-and `min_fleet_dollars_per_hour_for_viability` — the smallest fleet spend at
-which that run clears the ceiling, or `null` if the run's scale-invariant
-oversight cost is already at or over 10% and no fleet size can help.
+| Verdict | Prespecified interpretation |
+| --- | --- |
+| PASS | At least 30 paired seeds; lower detection-gain bound at least 0.10 and upper mean-overhead bound strictly below 0.10. |
+| FAIL | At least 30 paired seeds; upper detection-gain bound below 0.10 or lower overhead bound at least 0.10. |
+| INCONCLUSIVE | Sufficient paired seeds but intervals do not establish a pass or fail. |
+| INCOMPLETE | Too few seeds or missing matched baseline. Missing data never becomes zero-cost or zero-baseline uplift. |
 
-**At `fleet_scale` 1 the ceiling is unreachable by construction, and that is a
-scale artifact rather than a result about HARPY.** The simulated slice is 30
-agents for 500 ticks, about $156 of worker spend. A single alert that escalates
-costs $60 of analyst time, which is 38% of that bill on its own. There is no
-sampling policy, budget fraction or detector accuracy that fixes this: it is
-arithmetic about the size of the sample, and the previous flat
-`human_review_dollars: 25.0` constant hard-coded a mild version of the same
-mistake into every figure the simulator produced.
+Detection differences combine marginal 97.5% Wilson intervals using a Bonferroni construction, giving a conservative nominal 95% difference interval. This retains nonzero uncertainty at zero successes. Paired bootstrap detection effects and mean-cost intervals use 2,000 deterministic resamples. Wilson and bootstrap intervals are approximations; cost intervals may be weak for rare escalation or heavy-tailed workloads. Only the designated primary cell is confirmatory. Exploratory intervals have no simultaneous-coverage claim.
 
-### Human attention is a second budget
+See [the study report](STUDY_V2.md) for the observed verdict. No threshold or primary cell is tuned after reading that result.
 
-Clearing the dollar ceiling by paging a person every other minute is not
-clearing anything, so the alert rate is capped independently of the dollar
-budget. `alert_budget.max_alerts_per_agent_hour` is a hard cap that
-`response.alert_human()` consults before firing; at the cap, either the
-suspicion `isolation_threshold` rises by a configured step until the rate falls
-back under it (and decays back down when there is headroom), or the alert is
-suppressed and counted. Both branches are real trades and both are scored:
-`alerts_per_agent_hour`, `suppressed_alerts`, `effective_isolation_threshold`,
-and `detections_lost_to_alert_cap` — the last scored from ground truth, on the
-world's side of the isolation guard, because whether a suppressed alert cost a
-real detection is exactly the question HARPY is not allowed to ask.
+## Attention and scope
 
-`results/detection_vs_alert_budget.png` sweeps the cap from 0.01/agent-hour to
-uncapped.
+Dollar and attention limits bind independently. The attention denominator is active agent-hours, with suppressed alerts and lost detections scored on the world's side of the ground-truth guard. Fleet-scale recosting does not create a measured fleet attention model.
 
-## Out of scope v1
+Faults are malfunctions, not adaptive adversaries. Simulations establish no demographic fairness, industrial safety, real task coverage, or production savings. Claim and lineage guards catch accidental leakage by inspecting call stacks; they are not security sandboxes. The replay loader rejects known answer fields but cannot identify every answer hidden in prose.
 
-Adversarial agents that model the sampler. Every fault here is a malfunction,
-not a strategy: nothing in the mesh reasons about when it is being watched,
-holds back to keep its Tier 0 score down, or times its corruption around audits.
-A sampler that is predictable to the thing it is sampling is a different — and
-harder — problem, and pretending otherwise would make the budget curves
-optimistic in a way this simulator cannot quantify.
+## Pricing and evidence integrity
 
-## Pricing
+`configs/pricing.yaml` remains an unverified placeholder, and `configs/pricing.smoke.yaml` remains synthetic. Normal runs reject unverified prices; a deliberate smoke override stamps results false and watermarks plots. `configs/pricing.study.yaml` records official uncached text-token rates, exact snapshots, source URLs, and an access date. The gate checks metadata; it does not continuously verify provider prices.
 
-`configs/pricing.yaml` ships with **placeholders**. Every price is 0.0 and every
-`source` is empty. No price is written in Python source anywhere in this repo.
+V2 JSON schema `harpy-sim/run/2` embeds the entire parsed configuration and pricing snapshot. SHA-256 identifies those inputs, executing source, `pyproject.toml`, and `uv.lock`. An experiment fingerprint combines those identities. The published build separately records actual Python and package versions; a lock hash alone does not prove the installed environment followed it. Results and manifests retain parent relationships; `harpy verify` checks artifact bytes, file completeness, input consistency, and parents against a trusted manifest. CI compares the published source identity with the checkout. Hashes are not signatures or external attestations. Old `run/1` records remain readable without retroactively claiming v2 provenance.
 
-Before any reported run, replace them with figures read directly off provider
-pricing pages, paste the URL and the access date next to each entry, and set
-`verified: true`. `harpy sweep` refuses to start and exits nonzero until then.
+Plotting names its fleet scale and review policy and refuses to blend different experiment identities, worker tiers, or assumed detector settings. The main HYBRID curve averages reserve settings if several are present; a companion shows reserve-specific results. The v2 study uses one frozen reserve value.
 
-`--allow-unverified-pricing` exists for smoke runs and CI only. It stamps
-`pricing_verified: false` into every results JSON and watermarks the plot.
-`configs/pricing.smoke.yaml` holds round synthetic numbers for exactly that
-purpose and is not provider pricing.
+## Replay evidence
 
-## Design constraints
+[HARPY-REPLAY](REPLAY.md) keeps observations and labels separate, validates corpus hashes, and reports completed, failed, and unattempted cases. The optional OpenAI adapter uses strict structured decisions with existing observable evidence IDs. Refusals and incomplete responses are errors; unknown charges are reserved and replay stops without automatic paid retries.
 
-These are load-bearing; changing one changes what the results mean.
-
-- **Ground truth is unreadable from the detection path.** `Claim.is_corrupt` and
-  `LineagePair.ground_truth` are guarded by property accessors that inspect the
-  call stack and raise `GroundTruthLeakError` for any access originating in
-  `telemetry`, `sentinel`, `sampler`, `suspicion`, or `response`. `MockSentinel`
-  is whitelisted by name. `tests/test_isolation_guard.py` proves this for every
-  module, including that the guard cannot be laundered through a helper.
-- **Tier 0 is mechanical.** Seven checks, typed fields only, no natural-language
-  contradiction detection. A claim payload has no free-text field to read.
-  Everything semantic belongs to the sentinel, which is why it costs money.
-- **Audit count is derived from dollars.** Nothing configures how many audits to
-  run. The budget accrues per tick as a fraction of worker spend, Tier 0's bill
-  comes off the top, and audits are drawn until the pool cannot afford another.
-- **Isolation never fires on one audit.** `audit_weight < isolation_threshold`
-  is enforced at construction, not left to configuration discipline.
-- **HARPY sees lineage only through the lossy projection.** `lineage_fidelity`
-  is swept from 0.0 to 1.0 because how much oversight is worth buying depends on
-  provenance plumbing you may not have.
-- **Cost is six components, never one number.** Sentinel, Tier 0, discarded
-  work, rerun, triage and investigation, against worker spend as the
-  denominator. Discarded work is an agent's spend since its last clean restart —
-  a growing quantity, not a flat constant, so late isolations correctly cost
-  more than early ones.
-- **Human review is priced in minutes, not in dollars per alert.** A flat
-  per-alert constant is a number about a fleet size rather than about an alert.
-  Cost is `(triage_minutes + escalation × investigation_minutes) / 60 ×
-  analyst_cost_per_hour` in expectation, with escalation drawn per review from
-  its own RNG stream rather than averaged in, and alerts about the same agent
-  inside `batch_window_ticks` collapsing into one review.
-- **Fleet scale is swept, not assumed.** The 30-agent mesh is a sample. Costs
-  are reported at `fleet_scale` ∈ {1, 10, 100, 1000}; four components scale with
-  it and the two review components do not.
-- **The alert budget binds independently of the dollar budget.** Human attention
-  is finite in a way dollars are not, and a cap that can be exceeded is not a
-  cap — the reported `alerts_per_agent_hour` is provably at or under
-  `max_alerts_per_agent_hour` for every run.
-- **Runs are deterministic.** Same seed, byte-identical JSON. RNG streams are
-  separated per component so changing the sampler does not reshuffle the world
-  the arms are compared on.
-
-## Layout
-
-```
-src/harpy/
-  types.py       data model + the ground-truth isolation guard
-  mesh.py        the simulated agent mesh (the world)
-  faults.py      what OVERT / MODERATE / SUBTLE mean
-  lineage.py     ground-truth edges and the lossy observable projection
-  telemetry.py   Tier 0: the seven mechanical checks
-  sentinel.py    Sentinel protocol, MockSentinel, RealSentinel stub (phase 2)
-  sampler.py     the five arms, spending a dollar budget
-  ledger.py      pricing (from YAML only), review cost, the six components
-  alert_budget.py  the alert-rate cap and the threshold it adapts
-  suspicion.py   decaying per-agent score and the isolation gate
-  response.py    the five permitted actions
-  simulation.py  one run: world + oversight + scoring
-  sweep.py       the grid, across processes
-  metrics.py     per-run metrics, never averaged across severity
-  plot.py        the three figures
-  cli.py         harpy run / sweep / plot
-```
-
-## Sweep grid
-
-50 seeds x 5 arms x 3 severities x 5 budget fractions x 5 lineage fidelities x
-5 alert caps x 4 fleet scales, plus 5 reserve fractions for HYBRID: 675,000
-cells. One JSON per cell in `results/`, plus `results/summary.parquet` (one row
-per cell; aggregation happens at plot time).
-
-`fleet_scale` multiplies four cost components after the fact and touches no RNG
-stream, no threshold and no decision, so the sweep simulates each cell once and
-re-costs it at each scale — 168,750 simulations for 675,000 cells.
-`tests/test_determinism.py` pins that the re-costed document is byte-identical
-to the separately simulated one, so this is a scheduling detail and not a
-modelling shortcut.
-
-## Figures
-
-```
-results/detection_vs_overhead.png      primary: detection vs overhead, per arm.
-                                       Drawn at one stated fleet_scale and one
-                                       stated alert cap — the overhead on its x
-                                       axis is not scale-free.
-results/overhead_composition.png       stacked bars of the six components by arm
-                                       and severity, faceted by fleet_scale.
-results/detection_vs_alert_budget.png  detection vs max_alerts_per_agent_hour,
-                                       per arm, faceted by severity.
-```
+The published reference is a 12-case synthetic development fixture. No live-model or real-trace accuracy is established. A separately frozen, permissioned, sanitized, held-out real-trace evaluation is required for that claim.

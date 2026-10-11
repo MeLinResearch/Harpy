@@ -1,0 +1,40 @@
+{
+  "artifacts": [
+    {
+      "path": "build.json",
+      "sha256": "a6c1f23e8015c08a7d21aa579688e7a59d00a6e62d9db28e308918b5c88349ac",
+      "size_bytes": 494
+    },
+    {
+      "path": "cost_sensitivity.png",
+      "sha256": "843b547327fcf237d2321d75450f801e7019889c81e751def55251306b31e715",
+      "size_bytes": 102629
+    },
+    {
+      "parents": {
+        "config_sha256": "a6d2f8502d94132f39a2c3c1249654553a78b3cf6d861757ffc2c80be590988d",
+        "pricing_sha256": "590c59ae6f749e10d78a4a26aeefbaffa469c6e72e3a75c8e3b5cb53a5a64679",
+        "source_tree_sha256": "da351558f7adbcad85cc881185daa1ad8fc7ace788d351636445886e7358ddf0"
+      },
+      "path": "inputs.json",
+      "sha256": "b3865e519bef82639fe265672f021fcf64b22ba59294b647ab3eb1d7b740a19c",
+      "size_bytes": 6885
+    },
+    {
+      "path": "preregistration.json",
+      "sha256": "facb24d70ba2bf8e91f38fae44cc827cac502a924fba151c7872054bfe04b67d",
+      "size_bytes": 1505
+    },
+    {
+      "path": "report.json",
+      "sha256": "7133cd6260028ff859585760e3f0e5c481f35b02b555c9b4e2774ea4c0763cc3",
+      "size_bytes": 163773
+    },
+    {
+      "path": "seed-metrics.json.gz",
+      "sha256": "b518f3474214efcaaffaebdefaa263c04e201fde684b0c727a7014c617428387",
+      "size_bytes": 246950
+    }
+  ],
+  "schema": "harpy/artifact-manifest/1"
+}

@@ -63,21 +63,31 @@ class MockSentinel:
 
 
 class RealSentinel:
-    """Phase 2 (HARPY-REPLAY): a real candidate detector over recorded traces.
+    """An observable-only detector boundary used by HARPY-REPLAY.
 
-    Phase 1 answers "what detector characteristics would make this architecture
-    pay for itself". Phase 2 answers "does such a detector exist, at what price"
-    by replaying recorded multi-agent traces through actual candidate models and
-    measuring detection and cost instead of assuming them. Not implemented here
-    on purpose: implementing it inside the simulator would let assumed numbers
-    masquerade as measured ones.
+    The simulator continues to instantiate MockSentinel. A backend must be
+    supplied explicitly so replay measurements cannot become simulation inputs
+    without a separately versioned experiment.
     """
 
-    def __init__(self, *args, **kwargs) -> None:
-        raise NotImplementedError(
-            "RealSentinel lands in phase 2 (HARPY-REPLAY): recorded traces, real "
-            "candidate sentinels, measured detection and measured price."
-        )
+    def __init__(self, backend) -> None:
+        self.backend = backend
+        self.last_detection = None
 
     def audit(self, agent_id: str, window: tuple[Message, ...]) -> AuditResult:
-        raise NotImplementedError("RealSentinel lands in phase 2 (HARPY-REPLAY).")
+        observation = {
+            "agent_id": agent_id,
+            "window": [{"message_id": m.message_id, "sender_id": m.sender_id,
+                        "recipient_id": m.recipient_id, "tick": m.tick,
+                        "malformed": m.malformed, "tool_error": m.tool_error,
+                        "retry_count": m.retry_count, "token_len": m.token_len,
+                        "claims": [{"claim_id": c.claim_id, "origin_agent_id": c.origin_agent_id,
+                                    "tick": c.tick, "payload": c.payload.as_dict()}
+                                   for c in m.claims]} for m in window],
+        }
+        detection = self.backend.detect(observation)
+        self.last_detection = detection
+        return AuditResult(agent_id=agent_id, tick=window[-1].tick if window else -1,
+                           flagged=detection.flagged, input_tokens=detection.input_tokens,
+                           output_tokens=detection.output_tokens)
+

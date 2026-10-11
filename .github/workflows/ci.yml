@@ -21,13 +21,31 @@ jobs:
           python-version: "3.11"
           enable-cache: true
 
-      - run: uv sync --extra dev
+      - run: uv sync --locked --extra dev
 
       - name: ruff check
         run: uv run ruff check .
 
       - name: pytest
         run: uv run pytest -q
+
+      - name: published evidence matches checkout
+        shell: bash
+        run: |
+          uv run harpy verify --manifest evidence/study-v2/manifest.json
+          uv run harpy verify --manifest evidence/replay-reference/manifest.json
+          uv run python - <<'PY'
+          import json
+          from pathlib import Path
+          from harpy.provenance import source_identity
+          recorded = json.loads(Path("evidence/study-v2/inputs.json").read_text())
+          assert recorded["provenance"]["source"] == source_identity(), "source identity mismatch"
+          PY
+
+      - name: observable-only replay and evidence verification
+        run: |
+          uv run harpy replay --corpus examples/replay/synthetic --out replay-smoke/
+          uv run harpy verify --manifest replay-smoke/manifest.json
 
       - name: sweep refuses placeholder pricing
         shell: bash
@@ -41,14 +59,17 @@ jobs:
       - name: smoke run and plot
         shell: bash
         run: |
-          # Narrowed on the two axes added after the grid was first sized: the
-          # full cross product is 675,000 cells and CI is a wiring check, not a
-          # result. Both endpoints of each axis are kept so all three figures
-          # still have more than one facet to draw.
-          uv run harpy sweep --config configs/default.yaml \
+          # All arms and severities, both review policies, and endpoint values
+          # for budgets/fidelity/reserves/scales/caps: 144 simulations, 576 records.
+          uv run harpy run --config configs/default.yaml \
             --pricing configs/pricing.smoke.yaml \
-            --seeds 0..0 --fleet-scales 1,1000 --alert-caps 0.05,inf \
-            --processes 2 --allow-unverified-pricing \
+            --seed 0 --allow-unverified-pricing --out smoke-run/
+          uv run python scripts/ci_smoke.py \
             --out smoke-results/
-          uv run harpy plot --results smoke-results/ \
+          uv run harpy plot --results smoke-results/ --review-scaling fixed \
             --out smoke-results/detection_vs_overhead.png
+          uv run harpy plot --results smoke-results/ --review-scaling linear \
+            --out smoke-results/linear/detection_vs_overhead.png
+          uv run harpy verify --manifest smoke-run/manifest.json
+          uv run harpy verify --manifest smoke-results/manifest.json
+

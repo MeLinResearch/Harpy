@@ -131,7 +131,9 @@ def min_fleet_dollars_per_hour_for_viability(record: RunRecord) -> float | None:
 
     ``None`` means no fleet clears the ceiling: the run's scale-invariant
     oversight cost is already at or over it, and buying more agents cannot help.
-    ``0.0`` means the run had no review cost to amortise and clears at any scale.
+    Under linear review scaling all six components grow together: the ratio
+    is constant. ``0.0`` means every positive scale clears the ceiling;
+    ``None`` means none does. This is an accounting result, not a staffing forecast.
     """
     ledger = record.ledger
     worker = ledger.worker_dollars
@@ -139,6 +141,8 @@ def min_fleet_dollars_per_hour_for_viability(record: RunRecord) -> float | None:
     if worker <= 0.0 or hours <= 0.0:
         return None
     headroom = KILL_CEILING_PCT * worker - ledger.per_agent_overhead_dollars()
+    if ledger.review_scaling == "linear":
+        return 0.0 if ledger.review_dollars() < headroom else None
     if headroom <= 0.0:
         return None
     min_scale = ledger.review_dollars() / headroom
@@ -151,6 +155,7 @@ def run_metrics(record: RunRecord) -> dict:
     return {
         "run_id": record.spec.run_id(),
         **record.spec.as_dict(),
+        "experiment_fingerprint": record.provenance.get("experiment_fingerprint"),
         "detection_rate": detection_rate(record),
         "detected_tick": record.detected_tick,
         "false_isolations": false_isolation_count(record),
@@ -242,6 +247,8 @@ def run_metrics(record: RunRecord) -> dict:
 #: HYBRID-only knob, so TIER0_ONLY exists only at 0.0 and keying on it would
 #: leave every HYBRID cell without a baseline to subtract.
 BASELINE_MATCH_KEYS: tuple[str, ...] = (
+    "experiment_fingerprint",
+    "review_scaling",
     "seed",
     "severity",
     "budget_pct",
@@ -293,7 +300,8 @@ def attach_incremental_detection_over_tier0(rows: list[dict]) -> list[dict]:
 def result_document(record: RunRecord) -> dict:
     """The full results JSON for one run."""
     return {
-        "schema": "harpy-sim/run/1",
+        "schema": "harpy-sim/run/2",
+        "provenance": record.provenance,
         "spec": record.spec.as_dict(),
         "metrics": run_metrics(record),
         "ledger": record.ledger.as_dict(),
@@ -343,6 +351,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
             row.get("effective_detection_prob"),
             row.get("effective_false_positive_rate"),
             row.get("worker_model"),
+            row.get("review_scaling", "fixed"),
+            row.get("experiment_fingerprint"),
         )
         cells.setdefault(key, []).append(row)
 
@@ -359,6 +369,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
             detection_prob,
             false_positive_rate,
             worker_model,
+            review_scaling,
+            experiment_fingerprint,
         ) = key
         viability = [
             r["min_fleet_dollars_per_hour_for_viability"]
@@ -399,6 +411,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "effective_detection_prob": detection_prob,
                 "effective_false_positive_rate": false_positive_rate,
                 "worker_model": worker_model,
+                "review_scaling": review_scaling,
+                "experiment_fingerprint": experiment_fingerprint,
                 "n_seeds": len(group),
                 "detection_rate": statistics.fmean(r["detection_rate"] for r in group),
                 "overhead_pct": statistics.fmean(r["overhead_pct"] for r in group),
@@ -483,3 +497,4 @@ def aggregate(rows: list[dict]) -> list[dict]:
             }
         )
     return out
+
