@@ -173,7 +173,7 @@
       "files": [
         {
           "path": "src/harpy/detectors.py",
-          "sha256": "0e9578389fcd28693e0d86c9c790303c8e9625798cef544282e855ce1d86b524"
+          "sha256": "95d311317192a1d2fc60b58730ce661f8d926054db2b8c74323638c4029ea01f"
         },
         {
           "path": "src/harpy/sentinel.py",
@@ -227,15 +227,15 @@
       "files": [
         {
           "path": "evidence/replay-reference/report.json",
-          "sha256": "3f081cb32b82f45d23b7a100cd6ecf2077c47d321a5a959a01194232d99a9661"
+          "sha256": "93dc978f42ba605894f772d9038df7573ca9ad3715c5c640e6d963cf404a6d1c"
         },
         {
           "path": "evidence/replay-reference/predictions.jsonl",
-          "sha256": "153b1e578d54fa8e963b89801ad44d518971cda792b4043e6a98c0d8dc45d3f6"
+          "sha256": "e97033a1fd692258507724fbf582a57b9463fa0db997b14447690ea75624216a"
         },
         {
           "path": "evidence/replay-reference/manifest.json",
-          "sha256": "30db239a85aa0b5e819fef516a9e864ae7aa6d0d6e3dcc808279d6cd12b9d845"
+          "sha256": "b0ebdb00c27f909d5d0f89134268c11093dc53818e28a9376fab9bc1cb2a0b43"
         }
       ],
       "human_records": false,
@@ -403,7 +403,7 @@
       "trained": false
     },
     {
-      "id": "typed-checks/1",
+      "id": "typed-checks/2",
       "kind": "measured_mechanical_reference",
       "trained": false
     },
@@ -420,6 +420,7 @@
   ],
   "owner": "Melinda Emerson",
   "project": "MeLinResearch/Harpy",
+  "replay_source_revision": "2d10b7a831632138e6f82cb9e5d754b58f1aa069",
   "reviewed": "2026-10-11",
   "schema": "harpy/dbom/1",
   "transformations": [

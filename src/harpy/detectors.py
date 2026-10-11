@@ -93,7 +93,7 @@ class MechanicalDetector:
     """A measured deterministic reference, not an AI accuracy claim."""
 
     def metadata(self) -> dict:
-        return {"kind": "mechanical", "version": "typed-checks/1", "model": None}
+        return {"kind": "mechanical", "version": "typed-checks/2", "model": None}
 
     def token_bound(self, observation: dict) -> tuple[int, int]:
         return 0, 0
@@ -108,15 +108,37 @@ class MechanicalDetector:
             "count_units": (0, 5000),
             "score_pct": (0, 100),
         }
-        for message in observation.get("window", []):
+        window = observation.get("window", [])
+        if not isinstance(window, list):
+            raise ValueError("mechanical observations need a window list")
+        for message in window:
+            if not isinstance(message, dict):
+                raise ValueError("observed messages must be objects")
+            message_id = message.get("message_id")
+            if not isinstance(message_id, str) or not message_id.strip():
+                raise ValueError("observed messages need a nonempty message_id")
             if message.get("malformed") or message.get("tool_error"):
-                evidence.add(message["message_id"])
-            for claim in message.get("claims", []):
-                payload = claim["payload"]
+                evidence.add(message_id)
+            claims = message.get("claims", [])
+            if not isinstance(claims, list):
+                raise ValueError("observed claims must be a list")
+            for claim in claims:
+                if not isinstance(claim, dict):
+                    raise ValueError("observed claims must be objects")
+                claim_id = claim.get("claim_id")
+                if not isinstance(claim_id, str) or not claim_id.strip():
+                    raise ValueError("observed claims need a nonempty claim_id")
+                payload = claim.get("payload")
+                if not isinstance(payload, dict) or any(
+                    not isinstance(payload.get(key), str) or not payload[key].strip()
+                    for key in ("subject_id", "field_name")
+                ):
+                    evidence.add(claim_id)
+                    continue
                 if payload.get("schema_version") != 3 or not any(
                     payload.get(k) is not None for k in ("value_num", "value_date", "value_enum")
                 ):
-                    evidence.add(claim["claim_id"])
+                    evidence.add(claim_id)
                 value = payload.get("value_num")
                 field_name = payload["field_name"]
                 if value is not None:
@@ -124,13 +146,13 @@ class MechanicalDetector:
                         raise ValueError("typed numeric observations need numeric values")
                     low, high = bounds.get(field_name, (-math.inf, math.inf))
                     if not math.isfinite(value) or not low <= value <= high:
-                        evidence.add(claim["claim_id"])
+                        evidence.add(claim_id)
                     key = (payload["subject_id"], field_name)
                     if key in previous:
                         old, old_id = previous[key]
                         if abs(value - old) > 0.10 * max(abs(old), 1.0):
-                            evidence.update((old_id, claim["claim_id"]))
-                    previous[key] = (value, claim["claim_id"])
+                            evidence.update((old_id, claim_id))
+                    previous[key] = (value, claim_id)
         return Detection(
             bool(evidence),
             "Observable typed or structural violation"

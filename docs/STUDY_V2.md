@@ -21,7 +21,7 @@ The [specification](../configs/study.v2.yaml) was [committed before collecting s
 
 All five arms, three severities, two budgets, and two lineage fidelities produced 1,800 distinct simulations. Fixed/linear review and scales 1/100 re-cost those worlds into 7,200 records. They are not 7,200 independent trials. The fault distribution, thresholds, and detector assumptions in the v1 config were not tuned against these outcomes.
 
-The source-content digest is `da351558f7adbcad85cc881185daa1ad8fc7ace788d351636445886e7358ddf0`; the complete input snapshot lists each source-file and lockfile hash. Git documentation and cross-platform checkout fixes after the frozen commit do not alter that executing Python source.
+The simulation source-content digest is `da351558f7adbcad85cc881185daa1ad8fc7ace788d351636445886e7358ddf0`; the complete input snapshot lists each source-file and lockfile hash. The packet retains the analysis revision recorded in `build.json`. Reproduce this historical packet from that revision. Subsequent replay fixes are measured in the separate mechanical replay packet, which records its own executing source. CI verifies the frozen simulation against its recorded Git revision and the current replay against the checkout.
 
 ## Review-cost sensitivity
 
