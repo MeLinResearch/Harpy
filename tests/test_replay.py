@@ -173,6 +173,77 @@ def test_synthetic_mechanical_replay_measures_known_reference(tmp_path):
     assert verify_manifest(tmp_path / "manifest.json") == []
 
 
+def write_single_case_corpus(directory, observation):
+    directory.mkdir()
+    observations = directory / "observations.jsonl"
+    labels = directory / "labels.jsonl"
+    observations.write_text(json.dumps(observation) + "\n", encoding="utf-8")
+    labels.write_text(
+        json.dumps({"case_id": observation["case_id"], "fault_present": True}) + "\n",
+        encoding="utf-8",
+    )
+    metadata = json.loads((FIXTURE / "dataset.json").read_text(encoding="utf-8"))
+    metadata["files_sha256"] = {p.name: file_digest(p) for p in (observations, labels)}
+    (directory / "dataset.json").write_text(json.dumps(metadata), encoding="utf-8")
+
+
+@pytest.mark.parametrize(
+    "claim",
+    [
+        {"claim_id": "c1"},
+        {"claim_id": "c1", "payload": None},
+        {"claim_id": "c1", "payload": []},
+        {"claim_id": "c1", "payload": "malformed"},
+        {"claim_id": "c1", "payload": {"subject_id": "s1", "value_num": 100}},
+        {"claim_id": "c1", "payload": {"field_name": "price_usd", "value_num": 100}},
+        {"claim_id": "c1", "payload": {"subject_id": [], "field_name": "price_usd"}},
+        {"claim_id": "c1", "payload": {"subject_id": "s1", "field_name": " "}},
+    ],
+)
+def test_malformed_claim_payload_is_flagged_and_replay_report_is_written(tmp_path, claim):
+    corpus = tmp_path / "corpus"
+    write_single_case_corpus(
+        corpus,
+        {"case_id": "case1", "window": [{"message_id": "m1", "claims": [claim]}]},
+    )
+    output = tmp_path / "output"
+    report = json.loads(run_replay(corpus, MechanicalDetector(), output).read_text())
+    prediction = json.loads((output / "predictions.jsonl").read_text())
+    assert prediction["status"] == "completed"
+    assert prediction["detection"]["flagged"] is True
+    assert prediction["detection"]["evidence_ids"] == ["c1"]
+    assert report["metrics"]["true_positive"] == 1
+    assert report["metrics"]["failed_cases"] == 0
+    assert report["stop_reason"] is None
+    assert verify_manifest(output / "manifest.json") == []
+
+
+@pytest.mark.parametrize(
+    "window",
+    [
+        None,
+        [None],
+        [{"claims": [{"claim_id": "c1"}]}],
+        [{"message_id": "m1", "claims": None}],
+        [{"message_id": "m1", "claims": [None]}],
+        [{"message_id": "m1", "claims": [{"payload": {}}]}],
+        [{"message_id": "m1", "claims": [{"claim_id": []}]}],
+    ],
+)
+def test_invalid_claim_containers_or_ids_write_failed_replay_report(tmp_path, window):
+    corpus = tmp_path / "corpus"
+    write_single_case_corpus(corpus, {"case_id": "case1", "window": window})
+    output = tmp_path / "output"
+    report = json.loads(run_replay(corpus, MechanicalDetector(), output).read_text())
+    prediction = json.loads((output / "predictions.jsonl").read_text())
+    assert prediction["status"] == "error"
+    assert report["stop_reason"] == "detector_error"
+    assert report["metrics"]["failed_cases"] == 1
+    assert report["metrics"]["completed_cases"] == 0
+    assert report["metrics"]["false_negative"] == 0
+    assert verify_manifest(output / "manifest.json") == []
+
+
 def test_cost_preflight_prevents_a_paid_call(tmp_path, replay_pricing):
     calls = []
     detector = OpenAIResponsesDetector("fixture", transport=lambda p: calls.append(p))
