@@ -23,7 +23,7 @@ HARPY-SIM is a reproducible Python simulation of budgeted oversight for multi-ag
 | [V2 study](docs/STUDY_V2.md) | Frozen hypothesis, both review-cost policies, seed-level evidence, and uncertainty. |
 | [Replay guide](docs/REPLAY.md) | Blinded corpus format, mechanical reference, and optional real Responses API detector. |
 
-These are project documentation examples, with a machine-readable DBOM. They do not assert Siemens approval or regulatory certification.
+These are project documentation examples, with a machine-readable DBOM. They do not assert regulatory certification.
 
 ## What this is
 

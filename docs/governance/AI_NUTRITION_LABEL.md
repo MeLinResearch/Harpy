@@ -21,4 +21,4 @@ Owner: Melinda Emerson · Version: `0.2.0.dev0` · Reviewed: October 11, 2026
 
 [Study and result](../STUDY_V2.md) · [Data / model card](DATA_MODEL_CARD.md) · [DBOM](DBOM.md) · [Replay guide](../REPLAY.md)
 
-This is a project-specific documentation example, not Siemens approval or a compliance certification. The supporting fields are grounded in the implementation and its published evidence.
+This is a project-specific documentation example, not a compliance certification. The supporting fields are grounded in the implementation and its published evidence.
