@@ -80,7 +80,7 @@ class Face:
         k = size / self.upm
         pen = SVGPathPen(self.glyphs)
         cx = x
-        for info, p in zip(infos, pos):
+        for info, p in zip(infos, pos, strict=True):
             name = self.order[info.codepoint]
             tp = TransformPen(pen, (k, 0, 0, -k, cx + p.x_offset * k, y - p.y_offset * k))
             self.glyphs[name].draw(tp)
@@ -312,7 +312,7 @@ def hero() -> str:
     widths = [F["monom"].width(t, 10.5, 1.2) for t in items]
     gap = (W - 64 - sum(widths)) / (len(items) - 1)
     x = 32
-    for t, w in zip(items, widths):
+    for t, w in zip(items, widths, strict=True):
         s.text(t, x, 454, "monom", 10.5, MUTED, track=1.2)
         x += w + gap
     return s.done()
