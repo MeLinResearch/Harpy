@@ -687,9 +687,9 @@ def nutrition() -> str:
          "trial on real agent traces.", CYAN)
     para("Out-of-scope use", "Production enforcement, adversaries adapting to the sampler, any "
          "claim of live-model accuracy.", RED)
-    para("Validation", "Simulation only. Detector accuracy is an input, not a measurement: "
-         "overt 95%, moderate 78%, subtle 42%, false positives 2%. External validation: "
-         "not available.", AMBER)
+    para("Validation", "Detector accuracy is an input, not a measurement: overt 95%, "
+         "moderate 78%, subtle 42%, false positives 2%. Only the blame rule has been checked "
+         "on real traces: 184 labeled failure logs (Who&When).", AMBER)
     para("Maintenance", "CI on every push across Linux, macOS and Windows: lint, tests and "
          "evidence checks.", VIOLET)
     y += 16
@@ -728,7 +728,9 @@ def nutrition() -> str:
                "in the loop with capped alerts. Compliance: logging and auditing, guardrails, "
                "input/output consistency, budget enforcement, preregistered decisions and "
                "blame tracing are all yes, each backed by named requirements. Detector "
-               f"accuracy is assumed, not measured; external validation not available. {total} "
+               "accuracy is assumed, not measured. External validation covers only the blame "
+               "rule, on 184 labeled real failure logs (Who&When). "
+               f"{total} "
                f"requirements: {verified} verified by tests or CI, {manual} by inspection.")
     return s.done()
 

@@ -1,0 +1,5420 @@
+{
+ "summary": {
+  "Algorithm-Generated": {
+   "logs": 126,
+   "with_final_answer": 60,
+   "traceable": 45,
+   "majority_label": "Verification_Expert",
+   "majority_label_pct": 14.3,
+   "pools": {
+    "all logs": {
+     "origin walk": {
+      "n": 126,
+      "agent": 34,
+      "step": 22,
+      "agent_pct": 27.0,
+      "step_pct": 17.5,
+      "agent_ci95": [
+       20.0,
+       35.3
+      ],
+      "step_ci95": [
+       11.8,
+       25.0
+      ]
+     },
+     "final speaker": {
+      "n": 126,
+      "agent": 18,
+      "step": 4,
+      "agent_pct": 14.3,
+      "step_pct": 3.2,
+      "agent_ci95": [
+       9.2,
+       21.5
+      ],
+      "step_ci95": [
+       1.2,
+       7.9
+      ]
+     },
+     "first speaker": {
+      "n": 126,
+      "agent": 62,
+      "step": 20,
+      "agent_pct": 49.2,
+      "step_pct": 15.9,
+      "agent_ci95": [
+       40.6,
+       57.8
+      ],
+      "step_ci95": [
+       10.5,
+       23.2
+      ]
+     },
+     "random": {
+      "n": 126,
+      "agent": 52,
+      "step": 15,
+      "agent_pct": 41.3,
+      "step_pct": 11.9,
+      "agent_ci95": [
+       33.1,
+       50.0
+      ],
+      "step_ci95": [
+       7.3,
+       18.7
+      ]
+     }
+    },
+    "final answer": {
+     "origin walk": {
+      "n": 60,
+      "agent": 34,
+      "step": 22,
+      "agent_pct": 56.7,
+      "step_pct": 36.7,
+      "agent_ci95": [
+       44.1,
+       68.4
+      ],
+      "step_ci95": [
+       25.6,
+       49.3
+      ]
+     },
+     "final speaker": {
+      "n": 60,
+      "agent": 18,
+      "step": 4,
+      "agent_pct": 30.0,
+      "step_pct": 6.7,
+      "agent_ci95": [
+       19.9,
+       42.5
+      ],
+      "step_ci95": [
+       2.6,
+       15.9
+      ]
+     },
+     "first speaker": {
+      "n": 60,
+      "agent": 25,
+      "step": 6,
+      "agent_pct": 41.7,
+      "step_pct": 10.0,
+      "agent_ci95": [
+       30.1,
+       54.3
+      ],
+      "step_ci95": [
+       4.7,
+       20.1
+      ]
+     },
+     "random": {
+      "n": 60,
+      "agent": 24,
+      "step": 9,
+      "agent_pct": 40.0,
+      "step_pct": 15.0,
+      "agent_ci95": [
+       28.6,
+       52.6
+      ],
+      "step_ci95": [
+       8.1,
+       26.1
+      ]
+     }
+    },
+    "traceable": {
+     "origin walk": {
+      "n": 45,
+      "agent": 25,
+      "step": 17,
+      "agent_pct": 55.6,
+      "step_pct": 37.8,
+      "agent_ci95": [
+       41.2,
+       69.1
+      ],
+      "step_ci95": [
+       25.1,
+       52.4
+      ]
+     },
+     "final speaker": {
+      "n": 45,
+      "agent": 12,
+      "step": 3,
+      "agent_pct": 26.7,
+      "step_pct": 6.7,
+      "agent_ci95": [
+       16.0,
+       41.0
+      ],
+      "step_ci95": [
+       2.3,
+       17.9
+      ]
+     },
+     "first speaker": {
+      "n": 45,
+      "agent": 20,
+      "step": 5,
+      "agent_pct": 44.4,
+      "step_pct": 11.1,
+      "agent_ci95": [
+       30.9,
+       58.8
+      ],
+      "step_ci95": [
+       4.8,
+       23.5
+      ]
+     },
+     "random": {
+      "n": 45,
+      "agent": 19,
+      "step": 7,
+      "agent_pct": 42.2,
+      "step_pct": 15.6,
+      "agent_ci95": [
+       29.0,
+       56.7
+      ],
+      "step_ci95": [
+       7.7,
+       28.8
+      ]
+     }
+    }
+   },
+   "origin_vs_final_speaker_on_final_answer": {
+    "agent": {
+     "only_origin": 24,
+     "only_final_speaker": 8,
+     "p_two_sided": 0.007
+    },
+    "step": {
+     "only_origin": 21,
+     "only_final_speaker": 3,
+     "p_two_sided": 0.0003
+    }
+   },
+   "origin_minus_labeled_step": {
+    "before": 13,
+    "same": 17,
+    "after": 15,
+    "median": 0
+   },
+   "origin_is_not_final_speaker": 54
+  },
+  "Hand-Crafted": {
+   "logs": 58,
+   "with_final_answer": 56,
+   "traceable": 45,
+   "majority_label": "WebSurfer",
+   "majority_label_pct": 56.9,
+   "pools": {
+    "all logs": {
+     "origin walk": {
+      "n": 58,
+      "agent": 20,
+      "step": 9,
+      "agent_pct": 34.5,
+      "step_pct": 15.5,
+      "agent_ci95": [
+       23.6,
+       47.3
+      ],
+      "step_ci95": [
+       8.4,
+       26.9
+      ]
+     },
+     "final speaker": {
+      "n": 58,
+      "agent": 18,
+      "step": 7,
+      "agent_pct": 31.0,
+      "step_pct": 12.1,
+      "agent_ci95": [
+       20.6,
+       43.8
+      ],
+      "step_ci95": [
+       6.0,
+       22.9
+      ]
+     },
+     "first speaker": {
+      "n": 58,
+      "agent": 18,
+      "step": 1,
+      "agent_pct": 31.0,
+      "step_pct": 1.7,
+      "agent_ci95": [
+       20.6,
+       43.8
+      ],
+      "step_ci95": [
+       0.3,
+       9.1
+      ]
+     },
+     "random": {
+      "n": 58,
+      "agent": 23,
+      "step": 1,
+      "agent_pct": 39.7,
+      "step_pct": 1.7,
+      "agent_ci95": [
+       28.1,
+       52.5
+      ],
+      "step_ci95": [
+       0.3,
+       9.1
+      ]
+     }
+    },
+    "final answer": {
+     "origin walk": {
+      "n": 56,
+      "agent": 20,
+      "step": 9,
+      "agent_pct": 35.7,
+      "step_pct": 16.1,
+      "agent_ci95": [
+       24.5,
+       48.8
+      ],
+      "step_ci95": [
+       8.7,
+       27.8
+      ]
+     },
+     "final speaker": {
+      "n": 56,
+      "agent": 18,
+      "step": 7,
+      "agent_pct": 32.1,
+      "step_pct": 12.5,
+      "agent_ci95": [
+       21.4,
+       45.2
+      ],
+      "step_ci95": [
+       6.2,
+       23.6
+      ]
+     },
+     "first speaker": {
+      "n": 56,
+      "agent": 18,
+      "step": 1,
+      "agent_pct": 32.1,
+      "step_pct": 1.8,
+      "agent_ci95": [
+       21.4,
+       45.2
+      ],
+      "step_ci95": [
+       0.3,
+       9.4
+      ]
+     },
+     "random": {
+      "n": 56,
+      "agent": 21,
+      "step": 1,
+      "agent_pct": 37.5,
+      "step_pct": 1.8,
+      "agent_ci95": [
+       26.0,
+       50.6
+      ],
+      "step_ci95": [
+       0.3,
+       9.4
+      ]
+     }
+    },
+    "traceable": {
+     "origin walk": {
+      "n": 45,
+      "agent": 18,
+      "step": 7,
+      "agent_pct": 40.0,
+      "step_pct": 15.6,
+      "agent_ci95": [
+       27.0,
+       54.5
+      ],
+      "step_ci95": [
+       7.7,
+       28.8
+      ]
+     },
+     "final speaker": {
+      "n": 45,
+      "agent": 16,
+      "step": 4,
+      "agent_pct": 35.6,
+      "step_pct": 8.9,
+      "agent_ci95": [
+       23.2,
+       50.2
+      ],
+      "step_ci95": [
+       3.5,
+       20.7
+      ]
+     },
+     "first speaker": {
+      "n": 45,
+      "agent": 16,
+      "step": 1,
+      "agent_pct": 35.6,
+      "step_pct": 2.2,
+      "agent_ci95": [
+       23.2,
+       50.2
+      ],
+      "step_ci95": [
+       0.4,
+       11.6
+      ]
+     },
+     "random": {
+      "n": 45,
+      "agent": 17,
+      "step": 1,
+      "agent_pct": 37.8,
+      "step_pct": 2.2,
+      "agent_ci95": [
+       25.1,
+       52.4
+      ],
+      "step_ci95": [
+       0.4,
+       11.6
+      ]
+     }
+    }
+   },
+   "origin_vs_final_speaker_on_final_answer": {
+    "agent": {
+     "only_origin": 8,
+     "only_final_speaker": 6,
+     "p_two_sided": 0.7905
+    },
+    "step": {
+     "only_origin": 5,
+     "only_final_speaker": 3,
+     "p_two_sided": 0.7266
+    }
+   },
+   "origin_minus_labeled_step": {
+    "before": 9,
+    "same": 7,
+    "after": 29,
+    "median": 7
+   },
+   "origin_is_not_final_speaker": 30
+  }
+ },
+ "paper_table1_gpt4o_without_ground_truth": {
+  "Algorithm-Generated": {
+   "Random": [
+    29.1,
+    19.06
+   ],
+   "All-at-Once": [
+    51.12,
+    13.53
+   ],
+   "Step-by-Step": [
+    26.02,
+    15.31
+   ],
+   "Binary Search": [
+    30.11,
+    16.59
+   ]
+  },
+  "Hand-Crafted": {
+   "Random": [
+    12.0,
+    4.16
+   ],
+   "All-at-Once": [
+    53.44,
+    3.51
+   ],
+   "Step-by-Step": [
+    32.75,
+    8.77
+   ],
+   "Binary Search": [
+    36.21,
+    6.9
+   ]
+  }
+ },
+ "rows": [
+  {
+   "subset": "Algorithm-Generated",
+   "case": "1",
+   "steps": 6,
+   "random": [
+    "DataVerification_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Excel_Expert",
+    0
+   ],
+   "answer": "4",
+   "final_speaker": [
+    "DataVerification_Expert",
+    4
+   ],
+   "origin": [
+    "Excel_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Excel_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "2",
+   "steps": 7,
+   "random": [
+    "DataAnalysis_Expert",
+    2
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "answer": "CHN",
+   "final_speaker": [
+    "Verification_Expert",
+    5
+   ],
+   "origin": [
+    "Verification_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "3",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    7
+   ],
+   "first_speaker": [
+    "Python_Expert",
+    0
+   ],
+   "answer": "1.445",
+   "final_speaker": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    "Verification_Expert",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    4
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "4",
+   "steps": 8,
+   "random": [
+    "HawaiiRealEstate_Expert",
+    4
+   ],
+   "first_speaker": [
+    "HawaiiRealEstate_Expert",
+    0
+   ],
+   "answer": "950000",
+   "final_speaker": [
+    "Data_Analysis_Expert",
+    6
+   ],
+   "origin": [
+    "HawaiiRealEstate_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "HawaiiRealEstate_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "5",
+   "steps": 9,
+   "random": [
+    "Gaming_Awards_Expert",
+    5
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "DataVerification_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "6",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    3
+   ],
+   "first_speaker": [
+    "NorseMythology_Expert",
+    0
+   ],
+   "answer": "clichéd",
+   "final_speaker": [
+    "Literary_Analysis_Expert",
+    5
+   ],
+   "origin": [
+    "NorseMythology_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Literary_Analysis_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "7",
+   "steps": 10,
+   "random": [
+    "NumericalAnalysis_Expert",
+    4
+   ],
+   "first_speaker": [
+    "ScientificPaperAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "ScientificPaperAnalysis_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "8",
+   "steps": 10,
+   "random": [
+    "AlgorithmDesign_Expert",
+    1
+   ],
+   "first_speaker": [
+    "Excel_Expert",
+    0
+   ],
+   "truth": [
+    "AlgorithmDesign_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "9",
+   "steps": 5,
+   "random": [
+    "VerificationExpert",
+    2
+   ],
+   "first_speaker": [
+    "AlgorithmDesign_Expert",
+    0
+   ],
+   "answer": "30,000",
+   "final_speaker": [
+    "VerificationExpert",
+    2
+   ],
+   "origin": [
+    "GameTheory_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "GameTheory_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "10",
+   "steps": 10,
+   "random": [
+    "Validation_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Validation_Expert",
+    0
+   ],
+   "answer": "732,050",
+   "final_speaker": [
+    "Validation_Expert",
+    9
+   ],
+   "origin": [
+    "Validation_Expert",
+    7
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Validation_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "11",
+   "steps": 10,
+   "random": [
+    "DataAnalysis_Expert",
+    1
+   ],
+   "first_speaker": [
+    "Latin_American_Music_Expert",
+    0
+   ],
+   "truth": [
+    "InformationVerification_Expert",
+    6
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "12",
+   "steps": 5,
+   "random": [
+    "Verification_Expert",
+    3
+   ],
+   "first_speaker": [
+    "MBTA_FranciscoFoxboroLine_Expert",
+    0
+   ],
+   "answer": "12",
+   "final_speaker": [
+    "MBTA_FranciscoFoxboroLine_Expert",
+    3
+   ],
+   "origin": [
+    "Verification_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Verification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "13",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "ArtHistory_Expert",
+    0
+   ],
+   "truth": [
+    "ArtHistory_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "14",
+   "steps": 10,
+   "random": [
+    "Culinary_Awards_Expert",
+    6
+   ],
+   "first_speaker": [
+    "Ali_Khan_Shows_and_New_Mexican_Cuisine_Expert",
+    0
+   ],
+   "truth": [
+    "Culinary_Awards_Expert",
+    2
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "15",
+   "steps": 10,
+   "random": [
+    "Dictionary_Expert",
+    9
+   ],
+   "first_speaker": [
+    "Boggle_Board_Expert",
+    0
+   ],
+   "truth": [
+    "Boggle_Board_Expert",
+    6
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "16",
+   "steps": 10,
+   "random": [
+    "Video_Analyst_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Video_Analyst_Expert",
+    0
+   ],
+   "answer": "65 million",
+   "final_speaker": [
+    "Verification_Expert",
+    7
+   ],
+   "origin": [
+    "Narration_Expert",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Narration_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "17",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    7
+   ],
+   "first_speaker": [
+    "MarineBiology_Expert",
+    0
+   ],
+   "truth": [
+    "Statistics_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "18",
+   "steps": 10,
+   "random": [
+    "Poetry_Expert",
+    8
+   ],
+   "first_speaker": [
+    "Poetry_Expert",
+    0
+   ],
+   "answer": "3",
+   "final_speaker": [
+    "Poetry_Expert",
+    9
+   ],
+   "origin": [
+    "Poetry_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Poetry_Expert",
+    7
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "19",
+   "steps": 10,
+   "random": [
+    "Debugging_Problem_Solving_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Debugging_Problem_Solving_Expert",
+    0
+   ],
+   "truth": [
+    "Debugging_Problem_Solving_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "20",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "WebServing_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "21",
+   "steps": 6,
+   "random": [
+    "MusicHistorian_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Lyrics_Expert",
+    0
+   ],
+   "answer": "time",
+   "final_speaker": [
+    "Lyrics_Expert",
+    4
+   ],
+   "origin": [
+    "MusicHistorian_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Lyrics_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "22",
+   "steps": 6,
+   "random": [
+    "UnitTesting_Expert",
+    5
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "23",
+   "steps": 10,
+   "random": [
+    "DataVerification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Art_Historian_Expert",
+    0
+   ],
+   "truth": [
+    "Church_Historian_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "24",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    5
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "25",
+   "steps": 10,
+   "random": [
+    "ModelEvaluation_Interpretation_Expert",
+    5
+   ],
+   "first_speaker": [
+    "ModelEvaluation_Interpretation_Expert",
+    0
+   ],
+   "truth": [
+    "ModelEvaluation_Interpretation_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "26",
+   "steps": 9,
+   "random": [
+    "WomenInComputerScienceHistory_Expert",
+    1
+   ],
+   "first_speaker": [
+    "WomenInComputerScienceHistory_Expert",
+    0
+   ],
+   "answer": "27",
+   "final_speaker": [
+    "WomenInComputerScienceHistory_Expert",
+    7
+   ],
+   "origin": [
+    "WomenInComputerScienceHistory_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "WomenInComputerScienceHistory_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "27",
+   "steps": 10,
+   "random": [
+    "DataVerification_Expert",
+    9
+   ],
+   "first_speaker": [
+    "MarioKart8Deluxe_Expert",
+    0
+   ],
+   "answer": "1:48.585",
+   "final_speaker": [
+    "DataVerification_Expert",
+    7
+   ],
+   "origin": [
+    "MarioKart8Deluxe_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "DataVerification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "28",
+   "steps": 10,
+   "random": [
+    "DataVerification_Expert",
+    3
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "DataVerification_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "29",
+   "steps": 10,
+   "random": [
+    "Validation_Expert",
+    8
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "WebServing_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "30",
+   "steps": 7,
+   "random": [
+    "Culinary_Expert",
+    0
+   ],
+   "first_speaker": [
+    "AudioProcessing_Expert",
+    0
+   ],
+   "answer": "Cornstarch, Fresh strawberries, Lemon juice, Salt, Sugar",
+   "final_speaker": [
+    "Culinary_Expert",
+    3
+   ],
+   "origin": [
+    "Culinary_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Culinary_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "31",
+   "steps": 10,
+   "random": [
+    "Chinese_Political_History_Expert",
+    5
+   ],
+   "first_speaker": [
+    "OpenCV_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "32",
+   "steps": 10,
+   "random": [
+    "SpeciesSightingsData_Expert",
+    7
+   ],
+   "first_speaker": [
+    "SpeciesSightingsData_Expert",
+    0
+   ],
+   "truth": [
+    "SpeciesSightingsData_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "33",
+   "steps": 10,
+   "random": [
+    "DOI_Expert",
+    4
+   ],
+   "first_speaker": [
+    "DOI_Expert",
+    0
+   ],
+   "truth": [
+    "InformationExtraction_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "34",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "CSVProcessing_Expert",
+    0
+   ],
+   "answer": "112",
+   "final_speaker": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    "Locomotive_Expert",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Locomotive_Expert",
+    4
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "35",
+   "steps": 10,
+   "random": [
+    "WebServing_Expert",
+    8
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "WebServing_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "36",
+   "steps": 9,
+   "random": [
+    "ProblemSolving_Expert",
+    8
+   ],
+   "first_speaker": [
+    "ImageProcessing_Expert",
+    0
+   ],
+   "truth": [
+    "ProblemSolving_Expert",
+    2
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "37",
+   "steps": 6,
+   "random": [
+    "Cubing_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Cubing_Expert",
+    0
+   ],
+   "answer": "Red, White",
+   "final_speaker": [
+    "Verification_Expert",
+    4
+   ],
+   "origin": [
+    "Cubing_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Cubing_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "38",
+   "steps": 6,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Polish_TV_Series_Expert",
+    0
+   ],
+   "answer": "Piotr",
+   "final_speaker": [
+    "Verification_Expert",
+    4
+   ],
+   "origin": [
+    "Polish_TV_Series_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Polish_TV_Series_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "39",
+   "steps": 10,
+   "random": [
+    "GIS_DataAnalysis_Expert",
+    7
+   ],
+   "first_speaker": [
+    "AquaticEcosystems_InvasiveSpecies_Expert",
+    0
+   ],
+   "answer": "33040, 33037",
+   "final_speaker": [
+    "Scientific_Verification_Expert",
+    8
+   ],
+   "origin": [
+    "AquaticEcosystems_InvasiveSpecies_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "GIS_DataAnalysis_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "40",
+   "steps": 9,
+   "random": [
+    "NumericalAlgorithms_Expert",
+    6
+   ],
+   "first_speaker": [
+    "NumericalMethods_Expert",
+    0
+   ],
+   "answer": "3",
+   "final_speaker": [
+    "NumericalMethods_Expert",
+    7
+   ],
+   "origin": [
+    "NumericalMethods_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Verification_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "41",
+   "steps": 6,
+   "random": [
+    "Tizin_Translation_Expert",
+    4
+   ],
+   "first_speaker": [
+    "TizinGrammar_Expert",
+    0
+   ],
+   "answer": "Maktay Zapple Pa",
+   "final_speaker": [
+    "TizinGrammar_Expert",
+    4
+   ],
+   "origin": [
+    "Tizin_Translation_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Tizin_Translation_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "42",
+   "steps": 6,
+   "random": [
+    "DemographicData_Expert",
+    2
+   ],
+   "first_speaker": [
+    "DemographicData_Expert",
+    0
+   ],
+   "answer": "70.0",
+   "final_speaker": [
+    "ProblemSolving_Expert",
+    3
+   ],
+   "origin": [
+    "Verification_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "43",
+   "steps": 9,
+   "random": [
+    "DataAnalysis_Expert",
+    3
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "answer": "12:00 PM",
+   "final_speaker": [
+    "Verification_Expert",
+    7
+   ],
+   "origin": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "DataAnalysis_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "44",
+   "steps": 10,
+   "random": [
+    "GraphicDesign_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Web_Design_Expert",
+    0
+   ],
+   "truth": [
+    "WebDevelopment_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "45",
+   "steps": 5,
+   "random": [
+    "VerificationExpert",
+    2
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "answer": "50",
+   "final_speaker": [
+    "VerificationExpert",
+    3
+   ],
+   "origin": [
+    "PublicationData_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "PublicationData_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "46",
+   "steps": 7,
+   "random": [
+    "LogicExpert",
+    0
+   ],
+   "first_speaker": [
+    "LogicExpert",
+    0
+   ],
+   "answer": "0",
+   "final_speaker": [
+    "Validation_Expert",
+    2
+   ],
+   "origin": [
+    "Behavioral_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Behavioral_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "47",
+   "steps": 6,
+   "random": [
+    "Mesopotamian_Number_Systems_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Mesopotamian_Number_Systems_Expert",
+    0
+   ],
+   "truth": [
+    "Mesopotamian_Number_Systems_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "48",
+   "steps": 10,
+   "random": [
+    "Geometry_Expert",
+    2
+   ],
+   "first_speaker": [
+    "Geometry_Expert",
+    0
+   ],
+   "answer": "259.81",
+   "final_speaker": [
+    "Validation_Expert",
+    8
+   ],
+   "origin": [
+    "Geometry_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Geometry_Expert",
+    6
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "49",
+   "steps": 10,
+   "random": [
+    "DataExtraction_Expert",
+    1
+   ],
+   "first_speaker": [
+    "DataExtraction_Expert",
+    0
+   ],
+   "truth": [
+    "Validation_Expert",
+    2
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "50",
+   "steps": 10,
+   "random": [
+    "Financial_Expert",
+    8
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "DataAnalysis_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "51",
+   "steps": 6,
+   "random": [
+    "Python_Expert",
+    4
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "52",
+   "steps": 10,
+   "random": [
+    "ISBNCheckDigit_Expert",
+    3
+   ],
+   "first_speaker": [
+    "ISBNCheckDigit_Expert",
+    0
+   ],
+   "truth": [
+    "ISBNCheckDigit_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "53",
+   "steps": 5,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Data_Extraction_Expert",
+    0
+   ],
+   "answer": "0",
+   "final_speaker": [
+    "Verification_Expert",
+    3
+   ],
+   "origin": [
+    "Data_Extraction_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Verification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "54",
+   "steps": 10,
+   "random": [
+    "Clinical_Trial_Data_Analysis_Expert",
+    7
+   ],
+   "first_speaker": [
+    "Clinical_Trial_Data_Analysis_Expert",
+    0
+   ],
+   "answer": "100",
+   "final_speaker": [
+    "ClinicalTrials_Expert",
+    8
+   ],
+   "origin": [
+    "Clinical_Trial_Data_Analysis_Expert",
+    5
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Clinical_Trial_Data_Analysis_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "55",
+   "steps": 10,
+   "random": [
+    "WebServing_Expert",
+    5
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "truth": [
+    "WebServing_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "56",
+   "steps": 10,
+   "random": [
+    "AlgorithmDesign_Expert",
+    5
+   ],
+   "first_speaker": [
+    "AlgorithmDesign_Expert",
+    0
+   ],
+   "answer": "16.00",
+   "final_speaker": [
+    "Validation_Expert",
+    8
+   ],
+   "origin": [
+    "RecyclingRate_Expert",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Validation_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "57",
+   "steps": 5,
+   "random": [
+    "Verification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "TextExtraction_Expert",
+    0
+   ],
+   "answer": "one",
+   "final_speaker": [
+    "Verification_Expert",
+    2
+   ],
+   "origin": [
+    "Verification_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "TextExtraction_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "58",
+   "steps": 6,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Python_ScikitLearn_StatisticalAnalysis_Expert",
+    0
+   ],
+   "answer": "BaseBagging",
+   "final_speaker": [
+    "Verification_Expert",
+    4
+   ],
+   "origin": [
+    "Verification_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "59",
+   "steps": 10,
+   "random": [
+    "DataVerification_Expert",
+    5
+   ],
+   "first_speaker": [
+    "DataExtraction_Expert",
+    0
+   ],
+   "truth": [
+    "DataExtraction_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "60",
+   "steps": 10,
+   "random": [
+    "DataAnalysis_Expert",
+    3
+   ],
+   "first_speaker": [
+    "RealityTV_Historian_Expert",
+    0
+   ],
+   "answer": "53",
+   "final_speaker": [
+    "DataAnalysis_Expert",
+    9
+   ],
+   "origin": [
+    "DataAnalysis_Expert",
+    9
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "DataAnalysis_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "61",
+   "steps": 10,
+   "random": [
+    "PythonProgramming_Expert",
+    4
+   ],
+   "first_speaker": [
+    "PythonProgramming_Expert",
+    0
+   ],
+   "truth": [
+    "PythonProgramming_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "62",
+   "steps": 7,
+   "random": [
+    "Literature_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Literature_Expert",
+    0
+   ],
+   "answer": "mis-transmission",
+   "final_speaker": [
+    "VerificationExpert",
+    5
+   ],
+   "origin": [
+    "Literature_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Research_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "63",
+   "steps": 10,
+   "random": [
+    "MathAnalysis_Expert",
+    5
+   ],
+   "first_speaker": [
+    "MusicTheory_Expert",
+    0
+   ],
+   "answer": "3",
+   "final_speaker": [
+    "Verification_Expert",
+    7
+   ],
+   "origin": [
+    "MusicTheory_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "MusicTheory_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "64",
+   "steps": 10,
+   "random": [
+    "MilitaryHistory_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Whitney_Collection_Expert",
+    0
+   ],
+   "truth": [
+    "MilitaryHistory_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "65",
+   "steps": 6,
+   "random": [
+    "VideoContentAnalysis_Expert",
+    0
+   ],
+   "first_speaker": [
+    "VSCode_Expert",
+    0
+   ],
+   "truth": [
+    "VideoContentAnalysis_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "66",
+   "steps": 6,
+   "random": [
+    "BiblicalScholar_Expert",
+    1
+   ],
+   "first_speaker": [
+    "BiblicalScholar_Expert",
+    0
+   ],
+   "answer": "Amir-Abbas Hoveyda",
+   "final_speaker": [
+    "Verification_Expert",
+    4
+   ],
+   "origin": [
+    "MiddleEasternHistory_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "BiblicalScholar_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "67",
+   "steps": 10,
+   "random": [
+    "VideoContentAnalysis_Expert",
+    3
+   ],
+   "first_speaker": [
+    "MarineLifeData_Expert",
+    0
+   ],
+   "answer": "3",
+   "final_speaker": [
+    "VideoContentAnalysis_Expert",
+    8
+   ],
+   "origin": [
+    "MarineLifeData_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Verification_Expert",
+    4
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "68",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    6
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "answer": "Honolulu, Quincy",
+   "final_speaker": [
+    "WebServing_Expert",
+    5
+   ],
+   "origin": [
+    "WebServing_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "69",
+   "steps": 10,
+   "random": [
+    "VideoContentAnalysis_Expert",
+    0
+   ],
+   "first_speaker": [
+    "VideoContentAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "VideoContentAnalysis_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "70",
+   "steps": 6,
+   "random": [
+    "PythonDebugging_Expert",
+    5
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "71",
+   "steps": 10,
+   "random": [
+    "DataAnalysis_Expert",
+    9
+   ],
+   "first_speaker": [
+    "DataExtraction_Expert",
+    0
+   ],
+   "answer": "28",
+   "final_speaker": [
+    "DataExtraction_Expert",
+    7
+   ],
+   "origin": [
+    "DataExtraction_Expert",
+    3
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "DataExtraction_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "72",
+   "steps": 10,
+   "random": [
+    "API_Expert",
+    6
+   ],
+   "first_speaker": [
+    "API_Expert",
+    0
+   ],
+   "truth": [
+    "API_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "73",
+   "steps": 7,
+   "random": [
+    "DoctorWhoScript_Expert",
+    2
+   ],
+   "first_speaker": [
+    "DoctorWhoScript_Expert",
+    0
+   ],
+   "answer": "INT. CASTLE BEDROOM",
+   "final_speaker": [
+    "Validation_Expert",
+    3
+   ],
+   "origin": [
+    "VideoAnalysis_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "VideoAnalysis_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "74",
+   "steps": 10,
+   "random": [
+    "MerriamWebsterWordOfTheDay_Historian_Expert",
+    0
+   ],
+   "first_speaker": [
+    "MerriamWebsterWordOfTheDay_Historian_Expert",
+    0
+   ],
+   "truth": [
+    "MerriamWebsterWordOfTheDay_Historian_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "75",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Data_Collection_Expert",
+    0
+   ],
+   "answer": "2.311",
+   "final_speaker": [
+    "Verification_Expert",
+    5
+   ],
+   "origin": [
+    "DataAnalysis_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Data_Collection_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "76",
+   "steps": 10,
+   "random": [
+    "Baseball_Expert",
+    2
+   ],
+   "first_speaker": [
+    "Baseball_Expert",
+    0
+   ],
+   "truth": [
+    "Validation_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "77",
+   "steps": 10,
+   "random": [
+    "YouTubeDownload_Expert",
+    1
+   ],
+   "first_speaker": [
+    "YouTubeDownload_Expert",
+    0
+   ],
+   "truth": [
+    "YouTubeDownload_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "78",
+   "steps": 10,
+   "random": [
+    "Neurology_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Literature_Expert",
+    0
+   ],
+   "truth": [
+    "Neurology_Expert",
+    9
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "79",
+   "steps": 10,
+   "random": [
+    "WaybackMachine_Expert",
+    0
+   ],
+   "first_speaker": [
+    "WaybackMachine_Expert",
+    0
+   ],
+   "answer": "shrimp and grits",
+   "final_speaker": [
+    "Verification_Expert",
+    9
+   ],
+   "origin": [
+    "WaybackMachine_Expert",
+    6
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WaybackMachine_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "80",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "81",
+   "steps": 9,
+   "random": [
+    "Geography_Expert",
+    6
+   ],
+   "first_speaker": [
+    "Fashion_Vogue_Expert",
+    0
+   ],
+   "answer": "361",
+   "final_speaker": [
+    "DataVerification_Expert",
+    7
+   ],
+   "origin": [
+    "Geography_Expert",
+    6
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "DataVerification_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "82",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Marathon_Expert",
+    0
+   ],
+   "answer": "17,000",
+   "final_speaker": [
+    "CelestialPhysics_Expert",
+    5
+   ],
+   "origin": [
+    "CelestialPhysics_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Marathon_Expert",
+    4
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "83",
+   "steps": 10,
+   "random": [
+    "DataVerification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "StatisticalAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "DataAnalysis_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "84",
+   "steps": 9,
+   "random": [
+    "ChessRules_Expert",
+    1
+   ],
+   "first_speaker": [
+    "Chess_Expert",
+    0
+   ],
+   "truth": [
+    "Chess_Expert",
+    7
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "85",
+   "steps": 9,
+   "random": [
+    "WebServing_Expert",
+    4
+   ],
+   "first_speaker": [
+    "WebServing_Expert",
+    0
+   ],
+   "answer": "So it may not be beaucoup too late to save Crème Brulee from beyond the grave",
+   "final_speaker": [
+    "DataVerification_Expert",
+    7
+   ],
+   "origin": [
+    "WebServing_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "BenAndJerrysFlavors_Expert",
+    6
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "86",
+   "steps": 7,
+   "random": [
+    "NaturalLanguageProcessing_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Library_Database_Expert",
+    0
+   ],
+   "truth": [
+    "Library_Database_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "87",
+   "steps": 9,
+   "random": [
+    "DataVerification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "MusicHistorian_Expert",
+    0
+   ],
+   "answer": "Harbinger",
+   "final_speaker": [
+    "DataVerification_Expert",
+    7
+   ],
+   "origin": [
+    "Music_Critic_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Music_Critic_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "88",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    7
+   ],
+   "first_speaker": [
+    "FinancialData_Expert",
+    0
+   ],
+   "truth": [
+    "FinancialData_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "89",
+   "steps": 10,
+   "random": [
+    "Baseball_Historian_Expert",
+    9
+   ],
+   "first_speaker": [
+    "Baseball_Historian_Expert",
+    0
+   ],
+   "answer": "512",
+   "final_speaker": [
+    "Validation_Expert",
+    8
+   ],
+   "origin": [
+    "Validation_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Validation_Expert",
+    8
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "90",
+   "steps": 10,
+   "random": [
+    "Art_Expert",
+    6
+   ],
+   "first_speaker": [
+    "Federico_Lauria_Expert",
+    0
+   ],
+   "truth": [
+    "Federico_Lauria_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "91",
+   "steps": 10,
+   "random": [
+    "Blu-Ray_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Data_Analysis_Expert",
+    0
+   ],
+   "truth": [
+    "Blu-Ray_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "92",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    7
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "93",
+   "steps": 6,
+   "random": [
+    "MovieProp_Expert",
+    1
+   ],
+   "first_speaker": [
+    "JamesBondFilms_Expert",
+    0
+   ],
+   "answer": "white",
+   "final_speaker": [
+    "FilmCritic_Expert",
+    4
+   ],
+   "origin": [
+    "MovieProp_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "FilmCritic_Expert",
+    4
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "94",
+   "steps": 10,
+   "random": [
+    "Ornithology_Expert",
+    3
+   ],
+   "first_speaker": [
+    "BirdSpeciesIdentification_Expert",
+    0
+   ],
+   "truth": [
+    "AnimalBehavior_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "95",
+   "steps": 10,
+   "random": [
+    "AcademicPublication_Expert",
+    2
+   ],
+   "first_speaker": [
+    "AcademicPublication_Expert",
+    0
+   ],
+   "answer": "Can a good player be a good coach? Player–AI coadaption in a multiplayer real-time strategy game",
+   "final_speaker": [
+    "Verification_Expert",
+    9
+   ],
+   "origin": [
+    "AcademicPublication_Expert",
+    5
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "AcademicPublication_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "96",
+   "steps": 10,
+   "random": [
+    "Data_Retrieval_Expert",
+    5
+   ],
+   "first_speaker": [
+    "PopulationData_Expert",
+    0
+   ],
+   "truth": [
+    "Data_Retrieval_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "97",
+   "steps": 10,
+   "random": [
+    "Wikipedia_Editor_Expert",
+    1
+   ],
+   "first_speaker": [
+    "WikipediaHistory_Expert",
+    0
+   ],
+   "truth": [
+    "WikipediaHistory_Expert",
+    2
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "98",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    3
+   ],
+   "first_speaker": [
+    "TheoreticalChemistry_Expert",
+    0
+   ],
+   "answer": "2",
+   "final_speaker": [
+    "TheoreticalChemistry_Expert",
+    5
+   ],
+   "origin": [
+    "TheoreticalChemistry_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Probability_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "99",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "Ticket_Pricing_Expert",
+    0
+   ],
+   "answer": "120",
+   "final_speaker": [
+    "Ticket_Pricing_Expert",
+    4
+   ],
+   "origin": [
+    "AnalyticalReasoning_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "100",
+   "steps": 10,
+   "random": [
+    "Movie_Expert",
+    7
+   ],
+   "first_speaker": [
+    "Movie_Expert",
+    0
+   ],
+   "truth": [
+    "Movie_Expert",
+    2
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "101",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    6
+   ],
+   "first_speaker": [
+    "Tickets_Pricing_Expert",
+    0
+   ],
+   "answer": "23.00",
+   "final_speaker": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    "Budgeting_Expert",
+    5
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Tickets_Pricing_Expert",
+    2
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "102",
+   "steps": 10,
+   "random": [
+    "StreamingAvailability_Expert",
+    8
+   ],
+   "first_speaker": [
+    "Filmography_Expert",
+    0
+   ],
+   "answer": "Subway",
+   "final_speaker": [
+    "IMDB_Ratings_Expert",
+    8
+   ],
+   "origin": [
+    "Filmography_Expert",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Filmography_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "103",
+   "steps": 10,
+   "random": [
+    "Eateries_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Eateries_Expert",
+    0
+   ],
+   "truth": [
+    "DataVerification_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "104",
+   "steps": 10,
+   "random": [
+    "PythonDebugging_Expert",
+    4
+   ],
+   "first_speaker": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "truth": [
+    "PythonDebugging_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "105",
+   "steps": 8,
+   "random": [
+    "Fitness_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Local_Knowledge_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "106",
+   "steps": 6,
+   "random": [
+    "RealEstate_Expert",
+    5
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "answer": "5,200,000",
+   "final_speaker": [
+    "RealEstate_Expert",
+    3
+   ],
+   "origin": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "DataAnalysis_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "107",
+   "steps": 8,
+   "random": [
+    "Bioinformatics_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Genomics_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "108",
+   "steps": 10,
+   "random": [
+    "WebServing_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Corporate_Governance_Expert",
+    0
+   ],
+   "truth": [
+    "Corporate_Governance_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "109",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "Geography_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "110",
+   "steps": 9,
+   "random": [
+    "DataAnalysis_Expert",
+    3
+   ],
+   "first_speaker": [
+    "DataCollection_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    5
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "111",
+   "steps": 10,
+   "random": [
+    "ProbabilityTheory_Expert",
+    5
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "answer": "0",
+   "final_speaker": [
+    "Verification_Expert",
+    8
+   ],
+   "origin": [
+    "DataAnalysis_Expert",
+    5
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Verification_Expert",
+    8
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "112",
+   "steps": 10,
+   "random": [
+    "Validation_Expert",
+    4
+   ],
+   "first_speaker": [
+    "HistoricalWeatherData_Expert",
+    0
+   ],
+   "truth": [
+    "HistoricalWeatherData_Expert",
+    4
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "113",
+   "steps": 9,
+   "random": [
+    "Verification_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Hiking_Expert",
+    0
+   ],
+   "truth": [
+    "Reviews_Expert",
+    7
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "114",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    5
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "Verification_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "115",
+   "steps": 7,
+   "random": [
+    "Verification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "ProblemSolving_Expert",
+    0
+   ],
+   "answer": "120",
+   "final_speaker": [
+    "ArithmeticProgressions_Expert",
+    3
+   ],
+   "origin": [
+    "ProblemSolving_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Verification_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "116",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    4
+   ],
+   "first_speaker": [
+    "DataAnalysis_Expert",
+    0
+   ],
+   "truth": [
+    "DataAnalysis_Expert",
+    7
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "117",
+   "steps": 7,
+   "random": [
+    "JSON_Expert",
+    5
+   ],
+   "first_speaker": [
+    "JSON_Expert",
+    0
+   ],
+   "truth": [
+    "JSON_Expert",
+    0
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "118",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    1
+   ],
+   "first_speaker": [
+    "WeatherData_Expert",
+    0
+   ],
+   "answer": "35.00",
+   "final_speaker": [
+    "WeatherData_Expert",
+    9
+   ],
+   "origin": [
+    "Statistics_Expert",
+    7
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Statistics_Expert",
+    1
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "119",
+   "steps": 8,
+   "random": [
+    "Geometry_Expert",
+    3
+   ],
+   "first_speaker": [
+    "Geometry_Expert",
+    0
+   ],
+   "answer": "Point Pleasant Gym, River Fitness Center, CrossFit Point Pleasant",
+   "final_speaker": [
+    "LocalHistorian_Expert",
+    6
+   ],
+   "origin": [
+    "LocalHistorian_Expert",
+    6
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Geometry_Expert",
+    0
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "120",
+   "steps": 10,
+   "random": [
+    "Verification_Expert",
+    5
+   ],
+   "first_speaker": [
+    "Food_Expert",
+    0
+   ],
+   "answer": "By Chloe, Saigon Shack, Peacefood Cafe, Murray's Falafel & Grill, Mamouns Falafel",
+   "final_speaker": [
+    "Verification_Expert",
+    9
+   ],
+   "origin": [
+    "Verification_Expert",
+    9
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Vegan_Food_Expert",
+    8
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "121",
+   "steps": 7,
+   "random": [
+    "Debugging_Expert",
+    1
+   ],
+   "first_speaker": [
+    "JSON_Expert",
+    0
+   ],
+   "truth": [
+    "Debugging_Expert",
+    1
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "122",
+   "steps": 10,
+   "random": [
+    "Accessibility_Expert",
+    7
+   ],
+   "first_speaker": [
+    "BingAPI_Expert",
+    0
+   ],
+   "answer": "O'Jung's Tavern Bar",
+   "final_speaker": [
+    "Verification_Expert",
+    9
+   ],
+   "origin": [
+    "BingAPI_Expert",
+    0
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "BingAPI_Expert",
+    3
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "123",
+   "steps": 10,
+   "random": [
+    "Karting_Expert",
+    9
+   ],
+   "first_speaker": [
+    "Karting_Expert",
+    0
+   ],
+   "truth": [
+    "Paintball_Expert",
+    3
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "124",
+   "steps": 10,
+   "random": [
+    "Validation_Expert",
+    0
+   ],
+   "first_speaker": [
+    "Research_Expert",
+    0
+   ],
+   "truth": [
+    "Research_Expert",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "125",
+   "steps": 10,
+   "random": [
+    "NYC_Local_Expert",
+    9
+   ],
+   "first_speaker": [
+    "NYC_Local_Expert",
+    0
+   ],
+   "answer": "Anderson's Martial Arts Academy",
+   "final_speaker": [
+    "Verification_Expert",
+    8
+   ],
+   "origin": [
+    "NYC_Local_Expert",
+    2
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "MartialArts_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Algorithm-Generated",
+   "case": "126",
+   "steps": 8,
+   "random": [
+    "Verification_Expert",
+    0
+   ],
+   "first_speaker": [
+    "CorporateHistory_IPOs_MondayCom_Expert",
+    0
+   ],
+   "answer": "Oren Stern, Amit Mathrani, Michal Aharon",
+   "final_speaker": [
+    "Verification_Expert",
+    6
+   ],
+   "origin": [
+    "Verification_Expert",
+    6
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "CorporateHistory_IPOs_MondayCom_Expert",
+    5
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "1",
+   "steps": 29,
+   "random": [
+    "Orchestrator",
+    14
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Alliance Jiu Jitsu, NY Jidokwan Taekwondo",
+   "final_speaker": [
+    "Orchestrator",
+    28
+   ],
+   "origin": [
+    "Orchestrator",
+    28
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "2",
+   "steps": 86,
+   "random": [
+    "Orchestrator",
+    33
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "CSI Cyber",
+   "final_speaker": [
+    "Orchestrator",
+    85
+   ],
+   "origin": [
+    "Orchestrator",
+    85
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "3",
+   "steps": 93,
+   "random": [
+    "WebSurfer",
+    20
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Skidmore",
+   "final_speaker": [
+    "Orchestrator",
+    92
+   ],
+   "origin": [
+    "Orchestrator",
+    39
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    32
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "4",
+   "steps": 17,
+   "random": [
+    "WebSurfer",
+    16
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "truth": [
+    "WebSurfer",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "5",
+   "steps": 20,
+   "random": [
+    "WebSurfer",
+    17
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "bite",
+   "final_speaker": [
+    "Orchestrator",
+    19
+   ],
+   "origin": [
+    "WebSurfer",
+    16
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "6",
+   "steps": 8,
+   "random": [
+    "Orchestrator",
+    0
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "1080000000",
+   "final_speaker": [
+    "Orchestrator",
+    7
+   ],
+   "origin": [
+    "Orchestrator",
+    7
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    5
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "7",
+   "steps": 25,
+   "random": [
+    "WebSurfer",
+    10
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "2",
+   "final_speaker": [
+    "Orchestrator",
+    24
+   ],
+   "origin": [
+    "Orchestrator",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "8",
+   "steps": 129,
+   "random": [
+    "Orchestrator",
+    119
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Eliran Glazer, Shiran Nawi",
+   "final_speaker": [
+    "Orchestrator",
+    128
+   ],
+   "origin": [
+    "Orchestrator",
+    128
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "9",
+   "steps": 95,
+   "random": [
+    "Assistant",
+    53
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Ethan Zohn",
+   "final_speaker": [
+    "Orchestrator",
+    94
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    25
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "10",
+   "steps": 44,
+   "random": [
+    "Orchestrator",
+    35
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Whole Foods Market, Trader Joe's, Mariano's",
+   "final_speaker": [
+    "Orchestrator",
+    43
+   ],
+   "origin": [
+    "Orchestrator",
+    43
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    9
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "11",
+   "steps": 130,
+   "random": [
+    "WebSurfer",
+    21
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "The flavor lived on",
+   "final_speaker": [
+    "Orchestrator",
+    129
+   ],
+   "origin": [
+    "Orchestrator",
+    129
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    24
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "12",
+   "steps": 20,
+   "random": [
+    "WebSurfer",
+    4
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "5",
+   "final_speaker": [
+    "Orchestrator",
+    19
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Assistant",
+    16
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "13",
+   "steps": 53,
+   "random": [
+    "Orchestrator",
+    25
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "70",
+   "final_speaker": [
+    "Orchestrator",
+    52
+   ],
+   "origin": [
+    "Orchestrator",
+    52
+   ],
+   "found_earlier": false,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "14",
+   "steps": 32,
+   "random": [
+    "WebSurfer",
+    26
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "0.00049",
+   "final_speaker": [
+    "Orchestrator",
+    31
+   ],
+   "origin": [
+    "Orchestrator",
+    31
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    14
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "15",
+   "steps": 129,
+   "random": [
+    "Orchestrator",
+    0
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Fidelity Emerging Markets Fund (FEMKX)",
+   "final_speaker": [
+    "Orchestrator",
+    128
+   ],
+   "origin": [
+    "Orchestrator",
+    41
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "16",
+   "steps": 21,
+   "random": [
+    "Orchestrator",
+    0
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "The Tenant",
+   "final_speaker": [
+    "Orchestrator",
+    20
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    15
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "17",
+   "steps": 37,
+   "random": [
+    "Orchestrator",
+    33
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Sneekers Cafe",
+   "final_speaker": [
+    "Orchestrator",
+    36
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "18",
+   "steps": 31,
+   "random": [
+    "Orchestrator",
+    6
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "-201",
+   "final_speaker": [
+    "Orchestrator",
+    30
+   ],
+   "origin": [
+    "Orchestrator",
+    30
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    16
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "19",
+   "steps": 69,
+   "random": [
+    "Assistant",
+    25
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Unable to determine",
+   "final_speaker": [
+    "Orchestrator",
+    68
+   ],
+   "origin": [
+    "Orchestrator",
+    68
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    50
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "20",
+   "steps": 67,
+   "random": [
+    "Orchestrator",
+    35
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "31",
+   "final_speaker": [
+    "Orchestrator",
+    66
+   ],
+   "origin": [
+    "Orchestrator",
+    66
+   ],
+   "found_earlier": false,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    3
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "21",
+   "steps": 25,
+   "random": [
+    "Orchestrator",
+    3
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "80NSSC21K0223",
+   "final_speaker": [
+    "Orchestrator",
+    24
+   ],
+   "origin": [
+    "Orchestrator",
+    24
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "22",
+   "steps": 24,
+   "random": [
+    "Orchestrator",
+    12
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "tricksy",
+   "final_speaker": [
+    "Orchestrator",
+    23
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "FileSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "23",
+   "steps": 74,
+   "random": [
+    "WebSurfer",
+    10
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "truth": [
+    "WebSurfer",
+    8
+   ],
+   "origin": [
+    null,
+    null
+   ],
+   "final_speaker": [
+    null,
+    null
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "24",
+   "steps": 5,
+   "random": [
+    "Orchestrator",
+    2
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Maktay Zapple Mato",
+   "final_speaker": [
+    "Orchestrator",
+    4
+   ],
+   "origin": [
+    "Orchestrator",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    1
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "25",
+   "steps": 20,
+   "random": [
+    "WebSurfer",
+    3
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "50",
+   "final_speaker": [
+    "Orchestrator",
+    19
+   ],
+   "origin": [
+    "WebSurfer",
+    16
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Orchestrator",
+    18
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "26",
+   "steps": 33,
+   "random": [
+    "Orchestrator",
+    8
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "23",
+   "final_speaker": [
+    "Orchestrator",
+    32
+   ],
+   "origin": [
+    "Orchestrator",
+    32
+   ],
+   "found_earlier": false,
+   "ambiguous": true,
+   "truth": [
+    "FileSurfer",
+    32
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "27",
+   "steps": 51,
+   "random": [
+    "WebSurfer",
+    33
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "12.6",
+   "final_speaker": [
+    "Orchestrator",
+    50
+   ],
+   "origin": [
+    "Orchestrator",
+    50
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "28",
+   "steps": 32,
+   "random": [
+    "WebSurfer",
+    7
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "12 Steps Down",
+   "final_speaker": [
+    "Orchestrator",
+    31
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "29",
+   "steps": 13,
+   "random": [
+    "Orchestrator",
+    4
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "1976",
+   "final_speaker": [
+    "Orchestrator",
+    12
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "30",
+   "steps": 121,
+   "random": [
+    "Assistant",
+    5
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "445000",
+   "final_speaker": [
+    "Orchestrator",
+    120
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Assistant",
+    82
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "31",
+   "steps": 32,
+   "random": [
+    "Orchestrator",
+    13
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Muscle Headz Gym, Ohio WV YMCA",
+   "final_speaker": [
+    "Orchestrator",
+    31
+   ],
+   "origin": [
+    "Orchestrator",
+    9
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    9
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "32",
+   "steps": 12,
+   "random": [
+    "WebSurfer",
+    8
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "http://mart.ensembl.org/Canis_lupus_familiaris/Info/Index?db=core;g=ENSCAFG00845015183;r=X:24550462-24552226;t=ENSCAFT00845027108",
+   "final_speaker": [
+    "Orchestrator",
+    11
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    6
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "33",
+   "steps": 9,
+   "random": [
+    "WebSurfer",
+    5
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Kenya",
+   "final_speaker": [
+    "Orchestrator",
+    8
+   ],
+   "origin": [
+    "Orchestrator",
+    8
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "34",
+   "steps": 5,
+   "random": [
+    "Orchestrator",
+    4
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Wen Jia Bao",
+   "final_speaker": [
+    "Orchestrator",
+    4
+   ],
+   "origin": [
+    "Orchestrator",
+    4
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "35",
+   "steps": 44,
+   "random": [
+    "WebSurfer",
+    41
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "200",
+   "final_speaker": [
+    "Orchestrator",
+    43
+   ],
+   "origin": [
+    "Orchestrator",
+    43
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "36",
+   "steps": 91,
+   "random": [
+    "WebSurfer",
+    81
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Casino Royale",
+   "final_speaker": [
+    "Orchestrator",
+    90
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    9
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "37",
+   "steps": 59,
+   "random": [
+    "Orchestrator",
+    23
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "3",
+   "final_speaker": [
+    "Orchestrator",
+    58
+   ],
+   "origin": [
+    "Orchestrator",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "38",
+   "steps": 52,
+   "random": [
+    "Orchestrator",
+    13
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Beaver Ponds, Grand Prismatic Overlook Trail, Wraith Falls Trail",
+   "final_speaker": [
+    "Orchestrator",
+    51
+   ],
+   "origin": [
+    "Orchestrator",
+    51
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    3
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "39",
+   "steps": 49,
+   "random": [
+    "Orchestrator",
+    37
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "https://www.ncbi.nlm.nih.gov/gdv/browser/genome?id=GCF_002288905.2",
+   "final_speaker": [
+    "Orchestrator",
+    48
+   ],
+   "origin": [
+    "Orchestrator",
+    48
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    30
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "40",
+   "steps": 17,
+   "random": [
+    "WebSurfer",
+    0
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "67 Maclellan Rd",
+   "final_speaker": [
+    "Orchestrator",
+    16
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    16
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "41",
+   "steps": 83,
+   "random": [
+    "Assistant",
+    19
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "hike",
+   "final_speaker": [
+    "Orchestrator",
+    82
+   ],
+   "origin": [
+    "Orchestrator",
+    38
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    8
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "42",
+   "steps": 32,
+   "random": [
+    "WebSurfer",
+    21
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "but",
+   "final_speaker": [
+    "Orchestrator",
+    31
+   ],
+   "origin": [
+    "Orchestrator",
+    9
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    29
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "43",
+   "steps": 16,
+   "random": [
+    "Orchestrator",
+    11
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "6",
+   "final_speaker": [
+    "Orchestrator",
+    15
+   ],
+   "origin": [
+    "WebSurfer",
+    8
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Assistant",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "44",
+   "steps": 124,
+   "random": [
+    "Orchestrator",
+    43
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "[{\"sender\": \"DHL\", \"price (usd)\": 50}, {\"sender\": \"USPS\", \"price (usd)\": 35}, {\"sender\": \"Fedex\", \"price (usd)\": 45}]",
+   "final_speaker": [
+    "Orchestrator",
+    123
+   ],
+   "origin": [
+    "Orchestrator",
+    123
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    39
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "45",
+   "steps": 21,
+   "random": [
+    "Orchestrator",
+    1
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "5",
+   "final_speaker": [
+    "Orchestrator",
+    20
+   ],
+   "origin": [
+    "Orchestrator",
+    1
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "Orchestrator",
+    20
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "46",
+   "steps": 130,
+   "random": [
+    "Orchestrator",
+    41
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "5:30 PM",
+   "final_speaker": [
+    "Orchestrator",
+    129
+   ],
+   "origin": [
+    "Orchestrator",
+    129
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    32
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "47",
+   "steps": 67,
+   "random": [
+    "FileSurfer",
+    37
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Algeria, Bahrain, Brunei Darussalam, China, Congo, Rep., Gabon, Iran, Islamic Rep., Luxembourg, Macao SAR, China, Malaysia, Oman, Qatar, Saudi Arabia, Singapore",
+   "final_speaker": [
+    "Orchestrator",
+    66
+   ],
+   "origin": [
+    "Orchestrator",
+    66
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    51
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "48",
+   "steps": 5,
+   "random": [
+    "WebSurfer",
+    3
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "20",
+   "final_speaker": [
+    "Orchestrator",
+    4
+   ],
+   "origin": [
+    "Orchestrator",
+    4
+   ],
+   "found_earlier": false,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "49",
+   "steps": 16,
+   "random": [
+    "WebSurfer",
+    4
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "k",
+   "final_speaker": [
+    "Orchestrator",
+    15
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": true,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "50",
+   "steps": 113,
+   "random": [
+    "Orchestrator",
+    14
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Westville Hudson, Awash Ethiopian Restaurant",
+   "final_speaker": [
+    "Orchestrator",
+    112
+   ],
+   "origin": [
+    "Orchestrator",
+    61
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    5
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "51",
+   "steps": 123,
+   "random": [
+    "WebSurfer",
+    93
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "23, 45, 78, 102, 156",
+   "final_speaker": [
+    "Orchestrator",
+    122
+   ],
+   "origin": [
+    "Orchestrator",
+    122
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "FileSurfer",
+    5
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "52",
+   "steps": 21,
+   "random": [
+    "Orchestrator",
+    1
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Equinox Flatiron, Nimble Fitness",
+   "final_speaker": [
+    "Orchestrator",
+    20
+   ],
+   "origin": [
+    "Orchestrator",
+    5
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "53",
+   "steps": 28,
+   "random": [
+    "Orchestrator",
+    5
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "208",
+   "final_speaker": [
+    "Orchestrator",
+    27
+   ],
+   "origin": [
+    "Assistant",
+    24
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Assistant",
+    24
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "54",
+   "steps": 19,
+   "random": [
+    "Orchestrator",
+    9
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Yamasaki, Sugiyura",
+   "final_speaker": [
+    "Orchestrator",
+    18
+   ],
+   "origin": [
+    "Orchestrator",
+    18
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    15
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "55",
+   "steps": 40,
+   "random": [
+    "Orchestrator",
+    21
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Al Gore",
+   "final_speaker": [
+    "Orchestrator",
+    39
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    18
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "56",
+   "steps": 129,
+   "random": [
+    "Orchestrator",
+    106
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "2007",
+   "final_speaker": [
+    "Orchestrator",
+    128
+   ],
+   "origin": [
+    "Orchestrator",
+    34
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    4
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "57",
+   "steps": 17,
+   "random": [
+    "Orchestrator",
+    3
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "Once Upon a Time",
+   "final_speaker": [
+    "Orchestrator",
+    16
+   ],
+   "origin": [
+    "WebSurfer",
+    4
+   ],
+   "found_earlier": true,
+   "ambiguous": false,
+   "truth": [
+    "WebSurfer",
+    12
+   ]
+  },
+  {
+   "subset": "Hand-Crafted",
+   "case": "58",
+   "steps": 106,
+   "random": [
+    "WebSurfer",
+    60
+   ],
+   "first_speaker": [
+    "Orchestrator",
+    1
+   ],
+   "answer": "11/24/22",
+   "final_speaker": [
+    "Orchestrator",
+    105
+   ],
+   "origin": [
+    "Orchestrator",
+    105
+   ],
+   "found_earlier": false,
+   "ambiguous": false,
+   "truth": [
+    "Orchestrator",
+    22
+   ]
+  }
+ ]
+}

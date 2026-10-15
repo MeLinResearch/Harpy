@@ -1,6 +1,6 @@
 # AI nutrition label
 
-<p align="center"><img src="../assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY, a budgeted oversight simulation. Privacy ladder not applicable (synthetic data); runs offline; model type: simulation with a mock detector; base model: none, with optional gpt-4.1 replay. Trust ingredients: no training on customer data, no data shared with a vendor, human in the loop with capped alerts. Compliance: logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing are all yes, each backed by named requirements. Detector accuracy is assumed, not measured; external validation not available. 37 requirements: 35 verified by tests or CI, 2 by inspection." width="460"></p>
+<p align="center"><img src="../assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY, a budgeted oversight simulation. Privacy ladder not applicable (synthetic data); runs offline; model type: simulation with a mock detector; base model: none, with optional gpt-4.1 replay. Trust ingredients: no training on customer data, no data shared with a vendor, human in the loop with capped alerts. Compliance: logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing are all yes, each backed by named requirements. Detector accuracy is assumed, not measured; only the blame rule has been checked on real traces, on 184 labeled failure logs. 37 requirements: 35 verified by tests or CI, 2 by inspection." width="460"></p>
 
 Owner: Melinda Emerson · Covers: v2 (main) and the v3 draft · Reviewed: October 15, 2026
 
@@ -59,7 +59,7 @@ Every compliance row names the requirements in [REQUIREMENTS.md](../REQUIREMENTS
 | Cautioned out-of-scope use | Production enforcement, adversaries adapting to the sampler, high-stakes decisions, and any claim of live-model accuracy or real-world savings. |
 | Development details and input features | A seeded synthetic mesh: 30 agents, 500 one-minute ticks, typed claims, one planted fault per run. Oversight sees only observables: typed message fields, Tier 0 scores, audit results, recorded lineage. |
 | Fairness process | Not applicable. No people or demographic data are modeled. The fairness that matters here is between arms, so each arm is compared on the same world with matched seeds. |
-| External validation | Not available. No real traces have been evaluated. |
+| External validation | Partial. The blame rule alone was checked on 184 hand-labeled real failure logs ([Who&When](../../experiments/who_and_when/README.md)). It beat blaming the final speaker on wrong-value failures and missed failures that start as actions. The full simulation has not been run on real traces. |
 | Quantitative performance | Simulation only. Detector accuracy is an input: overt 95%, moderate 78%, subtle 42%, false positives 2%. The v2 study was INCONCLUSIVE. The v3 pilot is a design input, not study evidence. |
 | Ongoing maintenance | CI on every push across Linux, macOS and Windows: lint, the full test suite, evidence verification, and a v2 reproduction check. |
 | Update schedule | Each study version (v1, v2, v3) is frozen before data collection and published with its evidence, whatever the result. |
@@ -70,7 +70,7 @@ Every compliance row names the requirements in [REQUIREMENTS.md](../REQUIREMENTS
 | --- | --- |
 | Recipe | Generate a seeded world, apply seven mechanical signals, buy affordable audits, optionally trace each flagged claim to its origin, accumulate suspicion, apply scoped responses, and score against ground truth. Replay predicts from observables first and joins labels afterward. |
 | Cost ingredients | Sentinel, Tier 0, discarded work, reruns, triage and investigation. Token list prices are sourced (OpenAI gpt-4.1 and gpt-6 tiers, Anthropic Claude Haiku); staffing and engineering costs are assumptions. |
-| Known limits | This is a conditional simulation with a small synthetic replay fixture, and live-model accuracy is unmeasured. Blame tracing assumes the detector names the bad claim and that the framework records which claim each claim came from. Hashes are not signatures, and Python guards are not security sandboxes. |
+| Known limits | This is a conditional simulation with a small synthetic replay fixture, and live-model accuracy is unmeasured. Blame tracing assumes the detector names the bad claim and that the framework records which claim each claim came from. Real failures also include wrong actions and runs with no answer, which HARPY's faults don't model. Hashes are not signatures, and Python guards are not security sandboxes. |
 | License and rights | Code and the authored synthetic fixture are MIT. Provider models, APIs and external sources keep their own terms. |
 
 [Engineering requirements](../REQUIREMENTS.md) · [Data / model card](DATA_MODEL_CARD.md) · [DBOM](DBOM.md) · [V3 design notes](../STUDY_V3_DESIGN.md)

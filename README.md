@@ -37,6 +37,14 @@ These numbers come from a pre-freeze pilot of 6,200 simulated runs. They held wh
 > - It flags a relay's restatement as readily as the original.
 > - Your framework records which claim each claim came from.
 
+### On real failure logs
+
+The blame rule alone was run on [Who&When](https://github.com/ag2ai/Agents_Failure_Attribution)'s 184 hand-labeled multi-agent failures, with no model call:
+- **Code-and-calculation teams:** the agent that first stated the wrong answer was the labeled culprit 57% of the time; the agent that delivered it, 30%.
+- **Web-browsing teams:** the decisive mistake is usually an action taken before any wrong claim exists, and tracing claims can't see it.
+
+Results, baselines and caveats are in [the experiment write-up](experiments/who_and_when/README.md).
+
 ## Try it
 
 No API key and no paid model call. You need [uv](https://docs.astral.sh/uv/) and Python 3.11+.
@@ -63,7 +71,7 @@ The label is HARPY's requirements at a glance, in the standard AI nutrition labe
 Each compliance row names the requirements behind it, and each requirement names the test that checks it.
 
 <p align="center">
-  <img src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: runs offline on synthetic data with a mock detector and no base model; no training on or sharing of customer data; human in the loop with capped alerts; logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing all yes, each backed by named requirements; detector accuracy assumed, not measured; 37 requirements, 35 verified by tests or CI." width="460">
+  <img src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: runs offline on synthetic data with a mock detector and no base model; no training on or sharing of customer data; human in the loop with capped alerts; logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing all yes, each backed by named requirements; detector accuracy assumed, not measured; only the blame rule checked on real traces; 37 requirements, 35 verified by tests or CI." width="460">
 </p>
 
 - [**AI nutrition label**](docs/governance/AI_NUTRITION_LABEL.md): every field, with its backing requirements.
@@ -108,6 +116,8 @@ CI runs lint, the full test suite and every evidence check on Linux, macOS and W
 ## Related
 
 [**Tattletale**](https://github.com/MeLinResearch/tattletale) checks quoted claims against their source and names the agent that introduced a bad one, not the one that last repeated it. HARPY uses its origin rule to decide who a flagged claim belongs to.
+
+[**Who&When**](https://github.com/ag2ai/Agents_Failure_Attribution) (Zhang et al., ICML 2025) is a benchmark of 184 multi-agent failure logs labeled with the agent and step that caused each failure. HARPY's blame rule is [tested against it](experiments/who_and_when/README.md).
 
 ## License
 
