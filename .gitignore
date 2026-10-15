@@ -15,3 +15,6 @@ results/*
 !results/detection_vs_overhead.png
 !results/overhead_composition.png
 !results/detection_vs_alert_budget.png
+
+# README artwork generator (the generic build/ rule above would hide it)
+!docs/assets/build/
