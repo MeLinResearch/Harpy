@@ -85,6 +85,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         worker_model=args.worker_model or pricing.default_worker_model_name(),
         review_scaling=args.review_scaling,
         followup_audits=args.followup_audits,
+        attribution=args.attribution,
     )
     try:
         path = run_single(
@@ -252,6 +253,7 @@ def _cmd_feasibility(args: argparse.Namespace) -> int:
         worker_model=args.worker_model or pricing.default_worker_model_name(),
         review_scaling=args.review_scaling,
         followup_audits=args.followup_audits,
+        attribution=args.attribution,
     )
     forbidden: frozenset[int] = frozenset()
     if args.study:
@@ -354,6 +356,10 @@ def build_parser() -> argparse.ArgumentParser:
         "--followup-audits", type=int, default=0,
         help="v3: follow-up audits queued on an agent after each flagged audit (0 = v2)",
     )
+    run.add_argument(
+        "--attribution", action="store_true",
+        help="v3: credit flagged audits to the agent their evidence traces back to",
+    )
     run.set_defaults(func=_cmd_run)
 
     sweep = sub.add_parser("sweep", help="the full grid, across processes")
@@ -441,6 +447,7 @@ def build_parser() -> argparse.ArgumentParser:
     feas.add_argument("--max-alerts-per-agent-hour", type=float, default=0.05)
     feas.add_argument("--worker-model", default=None)
     feas.add_argument("--followup-audits", type=int, default=0)
+    feas.add_argument("--attribution", action="store_true")
     feas.add_argument("--floor", type=float, default=0.10,
                       help="minimum incremental detection over TIER0_ONLY")
     feas.add_argument("--ceiling", type=float, default=0.10, help="maximum overhead")

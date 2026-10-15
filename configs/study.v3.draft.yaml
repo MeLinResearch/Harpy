@@ -2,8 +2,7 @@
 # it while `status` is anything but `frozen`.
 #
 # Before freezing:
-#   1. Settle the owner decisions in docs/STUDY_V3_DESIGN.md (relay handling,
-#      review policy, operating point, August branch).
+#   1. Settle the open decisions in docs/STUDY_V3_DESIGN.md.
 #   2. Fill in primary_cell and the pricing file it implies.
 #   3. Run `harpy feasibility` on that cell with `--study` pointing here. Freeze
 #      only on a FREEZABLE verdict, at the seed count it recommends or more.
@@ -29,6 +28,7 @@ grid:
   alert_caps: [0.05]
   worker_models: null  # per decision 3
   followup_audits: [0, 4]
+  attributions: [false, true]
 decision:
   minimum_seeds: 30
   minimum_incremental_detection: 0.10

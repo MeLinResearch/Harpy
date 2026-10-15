@@ -36,6 +36,7 @@ class MockSentinel:
         output_tokens: int,
         rng: random.Random,
         severity: Severity,
+        evidence_accuracy: float | None = None,
     ) -> None:
         self.detection_prob = {Severity(k): float(v) for k, v in detection_prob.items()}
         self.false_positive_rate = float(false_positive_rate)
@@ -45,6 +46,14 @@ class MockSentinel:
         self.severity = Severity(severity)
         if self.severity not in self.detection_prob:
             raise ValueError(f"no detection_prob configured for severity {self.severity}")
+        #: v3, and an assumption rather than a measurement: when set, a flag
+        #: names one claim as its evidence. A true detection names a corrupt
+        #: claim with this probability and otherwise a claim drawn uniformly
+        #: from the window; a false positive always names a uniform draw.
+        #: ``None`` names nothing and draws nothing, which is v1/v2.
+        if evidence_accuracy is not None and not 0.0 <= float(evidence_accuracy) <= 1.0:
+            raise ValueError(f"evidence_accuracy must be in [0, 1], got {evidence_accuracy}")
+        self.evidence_accuracy = None if evidence_accuracy is None else float(evidence_accuracy)
 
     def audit(self, agent_id: str, window: tuple[Message, ...]) -> AuditResult:
         contains_corrupt = any(claim.is_corrupt for message in window for claim in message.claims)
@@ -53,13 +62,28 @@ class MockSentinel:
         )
         flagged = self.rng.random() < probability
         tick = window[-1].tick if window else -1
+        evidence: tuple[str, ...] = ()
+        if flagged and self.evidence_accuracy is not None:
+            evidence = self._name_evidence(window, contains_corrupt)
         return AuditResult(
             agent_id=agent_id,
             tick=tick,
             flagged=flagged,
             input_tokens=self.input_tokens,
             output_tokens=self.output_tokens,
+            evidence_claim_ids=evidence,
         )
+
+    def _name_evidence(
+        self, window: tuple[Message, ...], contains_corrupt: bool
+    ) -> tuple[str, ...]:
+        claims = [claim for message in window for claim in message.claims]
+        if not claims:
+            return ()
+        if contains_corrupt and self.rng.random() < self.evidence_accuracy:
+            corrupt = [claim for claim in claims if claim.is_corrupt]
+            return (corrupt[self.rng.randrange(len(corrupt))].claim_id,)
+        return (claims[self.rng.randrange(len(claims))].claim_id,)
 
 
 class RealSentinel:
@@ -89,5 +113,6 @@ class RealSentinel:
         self.last_detection = detection
         return AuditResult(agent_id=agent_id, tick=window[-1].tick if window else -1,
                            flagged=detection.flagged, input_tokens=detection.input_tokens,
-                           output_tokens=detection.output_tokens)
+                           output_tokens=detection.output_tokens,
+                           evidence_claim_ids=tuple(detection.evidence_ids or ()))
 

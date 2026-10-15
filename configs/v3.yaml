@@ -2,8 +2,9 @@
 #
 # Parameter-for-parameter the v1/v2 world (configs/default.yaml): same mesh, fault model,
 # fault distribution, Tier 0 weights, detector assumptions, suspicion gate and
-# review model. The only addition is sampler.exposure_refresh_ticks, read by the
-# v3 EXPOSURE arm alone. Follow-up depth is a run axis, not a config value.
+# review model. Two additions, each read by one v3 mechanism only:
+# sampler.exposure_refresh_ticks (EXPOSURE arm) and sentinel.evidence_accuracy
+# (attribution runs). Follow-up depth and attribution are run axes.
 #
 # Original header follows.
 #
@@ -96,6 +97,11 @@ sentinel:
     MODERATE: 0.78
     SUBTLE: 0.42
   false_positive_rate: 0.02
+  # v3, attribution runs only. ASSUMPTION, not a measurement: the probability
+  # that a true detection names a corrupt claim as its evidence (otherwise it
+  # names a claim drawn uniformly from the window). Replay measures the real
+  # value for a real detector.
+  evidence_accuracy: 1.0
   # Messages of the audited agent handed to the sentinel per audit.
   window_messages: 20
 

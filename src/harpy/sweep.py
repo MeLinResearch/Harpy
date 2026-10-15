@@ -66,6 +66,8 @@ class SweepGrid:
     #: v3. Follow-up depths for the auditing arms. NONE and TIER0_ONLY never
     #: audit, so they run once at 0 rather than once per depth.
     followup_audits: tuple[int, ...] = (0,)
+    #: v3. Whether flagged audits are traced to their origin. Auditing arms only.
+    attributions: tuple[bool, ...] = (False,)
 
     def __post_init__(self) -> None:
         if not self.review_scalings or not set(self.review_scalings).issubset({"fixed", "linear"}):
@@ -99,7 +101,10 @@ class SweepGrid:
                 # produce identical duplicate runs across it.
                 reserves = self.reserve_fractions if arm is Arm.HYBRID else (0.0,)
                 depths = self.followup_audits if arm in AUDITING_ARMS else (0,)
-                for severity, depth in [(s, d) for s in self.severities for d in depths]:
+                traces = self.attributions if arm in AUDITING_ARMS else (False,)
+                for severity, depth, traced in [
+                    (s, d, t) for s in self.severities for d in depths for t in traces
+                ]:
                     for budget in self.budget_pcts:
                         for fidelity in self.lineage_fidelities:
                             for reserve in reserves:
@@ -122,6 +127,7 @@ class SweepGrid:
                                                         worker_model=worker,
                                                         review_scaling=self.review_scalings[0],
                                                         followup_audits=int(depth),
+                                                        attribution=bool(traced),
                                                     )
                                                 )
         return specs

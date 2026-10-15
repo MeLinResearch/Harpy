@@ -22,6 +22,7 @@ CELL_KEYS = tuple(k for k in BASELINE_MATCH_KEYS if k != "seed") + (
     "reserve_fraction",
     # v3. Absent from v2 rows, where it reads as None for every cell alike.
     "followup_audits",
+    "attribution",
 )
 #: Arms a study evaluates against the matched TIER0_ONLY baseline.
 CANDIDATE_ARMS = ("RANDOM", "DIRECTED", "HYBRID", "EXPOSURE")

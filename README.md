@@ -22,7 +22,8 @@ HARPY-SIM is a reproducible Python simulation of budgeted oversight for multi-ag
 | [Data Bill of Materials](docs/governance/DBOM.md) | Inputs, transformations, lineage, hashes, and artifact relationships. |
 | [V2 study](docs/STUDY_V2.md) | Frozen hypothesis, both review-cost policies, seed-level evidence, and uncertainty. |
 | [Replay guide](docs/REPLAY.md) | Blinded corpus format, mechanical reference, and optional real Responses API detector. |
-| [V3 design draft](docs/STUDY_V3_DESIGN.md) | Why v2 could not pass, targeted re-audit, exposure sampling, the pre-freeze check, and its pilot. Not frozen. |
+| [V3 design draft](docs/STUDY_V3_DESIGN.md) | Why v2 could not pass, targeted re-audit, exposure sampling, Tattletale-style blame tracing, the pre-freeze check, and its pilot. Not frozen. |
+| [V1 result](docs/V1_RESULT.md) | The record that v1 failed its economic test, ported from the August 2026 branch. |
 
 These are project documentation examples, with a machine-readable DBOM. They do not assert regulatory certification.
 
@@ -106,6 +107,10 @@ The fault distribution is frozen before a sweep and included in each results rec
 | [sweep.py](src/harpy/sweep.py), [plot.py](src/harpy/plot.py) | Compare configurations and render conditional results. |
 | [provenance.py](src/harpy/provenance.py), [study.py](src/harpy/study.py) | Bind artifacts to complete inputs and evaluate the frozen study. |
 | [replay.py](src/harpy/replay.py), [detectors.py](src/harpy/detectors.py) | Evaluate observable-only cases and record measured detector usage. |
+
+## Related
+
+[Tattletale](https://github.com/MeLinResearch/tattletale) checks quoted claims against their source and names the agent that introduced a bad one, not the one that last repeated it. HARPY v3 uses its origin rule to decide who a flagged claim belongs to.
 
 ## License
 

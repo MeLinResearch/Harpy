@@ -57,7 +57,9 @@ _Z95 = 1.959963984540054
 
 def baseline_spec(spec: RunSpec) -> RunSpec:
     """The matched TIER0_ONLY run: same world, no audits, nothing to follow up."""
-    return dataclasses.replace(spec, arm=Arm.TIER0_ONLY, reserve_fraction=0.0, followup_audits=0)
+    return dataclasses.replace(
+        spec, arm=Arm.TIER0_ONLY, reserve_fraction=0.0, followup_audits=0, attribution=False
+    )
 
 
 # -- 1. arithmetic -----------------------------------------------------------
@@ -275,6 +277,7 @@ def evaluate(
         "overhead_max": max(overheads),
         "false_isolations_mean": fmean(r[1]["false_isolations"] for r in rows),
         "followup_audits_mean": fmean(r[1]["followup_audits_drawn"] for r in rows),
+        "relay_isolations_mean": fmean(r[1]["relay_isolations"] for r in rows),
         "audits_on_faulty_agent_mean": fmean(r[1]["audits_on_faulty_agent"] for r in rows),
         "affordable_audits_per_tick": fmean(
             r[1]["affordable_audits_per_tick"] or 0.0 for r in rows

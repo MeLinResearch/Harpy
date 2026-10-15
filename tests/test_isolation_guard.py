@@ -15,6 +15,7 @@ from pathlib import Path
 import pytest
 
 from harpy import alert_budget as alert_budget_module
+from harpy import attribution as attribution_module
 from harpy import mesh as mesh_module
 from harpy import metrics as metrics_module
 from harpy import response as response_module
@@ -36,6 +37,7 @@ GUARDED_MODULES = [
     suspicion_module,
     response_module,
     alert_budget_module,
+    attribution_module,
 ]
 SCORING_MODULES = [metrics_module, mesh_module, simulation_module]
 
@@ -145,8 +147,9 @@ def test_claims_are_frozen_against_rewriting_ground_truth():
 def test_no_guarded_module_even_mentions_ground_truth_in_source(module):
     """Static backstop: the guard is runtime, but the source should be clean too.
 
-    ``MockSentinel.audit`` is the sole exception, and it is exempted by name so
-    that a second reader appearing in sentinel.py would still fail this test.
+    ``MockSentinel.audit`` and, since v3, ``MockSentinel._name_evidence`` (which
+    picks the corrupt claim a true detection names) are the only exceptions. Both
+    are exempted by name so that a further reader in sentinel.py still fails.
     """
     source = Path(module.__file__).read_text(encoding="utf-8")
     tree = ast.parse(source)
@@ -155,7 +158,10 @@ def test_no_guarded_module_even_mentions_ground_truth_in_source(module):
         if not isinstance(node, ast.Attribute) or node.attr not in {"is_corrupt", "ground_truth"}:
             continue
         function = _enclosing_function(tree, node)
-        if module is sentinel_module and function == "MockSentinel.audit":
+        if module is sentinel_module and function in {
+            "MockSentinel.audit",
+            "MockSentinel._name_evidence",
+        }:
             continue
         offenders.append(f"{Path(module.__file__).name}:{node.lineno} ({function})")
     assert not offenders, f"ground truth referenced outside the whitelist: {offenders}"

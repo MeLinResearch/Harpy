@@ -68,6 +68,7 @@ GUARDED_MODULES = frozenset(
         "suspicion.py",
         "response.py",
         "alert_budget.py",
+        "attribution.py",
     }
 )
 
@@ -401,4 +402,8 @@ class AuditResult:
     flagged: bool
     input_tokens: int
     output_tokens: int
+    #: v3. Claims the detector points at as the reason for a flag. Empty unless
+    #: the run traces blame (``RunSpec.attribution``): only then does the mock
+    #: sentinel name a claim, so v1/v2 runs consume no extra RNG draws.
+    evidence_claim_ids: tuple[str, ...] = ()
 

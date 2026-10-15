@@ -2,23 +2,23 @@
   "artifacts": [
     {
       "path": "README.md",
-      "sha256": "99a8fe2960911fecac52ecdf31ce03ef47c08decfa21a9d07c899003f35741fb",
-      "size_bytes": 1530
+      "sha256": "7dedc4c766f69c52c3899adacf55be2993a0f2814db759a670b4816eafc50087",
+      "size_bytes": 1956
     },
     {
       "path": "grid.csv",
-      "sha256": "9797952f33e5166960746a88156933961a9b52b899330cbb1fced61719bc852a",
-      "size_bytes": 34921
+      "sha256": "432c5dc44289a3690bf6f59991dabb207aa7b3fb470650b0172d913c3377d753",
+      "size_bytes": 88548
     },
     {
       "path": "grid.json",
-      "sha256": "55181c5a450aace9461793248478ace8641a39b9c23a30cbd9ecc3d5d8c8ebf6",
-      "size_bytes": 100902
+      "sha256": "8d54f6811c8fdf87d40dd6232f82d86c31f882733c67737342d3609fc159e717",
+      "size_bytes": 277145
     },
     {
       "path": "runs.jsonl.gz",
-      "sha256": "c4e2493b08cfea1dcb2fb01410c5d88ace243a93633ef5e5863ad1f14b6e5ff3",
-      "size_bytes": 557303
+      "sha256": "439761269576dc8f1c356daf33b0fe21fa34697be04c86de763f6845ccdb8977",
+      "size_bytes": 1341765
     }
   ],
   "schema": "harpy/artifact-manifest/1"

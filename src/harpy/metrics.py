@@ -237,6 +237,12 @@ def run_metrics(record: RunRecord) -> dict:
         # False isolations split by cause: relays carried corrupt claims they
         # derived from the fault source; the rest were pure false positives.
         "relay_isolations": sum(1 for event in record.isolations if event.relay),
+        # v3 attribution (Tattletale's walk). Zero when attribution is off.
+        "attribution_walks": record.attribution_walks,
+        "attribution_redirected": record.attribution_redirected,
+        "attribution_broken": record.attribution_broken,
+        "attribution_on_corrupt": record.attribution_on_corrupt,
+        "attribution_to_fault_source": record.attribution_to_fault_source,
         "audit_cost_dollars": record.audit_cost_dollars,
         "affordable_audits_per_tick": (
             record.mean_allowance_per_tick_dollars / record.audit_cost_dollars
@@ -368,6 +374,7 @@ def aggregate(rows: list[dict]) -> list[dict]:
             row.get("experiment_fingerprint"),
             # v3: follow-up depth changes the answer, so it keys the cell too.
             row.get("followup_audits", 0),
+            row.get("attribution", False),
         )
         cells.setdefault(key, []).append(row)
 
@@ -387,6 +394,7 @@ def aggregate(rows: list[dict]) -> list[dict]:
             review_scaling,
             experiment_fingerprint,
             followup_audits,
+            attribution,
         ) = key
         viability = [
             r["min_fleet_dollars_per_hour_for_viability"]
@@ -430,6 +438,7 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "review_scaling": review_scaling,
                 "experiment_fingerprint": experiment_fingerprint,
                 "followup_audits": followup_audits,
+                "attribution": attribution,
                 "n_seeds": len(group),
                 "detection_rate": statistics.fmean(r["detection_rate"] for r in group),
                 "overhead_pct": statistics.fmean(r["overhead_pct"] for r in group),

@@ -110,3 +110,65 @@ def descendants(
         seen.add(node)
         stack.extend(children.get(node, ()))
     return frozenset(seen)
+
+
+class ProvenanceLog:
+    """v3: the lossy lineage a provenance store writes as claims are emitted.
+
+    Same loss model as :func:`build_observable`: each true edge is recorded with
+    probability ``fidelity``, and spurious edges appear at ``spurious_rate`` per
+    true edge between claims that are not actually related. The difference is
+    timing. ``build_observable`` redraws the whole projection from the full edge
+    set, which is what downstream flagging uses and what v1/v2 evidence was
+    computed with; this log decides each edge once, when it is created, from its
+    own RNG stream. That is how a real store behaves, and it lets attribution
+    walk lineage every tick without rebuilding the graph every tick.
+
+    Only :meth:`parents_of` is meant for HARPY-side code: it returns observable
+    parents and nothing about which edges were real.
+    """
+
+    def __init__(self, fidelity: float, spurious_rate: float, rng: random.Random) -> None:
+        if not 0.0 <= fidelity <= 1.0:
+            raise ValueError(f"fidelity must be in [0, 1], got {fidelity}")
+        if spurious_rate < 0.0:
+            raise ValueError(f"spurious_rate must be >= 0, got {spurious_rate}")
+        self.fidelity = float(fidelity)
+        self.spurious_rate = float(spurious_rate)
+        self.rng = rng
+        self._true: set[LineageEdge] = set()
+        self._ids: list[str] = []
+        self._known: set[str] = set()
+        self._parents: dict[str, list[str]] = {}
+        self.recorded_true = 0
+        self.recorded_spurious = 0
+
+    def _remember(self, claim_id: str) -> None:
+        if claim_id not in self._known:
+            self._known.add(claim_id)
+            self._ids.append(claim_id)
+
+    def _record(self, edge: LineageEdge) -> None:
+        self._parents.setdefault(edge.child_claim_id, []).append(edge.parent_claim_id)
+
+    def extend(self, edges) -> None:
+        """Record newly created true edges, in creation order."""
+        for edge in edges:
+            self._true.add(edge)
+            self._remember(edge.parent_claim_id)
+            self._remember(edge.child_claim_id)
+            if self.rng.random() < self.fidelity:
+                self._record(edge)
+                self.recorded_true += 1
+            if self.rng.random() < self.spurious_rate and len(self._ids) >= 2:
+                for _ in range(200):
+                    parent = self._ids[self.rng.randrange(len(self._ids))]
+                    child = self._ids[self.rng.randrange(len(self._ids))]
+                    fake = LineageEdge(parent, child)
+                    if parent != child and fake not in self._true:
+                        self._record(fake)
+                        self.recorded_spurious += 1
+                        break
+
+    def parents_of(self, claim_id: str) -> tuple[str, ...]:
+        return tuple(sorted(self._parents.get(claim_id, ())))
