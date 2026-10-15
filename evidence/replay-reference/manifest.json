@@ -2,13 +2,13 @@
   "artifacts": [
     {
       "path": "predictions.jsonl",
-      "sha256": "e97033a1fd692258507724fbf582a57b9463fa0db997b14447690ea75624216a",
-      "size_bytes": 4538
+      "sha256": "99d4d74bef0eeddef277c478bae832180758f21543316056636bb1411dc6f542",
+      "size_bytes": 4535
     },
     {
       "path": "report.json",
-      "sha256": "93dc978f42ba605894f772d9038df7573ca9ad3715c5c640e6d963cf404a6d1c",
-      "size_bytes": 4497
+      "sha256": "11a0b56a839c16cf0c770b558a6ac5ccb2d48bded0f0e6ca1fb9a4711efa1290",
+      "size_bytes": 4599
     }
   ],
   "schema": "harpy/artifact-manifest/1"

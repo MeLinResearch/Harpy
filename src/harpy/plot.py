@@ -34,6 +34,7 @@ ARM_STYLE: dict[str, dict] = {
     Arm.RANDOM.value: {"color": "#2ca02c", "marker": "^", "linestyle": "-"},
     Arm.DIRECTED.value: {"color": "#d62728", "marker": "D", "linestyle": "-"},
     Arm.HYBRID.value: {"color": "#9467bd", "marker": "v", "linestyle": "-"},
+    Arm.EXPOSURE.value: {"color": "#8c564b", "marker": "P", "linestyle": "-"},
 }
 SEVERITY_ORDER: tuple[str, ...] = tuple(s.value for s in Severity)
 ARM_ORDER: tuple[str, ...] = tuple(a.value for a in Arm)

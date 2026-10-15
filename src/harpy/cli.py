@@ -1,4 +1,4 @@
-"""``harpy run`` / ``harpy sweep`` / ``harpy plot``."""
+"""``harpy run`` / ``sweep`` / ``plot`` / ``study`` / ``feasibility`` / ``replay`` / ``verify``."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ from pathlib import Path
 import yaml
 
 from .detectors import MechanicalDetector, OpenAIResponsesDetector
+from .feasibility import DEFAULT_SEED_COUNTS, evaluate
 from .ledger import PricingEntryMissingError, load_pricing
 from .plot import (
     detection_vs_alert_budget,
@@ -83,6 +84,7 @@ def _cmd_run(args: argparse.Namespace) -> int:
         # file rather than defaulting to a name that may not be defined in it.
         worker_model=args.worker_model or pricing.default_worker_model_name(),
         review_scaling=args.review_scaling,
+        followup_audits=args.followup_audits,
     )
     try:
         path = run_single(
@@ -230,6 +232,62 @@ def _cmd_replay(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_feasibility(args: argparse.Namespace) -> int:
+    """Pre-freeze check for one candidate primary cell. Writes one JSON report."""
+    config = load_config(args.config)
+    pricing = load_pricing(args.pricing)
+    if not pricing.verified:
+        print("refusing: feasibility reports are design inputs and need verified pricing",
+              file=sys.stderr)
+        return 2
+    spec = RunSpec(
+        seed=0,
+        severity=Severity(args.severity),
+        arm=Arm(args.arm),
+        budget_pct=args.budget_pct,
+        lineage_fidelity=args.lineage_fidelity,
+        reserve_fraction=args.reserve_fraction if Arm(args.arm) is Arm.HYBRID else 0.0,
+        fleet_scale=args.fleet_scale,
+        max_alerts_per_agent_hour=args.max_alerts_per_agent_hour,
+        worker_model=args.worker_model or pricing.default_worker_model_name(),
+        review_scaling=args.review_scaling,
+        followup_audits=args.followup_audits,
+    )
+    forbidden: frozenset[int] = frozenset()
+    if args.study:
+        study = yaml.safe_load(Path(args.study).read_text(encoding="utf-8"))
+        low, high = study["grid"]["seeds"]
+        forbidden = frozenset(range(int(low), int(high) + 1))
+    decision = {
+        "minimum_incremental_detection": args.floor,
+        "maximum_overhead": args.ceiling,
+        "minimum_seeds": args.minimum_seeds,
+    }
+    report = evaluate(
+        config, pricing, spec, decision, tuple(_parse_seeds(args.pilot_seeds)),
+        tuple(int(v) for v in _parse_floats(args.seed_counts)), args.target,
+        args.processes, forbidden,
+    )
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(f"wrote {out}")
+    print(f"  verdict={report['verdict']}: {report['reason']}")
+    arithmetic = report["arithmetic"]
+    print(f"  affordable audits/tick={arithmetic['affordable_audits_per_tick']:.3f}"
+          f"  one detection's triage={arithmetic['one_detection_triage_share_of_worker_cost']:.1%}"
+          " of worker cost")
+    if "pilot" in report:
+        pilot = report["pilot"]
+        print(f"  pilot {pilot['n']} seeds: candidate {pilot['candidate_detections']}"
+              f", baseline {pilot['baseline_detections']}"
+              f", overhead {pilot['overhead_mean']:.2%}")
+        for point in report["curve"]:
+            print(f"    n={point['n_seeds']:>4}  assurance={point['assurance']:.2f}"
+                  f"  power@point={point['power_at_point_estimate']:.2f}")
+    return 0
+
+
 def _parse_seeds(text: str) -> list[int]:
     """Accept ``0..2`` or ``0,1,2``."""
     if ".." in text:
@@ -292,6 +350,10 @@ def build_parser() -> argparse.ArgumentParser:
     )
     run.add_argument("--out", default="results/")
     run.add_argument("--review-scaling", choices=["fixed", "linear"], default="fixed")
+    run.add_argument(
+        "--followup-audits", type=int, default=0,
+        help="v3: follow-up audits queued on an agent after each flagged audit (0 = v2)",
+    )
     run.set_defaults(func=_cmd_run)
 
     sweep = sub.add_parser("sweep", help="the full grid, across processes")
@@ -363,6 +425,34 @@ def build_parser() -> argparse.ArgumentParser:
     study.add_argument("--out", required=True)
     study.add_argument("--processes", type=int, default=2)
     study.set_defaults(func=_cmd_study)
+
+    feas = sub.add_parser(
+        "feasibility", help="pre-freeze check: can this primary cell pass, and at how many seeds?"
+    )
+    feas.add_argument("--config", default="configs/v3.yaml")
+    feas.add_argument("--pricing", required=True)
+    feas.add_argument("--arm", required=True, choices=[a.value for a in Arm])
+    feas.add_argument("--severity", default="SUBTLE", choices=[s.value for s in Severity])
+    feas.add_argument("--budget-pct", type=float, required=True)
+    feas.add_argument("--lineage-fidelity", type=float, default=1.0)
+    feas.add_argument("--reserve-fraction", type=float, default=0.5)
+    feas.add_argument("--fleet-scale", type=float, default=100.0)
+    feas.add_argument("--review-scaling", choices=["fixed", "linear"], required=True)
+    feas.add_argument("--max-alerts-per-agent-hour", type=float, default=0.05)
+    feas.add_argument("--worker-model", default=None)
+    feas.add_argument("--followup-audits", type=int, default=0)
+    feas.add_argument("--floor", type=float, default=0.10,
+                      help="minimum incremental detection over TIER0_ONLY")
+    feas.add_argument("--ceiling", type=float, default=0.10, help="maximum overhead")
+    feas.add_argument("--minimum-seeds", type=int, default=30)
+    feas.add_argument("--pilot-seeds", default="100000..100039")
+    feas.add_argument("--seed-counts", default=",".join(str(n) for n in DEFAULT_SEED_COUNTS))
+    feas.add_argument("--target", type=float, default=0.8, help="required assurance")
+    feas.add_argument("--study", default=None,
+                      help="a study YAML whose seeds the pilot must not touch")
+    feas.add_argument("--processes", type=int, default=2)
+    feas.add_argument("--out", required=True)
+    feas.set_defaults(func=_cmd_feasibility)
 
     replay = sub.add_parser("replay", help="evaluate a detector on observable-only recorded cases")
     replay.add_argument("--corpus", required=True)

@@ -27,7 +27,7 @@ from .lineage import make_pair
 from .mesh import Mesh
 from .provenance import capture_inputs
 from .response import ResponseController
-from .sampler import Sampler, SamplerConfig
+from .sampler import ExposureTracker, Sampler, SamplerConfig
 from .sentinel import MockSentinel
 from .suspicion import SuspicionConfig, SuspicionTracker
 from .telemetry import Tier0Config, Tier0Telemetry
@@ -76,10 +76,15 @@ class RunSpec:
     #: never a price and never a model string — both live in the pricing file.
     worker_model: str = DEFAULT_WORKER_MODEL_NAME
     review_scaling: str = "fixed"
+    #: v3. Follow-up audits queued on an agent after each flagged audit. 0 is
+    #: the v1/v2 behaviour, and leaves the run ID unchanged.
+    followup_audits: int = 0
 
     def __post_init__(self) -> None:
         if self.review_scaling not in ("fixed", "linear"):
             raise ValueError("review_scaling must be fixed or linear")
+        if int(self.followup_audits) != self.followup_audits or self.followup_audits < 0:
+            raise ValueError("followup_audits must be a non-negative integer")
         if not math.isfinite(self.fleet_scale) or self.fleet_scale <= 0:
             raise ValueError("fleet_scale must be finite and positive")
         for name in ("detection_prob", "false_positive_rate"):
@@ -104,16 +109,21 @@ class RunSpec:
             "false_positive_rate": self.false_positive_rate,
             "worker_model": self.worker_model,
             "review_scaling": self.review_scaling,
+            "followup_audits": int(self.followup_audits),
         }
 
     def run_id(self) -> str:
         detection = "cfg" if self.detection_prob is None else f"{self.detection_prob:g}"
         fpr = "cfg" if self.false_positive_rate is None else f"{self.false_positive_rate:g}"
+        # The follow-up suffix appears only when follow-ups are on, so every v1
+        # and v2 run keeps the file name its published evidence refers to.
+        followup = f"_k{int(self.followup_audits)}" if self.followup_audits else ""
         return (
             f"seed{self.seed:03d}_{self.arm.value}_{self.severity.value}"
             f"_b{self.budget_pct:g}_f{self.lineage_fidelity:g}_r{self.reserve_fraction:g}"
             f"_x{self.fleet_scale:g}_a{self.max_alerts_per_agent_hour:g}"
             f"_d{detection}_p{fpr}_w{_slug(self.worker_model)}_h{self.review_scaling}"
+            f"{followup}"
         )
 
 
@@ -125,6 +135,10 @@ class IsolationEvent:
     suspicion: float
     contaminated_claims: int
     interactions_since_onset: int
+    #: v3. A false isolation of an agent whose audit window held corrupt claims
+    #: it had derived from someone else: it was carrying the fault, not causing
+    #: it. Scored here because "was that claim corrupt" is ground truth.
+    relay: bool = False
 
 
 @dataclass
@@ -183,6 +197,14 @@ class RunRecord:
     detections_lost_to_alert_cap: int = 0
     effective_isolation_threshold: float = 0.0
     base_isolation_threshold: float = 0.0
+    # -- v3 ----------------------------------------------------------------
+    #: Audits spent serving follow-up queues (a subset of ``audits_run``).
+    followup_audits_drawn: int = 0
+    #: Sentinel price of one audit and the allowance one tick of this run's
+    #: worker spend buys, averaged over the run: their ratio is the audit rate
+    #: the budget can afford, which v3 showed to dominate every sampling choice.
+    audit_cost_dollars: float = 0.0
+    mean_allowance_per_tick_dollars: float = 0.0
     provenance: dict = field(default_factory=dict)
 
 
@@ -258,6 +280,7 @@ def run_simulation(
             budget_pct=spec.budget_pct,
             reserve_fraction=spec.reserve_fraction,
             carryover_cap_ticks=float(config["sampler"]["carryover_cap_ticks"]),
+            followup_audits=int(spec.followup_audits),
         ),
         audit_cost_dollars=accountant.audit_cost(sentinel.input_tokens, sentinel.output_tokens),
         rng=random.Random(_stream_seed(spec.seed, _STREAM_SAMPLER)),
@@ -281,6 +304,14 @@ def run_simulation(
                 random.Random(lineage_seed),
             )
         return projection_cache["pair"]  # type: ignore[return-value]
+
+    # Built only for the EXPOSURE arm: every other arm leaves it None, so no
+    # extra lineage projection is computed and v2 runs are untouched.
+    exposure_tracker = (
+        ExposureTracker(int(config["sampler"].get("exposure_refresh_ticks", 10)))
+        if spec.arm is Arm.EXPOSURE
+        else None
+    )
 
     response = ResponseController(
         mesh,
@@ -326,6 +357,8 @@ def run_simulation(
     # is exactly the question HARPY is not allowed to ask.
     base_threshold = alert_budget.config.base_isolation_threshold
     faulty_was_above = False
+    allowance_total = 0.0
+    record.audit_cost_dollars = sampler.audit_cost
 
     for tick in range(mesh.n_ticks):
         emissions = mesh.step(tick)
@@ -341,6 +374,8 @@ def run_simulation(
                     tier0.observe(message, emission.rejected_claim_ids)
                 )
             recent[message.sender_id].append(message)
+            if exposure_tracker is not None:
+                exposure_tracker.observe(message)
 
         active = mesh.active_agents()
         record.agent_active_ticks += len(active)
@@ -354,10 +389,19 @@ def run_simulation(
         suspicion.tick(tier0_scores)
 
         sampler.accrue(worker_this_tick, tier0_this_tick)
-        for agent_id in sampler.select(active, tier0_scores):
+        allowance_total += spec.budget_pct * worker_this_tick
+        exposure = None
+        if exposure_tracker is not None:
+            if exposure_tracker.refresh_due(tick):
+                exposure_tracker.refresh(lineage_provider().observable, tick)
+            exposure = exposure_tracker.scores(active, tick)
+        for agent_id in sampler.select(active, tier0_scores, exposure):
             result = sentinel.audit(agent_id, tuple(recent[agent_id]))
             accountant.charge_audit(result)
             suspicion.apply_audit(result)
+            sampler.record_result(agent_id, result.flagged)
+            if exposure_tracker is not None:
+                exposure_tracker.audited(agent_id, tick)
             # Targeting bookkeeping, scored here on the world's side of the
             # seam. "Was that the faulty agent" is exactly the question the
             # sampler is not allowed to ask, which is why these counters cannot
@@ -384,6 +428,10 @@ def run_simulation(
         actions_before = len(response.actions)
         for agent_id in suspicion.isolation_candidates(active):
             _isolate(mesh, response, suspicion, tier0, record, recent, agent_id, tick)
+            sampler.forget(agent_id)
+            if exposure_tracker is not None:
+                # Reviewed by a human either way: its exposure has been checked.
+                exposure_tracker.audited(agent_id, tick)
         alerted_now = {
             action.target
             for action in response.actions[actions_before:]
@@ -411,6 +459,8 @@ def run_simulation(
     record.alerts_batched = accountant.alerts_batched
     record.escalated_reviews = accountant.escalations_charged
     record.effective_isolation_threshold = alert_budget.effective_isolation_threshold()
+    record.followup_audits_drawn = sampler.followup_audits_drawn
+    record.mean_allowance_per_tick_dollars = allowance_total / max(mesh.n_ticks, 1)
     return record
 
 
@@ -425,6 +475,9 @@ def _isolate(mesh, response, suspicion, tier0, record, recent, agent_id, tick) -
     """
     was_faulty = mesh.is_faulty_now(agent_id)
     contaminated = sum(1 for t in mesh.corrupt_claim_ticks if t <= tick)
+    relay = (not was_faulty) and any(
+        claim.is_corrupt for message in recent[agent_id] for claim in message.claims
+    )
 
     isolation = response.isolate(agent_id)
     # response.isolate charged the totals without knowing which kind of
@@ -447,6 +500,7 @@ def _isolate(mesh, response, suspicion, tier0, record, recent, agent_id, tick) -
             suspicion=suspicion.score(agent_id),
             contaminated_claims=contaminated,
             interactions_since_onset=interactions,
+            relay=relay,
         )
     )
 

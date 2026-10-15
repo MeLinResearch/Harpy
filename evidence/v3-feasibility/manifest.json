@@ -1,0 +1,25 @@
+{
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "99a8fe2960911fecac52ecdf31ce03ef47c08decfa21a9d07c899003f35741fb",
+      "size_bytes": 1530
+    },
+    {
+      "path": "grid.csv",
+      "sha256": "9797952f33e5166960746a88156933961a9b52b899330cbb1fced61719bc852a",
+      "size_bytes": 34921
+    },
+    {
+      "path": "grid.json",
+      "sha256": "55181c5a450aace9461793248478ace8641a39b9c23a30cbd9ecc3d5d8c8ebf6",
+      "size_bytes": 100902
+    },
+    {
+      "path": "runs.jsonl.gz",
+      "sha256": "c4e2493b08cfea1dcb2fb01410c5d88ace243a93633ef5e5863ad1f14b6e5ff3",
+      "size_bytes": 557303
+    }
+  ],
+  "schema": "harpy/artifact-manifest/1"
+}

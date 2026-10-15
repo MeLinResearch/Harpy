@@ -231,6 +231,18 @@ def run_metrics(record: RunRecord) -> dict:
         "worker_model": record.worker_model_name,
         "worker_model_input_per_mtok": record.worker_model_price.get("input_per_mtok"),
         "worker_model_output_per_mtok": record.worker_model_price.get("output_per_mtok"),
+        "sentinel_model": record.pricing_dict.get("sentinel_model", {}).get("model"),
+        # -- v3: how many audits the budget can buy, and how they were spent --
+        "followup_audits_drawn": record.followup_audits_drawn,
+        # False isolations split by cause: relays carried corrupt claims they
+        # derived from the fault source; the rest were pure false positives.
+        "relay_isolations": sum(1 for event in record.isolations if event.relay),
+        "audit_cost_dollars": record.audit_cost_dollars,
+        "affordable_audits_per_tick": (
+            record.mean_allowance_per_tick_dollars / record.audit_cost_dollars
+            if record.audit_cost_dollars > 0.0
+            else None
+        ),
         # Cross-run quantity: a single run cannot know its own baseline. Filled
         # by attach_incremental_detection_over_tier0 once the matched TIER0_ONLY
         # run exists; null on a run JSON read in isolation. See that function.
@@ -322,6 +334,7 @@ def result_document(record: RunRecord) -> dict:
                 "suspicion": event.suspicion,
                 "contaminated_claims": event.contaminated_claims,
                 "interactions_since_onset": event.interactions_since_onset,
+                "relay": event.relay,
             }
             for event in record.isolations
         ],
@@ -353,6 +366,8 @@ def aggregate(rows: list[dict]) -> list[dict]:
             row.get("worker_model"),
             row.get("review_scaling", "fixed"),
             row.get("experiment_fingerprint"),
+            # v3: follow-up depth changes the answer, so it keys the cell too.
+            row.get("followup_audits", 0),
         )
         cells.setdefault(key, []).append(row)
 
@@ -371,6 +386,7 @@ def aggregate(rows: list[dict]) -> list[dict]:
             worker_model,
             review_scaling,
             experiment_fingerprint,
+            followup_audits,
         ) = key
         viability = [
             r["min_fleet_dollars_per_hour_for_viability"]
@@ -413,6 +429,7 @@ def aggregate(rows: list[dict]) -> list[dict]:
                 "worker_model": worker_model,
                 "review_scaling": review_scaling,
                 "experiment_fingerprint": experiment_fingerprint,
+                "followup_audits": followup_audits,
                 "n_seeds": len(group),
                 "detection_rate": statistics.fmean(r["detection_rate"] for r in group),
                 "overhead_pct": statistics.fmean(r["overhead_pct"] for r in group),

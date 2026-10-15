@@ -59,6 +59,21 @@ jobs:
           uv run harpy replay --corpus examples/replay/synthetic --out replay-smoke/
           uv run harpy verify --manifest replay-smoke/manifest.json
 
+      - name: v3 mechanisms and the pre-freeze check
+        shell: bash
+        run: |
+          # EXPOSURE with follow-ups runs end to end on smoke pricing.
+          uv run harpy run --config configs/v3.yaml --pricing configs/pricing.smoke.yaml \
+            --arm EXPOSURE --followup-audits 4 --severity SUBTLE --seed 0 \
+            --allow-unverified-pricing --out v3-smoke/
+          uv run harpy verify --manifest v3-smoke/manifest.json
+          # The v2 primary cell must be caught as unpassable by arithmetic alone.
+          uv run harpy feasibility --config configs/default.yaml \
+            --pricing configs/pricing.study.yaml --arm HYBRID --budget-pct 0.05 \
+            --worker-model gpt-4.1-mini --review-scaling linear --out v3-feasibility.json
+          grep -q '"verdict": "CRITERIA_CONFLICT"' v3-feasibility.json
+          uv run harpy verify --manifest evidence/v3-feasibility/manifest.json
+
       - name: sweep refuses placeholder pricing
         shell: bash
         run: |

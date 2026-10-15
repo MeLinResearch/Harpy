@@ -22,6 +22,7 @@ HARPY-SIM is a reproducible Python simulation of budgeted oversight for multi-ag
 | [Data Bill of Materials](docs/governance/DBOM.md) | Inputs, transformations, lineage, hashes, and artifact relationships. |
 | [V2 study](docs/STUDY_V2.md) | Frozen hypothesis, both review-cost policies, seed-level evidence, and uncertainty. |
 | [Replay guide](docs/REPLAY.md) | Blinded corpus format, mechanical reference, and optional real Responses API detector. |
+| [V3 design draft](docs/STUDY_V3_DESIGN.md) | Why v2 could not pass, targeted re-audit, exposure sampling, the pre-freeze check, and its pilot. Not frozen. |
 
 These are project documentation examples, with a machine-readable DBOM. They do not assert regulatory certification.
 

@@ -121,3 +121,13 @@ See [Replay](REPLAY.md) for real detector credentials, cost reservations, corpus
 
 Generated output is not bundled as a demonstrated production result. See the [methodology](METHODOLOGY.md) for scope and interpretation.
 
+## Check a study cell before freezing it (v3)
+
+```bash
+uv run harpy feasibility --pricing configs/pricing.v3.claude-haiku-4-5.yaml \
+  --arm EXPOSURE --followup-audits 4 --budget-pct 0.05 \
+  --worker-model gpt-6.1-sol --review-scaling fixed \
+  --pilot-seeds 100000..100039 --out results/feasibility/candidate.json
+```
+
+The report says `CRITERIA_CONFLICT` without simulating when one detection's triage alone reaches the cost ceiling. Otherwise it pilots the cell on seeds 100000 and up and reports the probability of PASS at each seed count. Pilot seeds below 100000 are refused. `--study` also refuses any overlap with a study's seeds. `scripts/v3_feasibility_grid.py` runs the full pilot grid; see [the v3 design notes](STUDY_V3_DESIGN.md).

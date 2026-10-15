@@ -1,0 +1,46 @@
+# HARPY v3 pricing, sentinel = gpt-4.1.
+#
+# Standard, uncached, short-context list prices per 1M text tokens, fetched by
+# Claude from the provider pages below on the 'accessed' date (gpt-4.1-mini
+# was checked for v2 on 2026-10-10). No caching, batch or long-context column
+# is used: one audit is a 9,000-token uncached window.
+#
+# The simulation consumes prices only. A cheaper sentinel buys more audits, but
+# its detection probability stays the configured assumption: HARPY-SIM cannot
+# tell whether gpt-4.1 detects as well as any other model. Only replay can.
+#
+# Same family as the OpenAI workers. Kept for continuity with v2.
+verified: true
+worker_models:
+  gpt-4.1-mini:
+    model: gpt-4.1-mini-2025-04-14
+    input_per_mtok: 0.40
+    output_per_mtok: 1.60
+    source: https://developers.openai.com/api/docs/models/gpt-4.1-mini
+    accessed: "2026-10-10"
+  gpt-6-luna:
+    model: gpt-6-luna
+    input_per_mtok: 0.10
+    output_per_mtok: 0.50
+    source: https://developers.openai.com/api/docs/pricing
+    accessed: "2026-10-13"
+  gpt-6.1-sol:
+    model: gpt-6.1-sol
+    input_per_mtok: 2.00
+    output_per_mtok: 10.00
+    source: https://developers.openai.com/api/docs/pricing
+    accessed: "2026-10-13"
+  gpt-6-astra:
+    model: gpt-6-astra
+    input_per_mtok: 10.00
+    output_per_mtok: 50.00
+    source: https://developers.openai.com/api/docs/pricing
+    accessed: "2026-10-13"
+sentinel_model:
+  model: gpt-4.1-2025-04-14
+  input_per_mtok: 2.00
+  output_per_mtok: 8.00
+  source: https://developers.openai.com/api/docs/models/gpt-4.1
+  accessed: "2026-10-13"
+tier0:
+  cost_per_message_dollars: 0.0000001
