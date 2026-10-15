@@ -559,72 +559,141 @@ def erd() -> str:
 # --------------------------------------------------------------------------
 # AI nutrition facts
 # --------------------------------------------------------------------------
+def requirement_counts() -> tuple[int, int, int]:
+    """(total, verified by a test or CI step, checked by inspection) from REQUIREMENTS.md."""
+    text = (OUT_DIR.parent / "REQUIREMENTS.md").read_text(encoding="utf-8")
+    statuses = [m.strip() for m in re.findall(r"^\| [A-Z]-\d+ \|.*\| ([^|]+) \|$", text, re.M)]
+    manual = sum(1 for st in statuses if st == "Manual")
+    return len(statuses), len(statuses) - manual, manual
+
+
 def nutrition() -> str:
-    W, H = 380, 740
-    black, white = "#111111", "#ffffff"
-    s = Svg(W, H, "AI Nutrition Facts for HARPY. Serving size: one simulation run. Model calls "
-                  "per serving: 0. Sentinel audits at most 5% of worker spend; total oversight "
-                  "target under 10%; human alerts capped. Trained weights, fine-tuning, "
-                  "retrieval corpus and personal data: none. Assumed detector accuracy, inputs "
-                  "not measurements: overt 95%, moderate 78%, subtle 42%, false positives 2%.",
-            bg=white, rx=6)
-    s.rect(6, 6, W - 12, H - 12, fill="none", stroke=black, sw=2, rx=3)
-    L, R = 18, W - 18
+    """HARPY's AI nutrition label: the requirements, in the standard label format.
 
-    def rule(y, sw):
-        s.rect(L, y, R - L, sw, fill=black)
+    Field set follows Twilio's AI Nutrition Facts (description, privacy ladder,
+    model type, base model, trust ingredients, compliance), extended with the
+    ONC HTI-1 source-attribute categories that a requirements reader needs:
+    intended use, out-of-scope use, validation and maintenance. Compliance rows
+    cite the requirement IDs in docs/REQUIREMENTS.md that back them.
+    """
+    W = 420
+    black, grey, white = "#111111", "#5b5b5b", "#ffffff"
+    s = Svg(W, 100, "", bg=None)
+    L, R = 20, W - 20
+    y = 0
 
-    def row(y, label, value, bold_label=True, indent=0, size=14, value_font="cond"):
-        s.text(label, L + indent, y, "cond" if bold_label else "reg", size, black)
-        if value:
-            s.text(value, R, y, value_font, size, black, anchor="end")
+    def rule(h):
+        nonlocal y
+        s.rect(L, y, R - L, h, fill=black)
+        y += h
+
+    def thin():
         s.rect(L, y + 7, R - L, 1, fill=black)
 
-    s.text("AI Nutrition Facts", L - 1, 56, "display", 48, black, track=0.5)
-    rule(68, 1)
-    s.text("Servings per study", L, 88, "reg", 14, black)
-    s.text("1,800+", R, 88, "reg", 14, black, anchor="end")
-    s.text("Serving size", L, 110, "cond", 17, black)
-    s.text("1 simulation run", R, 110, "cond", 17, black, anchor="end")
-    rule(120, 10)
-    s.text("Amount per serving", L, 146, "cond", 12, black)
-    s.text("Model calls", L, 182, "display", 34, black, track=0.5)
-    s.text("0", R, 184, "display", 46, black, anchor="end")
-    rule(196, 5)
-    s.text("% Worker spend*", R, 216, "cond", 12, black, anchor="end")
-    rule(223, 1)
-    y = 244
-    row(y, "Sentinel audits", "≤ 5%")
-    row(y + 24, "Total oversight target", "< 10%")
-    row(y + 48, "Tier 0 checks", "~0%", bold_label=False, indent=14)
-    row(y + 72, "Human alerts", "capped", bold_label=False, indent=14)
-    row(y + 96, "Trained weights", "0g")
-    row(y + 120, "Fine-tuning", "0g")
-    row(y + 144, "Retrieval corpus", "0g")
-    row(y + 168, "Personal data", "0g")
-    rule(y + 182, 10)
-    y2 = y + 212
-    s.text("Assumed detector accuracy", L, y2, "cond", 14, black)
-    s.text("inputs, not measurements", R, y2, "reg", 11, black, anchor="end")
-    s.rect(L, y2 + 7, R - L, 1, fill=black)
-    for i, (k, v) in enumerate((("Overt faults", "95%"), ("Moderate faults", "78%"),
-                                ("Subtle faults", "42%"), ("False positives", "2%"))):
-        row(y2 + 28 + 24 * i, k, v, bold_label=False, indent=14)
-    rule(y2 + 112, 5)
-    y3 = y2 + 134
-    ingredients = ("INGREDIENTS: Seeded synthetic agent mesh, typed claims, planted faults "
-                   "(overt, moderate, subtle), seven mechanical Tier 0 signals, mock sentinel "
-                   "(assumed probabilities), Tattletale-style blame tracing, lossy provenance "
-                   "log, sourced token list prices, modeled analyst time.")
-    rows = wrap(ingredients, "reg", 11.5, R - L)
-    s.lines(rows, L, y3, "reg", 11.5, black, lead=15)
-    y4 = y3 + 15 * len(rows) + 6
-    s.text("CONTAINS: simulation only. Live-model accuracy not measured.", L, y4, "cond", 11.5,
-           black)
-    rule(y4 + 12, 1)
-    foot = ("* Share of worker-fleet spend, the budget HARPY is judged against. "
-            "A project label, not a compliance certification.")
-    s.lines(wrap(foot, "reg", 10, R - L), L, y4 + 30, "reg", 10, black, lead=13)
+    def kv(label, value, ids="", size=13.5, label_font="reg", value_font="cond", step=24):
+        nonlocal y
+        y += step
+        s.text(label, L, y, label_font, size, black)
+        vw = s.text(value, R, y, value_font, size, black, anchor="end")
+        if ids:
+            s.text(ids, R - vw - 8, y - 0.5, "monom", 9.5, grey, anchor="end")
+        thin()
+
+    def heading(text, size=17, step=28):
+        nonlocal y
+        y += step
+        s.text(text, L, y, "cond", size, black)
+        thin()
+
+    def para(label, text, size=12.5, lead=16):
+        nonlocal y
+        y += 22
+        s.text(label, L, y, "cond", 13.5, black)
+        for line in wrap(text, "reg", size, R - L):
+            y += lead
+            s.text(line, L, y, "reg", size, black)
+        y += 4
+        thin()
+
+    y = 62
+    s.text("AI Nutrition Facts", L - 1, y, "display", 46, black, track=0.5)
+    y += 12
+    rule(1)
+    y += 20
+    s.text("HARPY", L, y, "cond", 17, black)
+    s.text("budgeted oversight simulation", R, y, "reg", 13.5, black, anchor="end")
+    y += 10
+    rule(9)
+    para("Description", "Simulates budgeted oversight of multi-agent AI. Audits a sample of "
+         "agents, traces each bad claim back to the agent that started it, and charges every "
+         "cost against worker spend.")
+    kv("Privacy Ladder Level", "N/A · synthetic data", label_font="cond")
+    kv("Feature is Optional", "Yes · runs offline", label_font="cond")
+    kv("Model Type", "Simulation (mock detector)", label_font="cond")
+    kv("Base Model", "None · replay: gpt-4.1, opt-in", label_font="cond")
+    y += 12
+    rule(9)
+    heading("Trust Ingredients")
+    kv("Base model trained with customer data", "No")
+    kv("Customer data shared with model vendor", "No*", ids="N-4")
+    kv("Training data anonymized", "N/A")
+    kv("Data deletion", "Local files")
+    kv("Human in the loop", "Yes · capped", ids="B-3")
+    kv("Data retention", "You control")
+    y += 12
+    rule(9)
+    heading("Compliance")
+    kv("Logging & auditing", "Yes", ids="E-4 N-1")
+    kv("Guardrails", "Yes", ids="O-2 R-1 R-2")
+    kv("Input/output consistency", "Yes", ids="N-1 E-5")
+    kv("Budget enforced", "Yes", ids="B-1–B-5")
+    kv("Preregistered decision", "Yes", ids="E-1–E-3")
+    kv("Blame traced to origin", "Yes · v3", ids="A-1–A-5")
+    y += 12
+    rule(9)
+    para("Intended use", "Research: which oversight budgets and detector qualities justify a "
+         "trial on real agent traces.")
+    para("Out-of-scope use", "Production enforcement, adversaries adapting to the sampler, any "
+         "claim of live-model accuracy.")
+    para("Validation", "Simulation only. Detector accuracy is an input, not a measurement: "
+         "overt 95%, moderate 78%, subtle 42%, false positives 2%. External validation: "
+         "not available.")
+    para("Maintenance", "CI on every push across Linux, macOS and Windows: lint, tests and "
+         "evidence checks.")
+    y += 10
+    rule(5)
+    y += 30
+    s.text("Requirements", L, y, "display", 28, black, track=0.5)
+    total, verified, manual = requirement_counts()
+    s.text(str(total), R, y + 1, "display", 34, black, anchor="end")
+    y += 10
+    rule(1)
+    kv("Verified by a test or CI step", str(verified), value_font="cond")
+    kv("Checked by inspection", str(manual), value_font="cond")
+    y += 14
+    foot = ("* Simulation sends nothing anywhere. Replay sends observables to OpenAI only if you "
+            "run it with your own key. Full requirement list: docs/REQUIREMENTS.md. Format after "
+            "Twilio's AI Nutrition Facts and the ONC HTI-1 source attributes. Not a "
+            "certification.")
+    for line in wrap(foot, "reg", 10, R - L):
+        y += 13
+        s.text(line, L, y, "reg", 10, black)
+    y += 20
+
+    H = int(math.ceil(y))
+    s.h = H
+    s.parts.insert(0, f'<rect width="{W}" height="{H}" rx="6" fill="{white}"/>'
+                      f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" rx="3" fill="none" '
+                      f'stroke="{black}" stroke-width="2"/>')
+    s.label = ("AI Nutrition Facts for HARPY, a budgeted oversight simulation. Privacy ladder "
+               "not applicable (synthetic data); runs offline; model type: simulation with a "
+               "mock detector; base model: none, with optional gpt-4.1 replay. Trust "
+               "ingredients: no training on customer data, no data shared with a vendor, human "
+               "in the loop with capped alerts. Compliance: logging and auditing, guardrails, "
+               "input/output consistency, budget enforcement, preregistered decisions and "
+               "blame tracing are all yes, each backed by named requirements. Detector "
+               f"accuracy is assumed, not measured; external validation not available. {total} "
+               f"requirements: {verified} verified by tests or CI, {manual} by inspection.")
     return s.done()
 
 

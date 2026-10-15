@@ -58,18 +58,20 @@ The run prints whether it caught the fault, what oversight cost as a share of wo
 
 ## AI nutrition label
 
-<img align="right" src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: serving size one simulation run; model calls per serving 0; sentinel audits at most 5% of worker spend; total oversight target under 10%; human alerts capped; trained weights, fine-tuning, retrieval corpus and personal data all 0g; assumed detector accuracy, inputs not measurements: overt 95%, moderate 78%, subtle 42%, false positives 2%." width="320">
+The label is HARPY's requirements at a glance, in the standard AI nutrition label format: [Twilio's AI Nutrition Facts](https://www.twilio.com/docs/conversations/intelligence/ai-nutrition-facts) fields plus the [ONC HTI-1](https://casrai.org/guides/hti-1-predictive-dsi-source-attributes) source-attribute categories.
 
-Every number HARPY reports rests on stated inputs, so the inputs are on the label.
+Each compliance row names the requirements behind it, and each requirement names the test that checks it.
 
-- [**AI nutrition label**](docs/governance/AI_NUTRITION_LABEL.md): purpose, AI and data ingredients, assumed accuracy, cost ingredients, known limits.
+<p align="center">
+  <img src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: runs offline on synthetic data with a mock detector and no base model; no training on or sharing of customer data; human in the loop with capped alerts; logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing all yes, each backed by named requirements; detector accuracy assumed, not measured; 37 requirements, 35 verified by tests or CI." width="420">
+</p>
+
+- [**AI nutrition label**](docs/governance/AI_NUTRITION_LABEL.md): every field, with its backing requirements.
+- [**Engineering requirements**](docs/REQUIREMENTS.md): all 37 requirements, how each is verified, and the v3 acceptance criteria.
 - [**Data / model card**](docs/governance/DATA_MODEL_CARD.md): data origin, detector identity, evaluation, intended use.
 - [**Data bill of materials**](docs/governance/DBOM.md): inputs, transformations, lineage and hashes, with a [machine-readable copy](docs/governance/dbom.json).
-- [**Engineering requirements**](docs/REQUIREMENTS.md): every requirement, mapped to the test that checks it.
 
 These are project documents, not compliance certifications.
-
-<br clear="right">
 
 ## Data model
 

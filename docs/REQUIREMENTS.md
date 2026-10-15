@@ -6,6 +6,8 @@ Owner: Melinda Emerson · Covers: v2 (main) and the v3 draft · Status: living d
 
 Each requirement says what HARPY must do and how that is checked. Most checks are named tests that run in CI on every push. A requirement without an automated check says so.
 
+**At a glance:** the [AI nutrition label](governance/AI_NUTRITION_LABEL.md) summarizes these requirements in the standard label format. Each of its compliance rows cites the IDs below.
+
 ## 1. Purpose and scope
 
 HARPY is a research testbed for one question: **can a fixed oversight budget find the agent that started a fault in a multi-agent system, before the fault spreads, without isolating the agents that only passed it along?**
