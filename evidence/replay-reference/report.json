@@ -42,12 +42,12 @@
       0.43448246478317465
     ],
     "false_positive_rate": 0.0,
-    "mean_duration_seconds": 1.404075010214001e-05,
+    "mean_duration_seconds": 1.6227999973731737e-05,
     "true_negative": 5,
     "true_positive": 6,
     "unattempted_cases": 0
   },
-  "predictions_sha256": "84d50e25aa21b62d00c891a829787a74176bc9b13ef24fe85bb1073fbc9622ba",
+  "predictions_sha256": "3fdcc029a3bab1782e37be7e99d0d5695fa05a215d43a828f38452da9fa129b0",
   "pricing": null,
   "real_model_called": false,
   "schema": "harpy/replay-report/1",
@@ -57,7 +57,7 @@
       "src/harpy/__init__.py": "4187a8c7e2b68f058cf53331eb8e4571cef24cc2f5f2deede699dc62f43951a4",
       "src/harpy/alert_budget.py": "aee114da36041829ac608880d7feeec05a8886e8b3dae9b60ea45618f7a21280",
       "src/harpy/attribution.py": "abb2fe342fe29ddf74d79308c8f1dd2038354cf4025a67aaad3bf02e0a7c938e",
-      "src/harpy/cli.py": "8eb63022af08058daee1029e649401a0b99035751bbb18e2b78c95e397e73674",
+      "src/harpy/cli.py": "ac696362cb57f209a44925794e1569cafc6f5e86851226d055fbd526c875795b",
       "src/harpy/detectors.py": "95d311317192a1d2fc60b58730ce661f8d926054db2b8c74323638c4029ea01f",
       "src/harpy/faults.py": "bad4cf34137a6787d807b0ecde6bd7f2b4c6de17a5658504b29d3148c42dd7d0",
       "src/harpy/feasibility.py": "23b90cf74303aaff9ca54ab85214006af015610c07dac5da9c2e742444dc7658",
@@ -80,7 +80,7 @@
       "src/harpy/types.py": "a641b553ec32f39dc85bf86db1908aa1bdc9395d48950b9d5bc107b1934cd32c",
       "uv.lock": "f0403d090017f855485426d997fce3742eac9ce68e06c50733357d8e06540be8"
     },
-    "tree_sha256": "69abb60753e35783060e9a50773378a98dc883a58f863997e21865341963f425"
+    "tree_sha256": "105a9dd48e51d96100b273a981a011f419a6bafc16da4cf839c46ed271102ecc"
   },
   "stop_reason": null,
   "unknown_charge_reserved_dollars": 0.0

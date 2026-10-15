@@ -1,118 +1,112 @@
 <p align="center">
-  <img src="docs/assets/harpy-banner.png" alt="HARPY — Budgeted oversight for agent meshes. Simulation / Phase 1." width="900">
+  <img src="docs/assets/harpy-hero.svg" alt="HARPY. Catch the agent that started it. A sentinel audits a sample of an agent mesh, flags a relay carrying a bad claim, and blame tracing walks the claim's lineage back to the agent that originated it, which is isolated." width="100%">
 </p>
 
-# HARPY
+In a multi-agent system, one agent goes wrong and the others repeat it. If you audit everything, oversight costs as much as the work. If you audit a sample, you mostly catch the agents repeating the error, not the one that started it.
 
-**How much agent oversight can a system afford, and what detection capability would make it worthwhile?**
-
-HARPY-SIM is a reproducible Python simulation of budgeted oversight for multi-agent systems. It compares inexpensive mechanical checks with selective sentinel audits, then accounts for detection, false isolations, discarded work, reruns, and human review.
+**HARPY buys audits from a fixed slice of the budget, then traces each bad claim back to the agent that changed it.**
 
 [![CI](https://github.com/MeLinResearch/Harpy/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/MeLinResearch/Harpy/actions/workflows/ci.yml)
-**Python 3.11+** · **MIT** · **v2: simulation and detector replay**
+**Python 3.11+** · **MIT** · **Research simulation: v2 published, v3 in design**
 
-[Architecture](docs/ARCHITECTURE.md) · [Methodology](docs/METHODOLOGY.md) · [Run and inspect](docs/RUNNING.md)
-
-## Governance cards and evidence
-
-| Read this | What it records |
-| --- | --- |
-| [AI nutrition label / recipe card](docs/governance/AI_NUTRITION_LABEL.md) | Purpose, AI ingredients, controls, cost assumptions, and evidence limits. |
-| [Data / model card](docs/governance/DATA_MODEL_CARD.md) | Data origin, detector identity, evaluation, rights, and intended use. |
-| [Data Bill of Materials](docs/governance/DBOM.md) | Inputs, transformations, lineage, hashes, and artifact relationships. |
-| [V2 study](docs/STUDY_V2.md) | Frozen hypothesis, both review-cost policies, seed-level evidence, and uncertainty. |
-| [Replay guide](docs/REPLAY.md) | Blinded corpus format, mechanical reference, and optional real Responses API detector. |
-| [V3 design draft](docs/STUDY_V3_DESIGN.md) | Why v2 could not pass, targeted re-audit, exposure sampling, Tattletale-style blame tracing, the pre-freeze check, and its pilot. Not frozen. |
-| [V1 result](docs/V1_RESULT.md) | The record that v1 failed its economic test, ported from the August 2026 branch. |
-
-These are project documentation examples, with a machine-readable DBOM. They do not assert regulatory certification.
-
-## What this is
-
-A simulated agent mesh exchanges typed claims. One agent develops a fault, and corrupted claims can propagate through their derivation chains. HARPY compares five oversight policies under the same simulated conditions.
-
-| Question | What the simulation examines |
-| --- | --- |
-| Where should audits go? | Random, signal-directed, and hybrid sampling against two baseline arms. |
-| What does oversight cost? | Six separate cost components, including human triage and investigation. |
-| How much attention is available? | A human-alert cap that binds independently of the dollar budget. |
-| How reliable is provenance? | A lossy lineage projection with missing and spurious edges. |
-
-The output is a set of per-run JSON records and comparative figures. A sweep also writes a Parquet summary. Results are conditional on the supplied detector characteristics, pricing, and fleet scale.
+<p align="center">
+  <img src="docs/assets/harpy-glance.svg" alt="At a glance: audits are bought from a fixed share of worker spend; blame is traced to the originating agent with Tattletale's lineage rule; the kill condition is preregistered; the simulation needs no API key." width="100%">
+</p>
 
 ## How it works
 
-![HARPY simulation flow: a simulated mesh feeds mechanical checks and budget-selected mock audits; accumulated evidence drives bounded responses.](docs/assets/oversight-flow.svg)
+<p align="center">
+  <img src="docs/assets/harpy-how.svg" alt="1 Observe: Tier 0 reads every message. 2 Audit: a sentinel samples the mesh within a fixed budget. 3 Trace: walk the flagged claim back to its source. 4 Accumulate: suspicion builds on the source. 5 Respond: isolate, flag downstream and alert, within a cap. 6 Score: the world keeps the answer key and HARPY never reads it." width="100%">
+</p>
 
-1. **Observe:** seven Tier 0 checks inspect typed fields and mechanical signals.
-2. **Allocate:** the sampler buys audits from an allowance tied to worker spend.
-3. **Accumulate:** decaying suspicion combines Tier 0 signals with audit outcomes.
-4. **Respond:** the controller exposes five scoped actions; human alerts have their own cap.
-5. **Score:** the simulation records detection, false isolations, attention use, and costs.
+The trace step uses [Tattletale](https://github.com/MeLinResearch/tattletale)'s origin rule. An agent that passed a claim along unchanged passes the blame upstream; an agent that changed it owns it. Every relay carrying the bad claim then counts as a witness against the source instead of a suspect.
 
-The default run isolates agents when their suspicion crosses the gate, flags observable descendants, and attempts a human alert. The alert budget can adapt the gate and suppress alerts.
+## What tracing changes
 
-## What this CANNOT show
+<p align="center">
+  <img src="docs/assets/harpy-results.svg" alt="In the v3 pilot (40 seeds, simulated sentinel, not a frozen study): faults caught went from 7 of 40 without tracing to 40 of 40 with it; healthy agents isolated per run from 1.57 to 0.07; oversight cost from 13.8% to 8.4% of worker spend, under the 10% ceiling; median corrupt claims per run from about 860 to about 135." width="100%">
+</p>
 
-> **The sentinel is simulated.** `MockSentinel` uses configured detection and false-positive probabilities; it is not an actual model detecting faults. HARPY-SIM estimates the conditions under which oversight could be viable. It does not establish real-model accuracy or production savings.
+These numbers come from a pre-freeze pilot of 6,200 simulated runs. They held when the sentinel named the wrong claim half the time. They broke down when half the lineage records were missing. Full results, stress tests and the candidate study design are in [the v3 design notes](docs/STUDY_V3_DESIGN.md).
 
-**HARPY-REPLAY** now supplies an observable-only `RealSentinel` boundary, a mechanical reference detector, and a real OpenAI Responses API adapter. The included development corpus is explicitly synthetic. No live model accuracy or real-trace benchmark is claimed. Phase 1 faults are malfunctions, not adversaries adapting to the sampler.
+> [!IMPORTANT]
+> **The sentinel is simulated.** `MockSentinel` flags audits with configured probabilities; it is not a model detecting anything. HARPY shows the conditions under which budgeted oversight could work. It does not measure real-model accuracy or production savings.
+>
+> Three assumptions need testing on real agent traces:
+> - The sentinel can name the bad claim.
+> - It flags a relay's restatement as readily as the original.
+> - Your framework records which claim each claim came from.
 
-## Try one run
+## Try it
 
-Requires [uv](https://docs.astral.sh/uv/) and Python 3.11+. No API key or paid model call is needed.
+No API key and no paid model call. You need [uv](https://docs.astral.sh/uv/) and Python 3.11+.
 
 ```bash
-git clone https://github.com/MeLinResearch/Harpy.git
-cd Harpy
+git clone https://github.com/MeLinResearch/Harpy.git && cd Harpy
 uv sync --extra dev
 uv run pytest -q
-uv run harpy run --seed 0 \
-  --pricing configs/pricing.smoke.yaml \
-  --allow-unverified-pricing \
-  --out results/smoke/
-uv run harpy plot --results results/smoke/ \
-  --out results/smoke/detection_vs_overhead.png
+
+# One v3 run: exposure sampling plus blame tracing, at sourced list prices
+uv run harpy run --config configs/v3.yaml \
+  --pricing configs/pricing.v3.claude-haiku-4-5.yaml \
+  --arm EXPOSURE --attribution --severity SUBTLE \
+  --worker-model gpt-6.1-sol --fleet-scale 100 --seed 100000 \
+  --out results/try/
 ```
 
-This example exercises the pipeline using **synthetic prices**. Its JSON is marked `pricing_verified: false`, and its figures are watermarked. A single run demonstrates the tooling; it is not a comparative finding. See [Run and inspect](docs/RUNNING.md) for sweeps and verified pricing.
+The run prints whether it caught the fault, what oversight cost as a share of worker spend, and where blame was traced. One run shows the tooling, not a finding. See [Run and inspect](docs/RUNNING.md) for sweeps, studies and `harpy feasibility`, which checks whether a study can pass before you freeze it.
 
-## Engineering evidence
+## AI nutrition label
 
-| Property | Implementation and checks |
+<img align="right" src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: serving size one simulation run; model calls per serving 0; sentinel audits at most 5% of worker spend; total oversight target under 10%; human alerts capped; trained weights, fine-tuning, retrieval corpus and personal data all 0g; assumed detector accuracy, inputs not measurements: overt 95%, moderate 78%, subtle 42%, false positives 2%." width="320">
+
+Every number HARPY reports rests on stated inputs, so the inputs are on the label.
+
+- [**AI nutrition label**](docs/governance/AI_NUTRITION_LABEL.md): purpose, AI and data ingredients, assumed accuracy, cost ingredients, known limits.
+- [**Data / model card**](docs/governance/DATA_MODEL_CARD.md): data origin, detector identity, evaluation, intended use.
+- [**Data bill of materials**](docs/governance/DBOM.md): inputs, transformations, lineage and hashes, with a [machine-readable copy](docs/governance/dbom.json).
+- [**Engineering requirements**](docs/REQUIREMENTS.md): every requirement, mapped to the test that checks it.
+
+These are project documents, not compliance certifications.
+
+<br clear="right">
+
+## Data model
+
+<p align="center">
+  <img src="docs/assets/harpy-erd.svg" alt="HARPY data model. Agents emit messages that carry claims; lineage edges link parent and child claims. An audit reads an agent's window and names an evidence claim; attribution walks lineage back to the origin agent and credits suspicion there; suspicion past the gate triggers isolation. Ground-truth fields are readable only by scoring code. A ledger charges every oversight cost against worker spend." width="100%">
+</p>
+
+Fields marked `GT` are ground truth. A runtime guard and a static source scan stop HARPY's side from reading them; only the mock sentinel and the scoring code may. See [Architecture](docs/ARCHITECTURE.md).
+
+## Built to be checked
+
+| Property | How it's enforced |
 | --- | --- |
-| Reproducible comparisons | Independent RNG streams and byte-identical same-seed JSON: [determinism tests](tests/test_determinism.py). |
-| Ground-truth separation | A call-stack guard rejects forbidden accesses, with an explicit mock-sentinel exception: [isolation tests](tests/test_isolation_guard.py). This is an experiment guard, not a security sandbox. |
-| Budget enforcement | Audits are derived from dollars; an independent attention budget caps alerts: [sampler tests](tests/test_sampler_arms.py), [alert-budget tests](tests/test_alert_budget.py). |
-| Cost accounting | Six components and separate true/false-isolation attribution: [ledger tests](tests/test_ledger.py), [instrumentation tests](tests/test_instrumentation.py). |
-| Provenance and artifact integrity | Complete input snapshots, source-content hashes, experiment identities, and verified manifests: [provenance tests](tests/test_provenance.py). Hashes require a trusted manifest; they are not signatures. |
-| Blinded replay and spending | Labels are kept separate, provider errors are not clear verdicts, and calls require cost reservations: [replay tests](tests/test_replay.py). |
-| Reproducible development | CI runs lint, tests, pricing rejection, and a synthetic sweep/plot smoke path on Linux, macOS, and Windows: [workflow](.github/workflows/ci.yml). |
+| Preregistered | A study writes its spec before any outcome, and a spec not marked `frozen` refuses to run. The v2 kill condition is [frozen](configs/study.v2.yaml): at least 10 points of detection over Tier 0 alone, under 10% overhead. |
+| Reproducible | Same seed, byte-identical JSON. Separate random streams keep arms comparable. [Published v2 records](evidence/study-v2/) re-run exactly in CI. |
+| No answer-key leaks | A call-stack guard plus a source scan keep ground truth out of the oversight path. |
+| Budgets that bind | Audits are bought from dollars, and human alerts have their own cap. Six cost components are reported separately. |
+| Evidence integrity | Every packet carries a SHA-256 manifest, and `harpy verify` detects changed, missing or unlisted files. |
+| Honest replay | Labels stay separate from observations, provider errors are never verdicts, and paid calls need verified prices and a cost reservation. |
 
-## Preregistered kill condition
+CI runs lint, the full test suite and every evidence check on Linux, macOS and Windows.
 
-V2 fixes the target at **at least 10 percentage points of incremental detection over matched `TIER0_ONLY`, with total incremental cost below 10% of worker-fleet cost**. The designated primary cell uses linear review scaling. Decisions use uncertainty intervals and may be `INCONCLUSIVE`; see [the frozen specification](configs/study.v2.yaml) and [study notes](docs/STUDY_V2.md).
+## Read more
 
-The fault distribution is frozen before a sweep and included in each results record. Read the [methodology](docs/METHODOLOGY.md) before interpreting cost curves or changing assumptions.
-
-## Explore the implementation
-
-| Start here | Responsibility |
+| Document | What it covers |
 | --- | --- |
-| [simulation.py](src/harpy/simulation.py) | Compose the simulated world, oversight, and scoring. |
-| [telemetry.py](src/harpy/telemetry.py), [sentinel.py](src/harpy/sentinel.py) | Mechanical signals and the mock/real sentinel boundary. |
-| [sampler.py](src/harpy/sampler.py), [alert_budget.py](src/harpy/alert_budget.py) | Allocate money and human attention. |
-| [suspicion.py](src/harpy/suspicion.py), [response.py](src/harpy/response.py) | Accumulate evidence and expose scoped responses. |
-| [ledger.py](src/harpy/ledger.py), [metrics.py](src/harpy/metrics.py) | Price the run and produce its evidence record. |
-| [sweep.py](src/harpy/sweep.py), [plot.py](src/harpy/plot.py) | Compare configurations and render conditional results. |
-| [provenance.py](src/harpy/provenance.py), [study.py](src/harpy/study.py) | Bind artifacts to complete inputs and evaluate the frozen study. |
-| [replay.py](src/harpy/replay.py), [detectors.py](src/harpy/detectors.py) | Evaluate observable-only cases and record measured detector usage. |
+| [V3 design notes](docs/STUDY_V3_DESIGN.md) | Why v2 couldn't pass, what v3 adds, the pilot, the candidate study. |
+| [Engineering requirements](docs/REQUIREMENTS.md) | Requirements, verification and acceptance criteria. |
+| [V2 study](docs/STUDY_V2.md) | The frozen v2 test and its INCONCLUSIVE result. |
+| [V1 result](docs/V1_RESULT.md) | The record that v1 failed its economic test. |
+| [Methodology](docs/METHODOLOGY.md) · [Architecture](docs/ARCHITECTURE.md) | How the simulation works and what it assumes. |
+| [Run and inspect](docs/RUNNING.md) · [Replay](docs/REPLAY.md) | Commands, sweeps, studies, and measuring a real detector. |
 
 ## Related
 
-[Tattletale](https://github.com/MeLinResearch/tattletale) checks quoted claims against their source and names the agent that introduced a bad one, not the one that last repeated it. HARPY v3 uses its origin rule to decide who a flagged claim belongs to.
+[**Tattletale**](https://github.com/MeLinResearch/tattletale) checks quoted claims against their source and names the agent that introduced a bad one, not the one that last repeated it. HARPY uses its origin rule to decide who a flagged claim belongs to.
 
 ## License
 
-[MIT](LICENSE).
-
+[MIT](LICENSE). The README artwork is generated by [`docs/assets/build/build_art.py`](docs/assets/build/build_art.py).

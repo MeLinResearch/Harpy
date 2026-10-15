@@ -6,7 +6,9 @@ HARPY-SIM is a local batch simulation. HARPY-REPLAY is a separate local evaluati
 
 ## Oversight flow
 
-![Simulated mesh, mechanical checks, budget-selected mock audits, suspicion, and bounded response.](assets/oversight-flow.svg)
+![1 Observe: Tier 0 reads every message. 2 Audit: a sentinel samples the mesh within a fixed budget. 3 Trace: walk the flagged claim back to its source. 4 Accumulate: suspicion builds on the source. 5 Respond: isolate, flag downstream and alert, within a cap. 6 Score: the world keeps the answer key.](assets/harpy-how.svg)
+
+Step 3, blame tracing, exists on the v3 branch and is off by default; see [the v3 design notes](STUDY_V3_DESIGN.md) and [the data model](REQUIREMENTS.md#3-data-model). Without it, a flagged audit is credited to the audited agent, as in v1 and v2.
 
 The diagram shows the oversight-enabled arms. `NONE` bypasses oversight entirely; `TIER0_ONLY` uses mechanical signals without sentinel audits. The mock receives recent messages for each selected agent and generates an audit outcome from assumed detector characteristics.
 
