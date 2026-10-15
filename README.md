@@ -63,7 +63,7 @@ The label is HARPY's requirements at a glance, in the standard AI nutrition labe
 Each compliance row names the requirements behind it, and each requirement names the test that checks it.
 
 <p align="center">
-  <img src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: runs offline on synthetic data with a mock detector and no base model; no training on or sharing of customer data; human in the loop with capped alerts; logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing all yes, each backed by named requirements; detector accuracy assumed, not measured; 37 requirements, 35 verified by tests or CI." width="420">
+  <img src="docs/assets/harpy-nutrition.svg" alt="AI Nutrition Facts for HARPY: runs offline on synthetic data with a mock detector and no base model; no training on or sharing of customer data; human in the loop with capped alerts; logging and auditing, guardrails, input/output consistency, budget enforcement, preregistered decisions and blame tracing all yes, each backed by named requirements; detector accuracy assumed, not measured; 37 requirements, 35 verified by tests or CI." width="460">
 </p>
 
 - [**AI nutrition label**](docs/governance/AI_NUTRITION_LABEL.md): every field, with its backing requirements.

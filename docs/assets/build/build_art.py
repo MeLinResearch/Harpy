@@ -567,6 +567,12 @@ def requirement_counts() -> tuple[int, int, int]:
     return len(statuses), len(statuses) - manual, manual
 
 
+def check(s: Svg, x, y, color, size=10):
+    """A small check mark whose left edge sits at x, baseline at y."""
+    s.path(f"M{x:.1f} {y - size * 0.45:.1f} L{x + size * 0.38:.1f} {y - size * 0.08:.1f} "
+           f"L{x + size:.1f} {y - size * 0.9:.1f}", stroke=color, sw=2.2)
+
+
 def nutrition() -> str:
     """HARPY's AI nutrition label: the requirements, in the standard label format.
 
@@ -574,117 +580,147 @@ def nutrition() -> str:
     model type, base model, trust ingredients, compliance), extended with the
     ONC HTI-1 source-attribute categories that a requirements reader needs:
     intended use, out-of-scope use, validation and maintenance. Compliance rows
-    cite the requirement IDs in docs/REQUIREMENTS.md that back them.
+    cite the requirement IDs in docs/REQUIREMENTS.md that back them. Drawn in the
+    README's palette, keeping the heavy rules that make it read as a label.
     """
-    W = 420
-    black, grey, white = "#111111", "#5b5b5b", "#ffffff"
+    W = 460
     s = Svg(W, 100, "", bg=None)
-    L, R = 20, W - 20
+    L, R = 28, W - 28
     y = 0
 
-    def rule(h):
+    def rule(h, color=INK):
         nonlocal y
-        s.rect(L, y, R - L, h, fill=black)
+        s.rect(L, y, R - L, h, fill=color, rx=min(h / 2, 2))
         y += h
 
     def thin():
-        s.rect(L, y + 7, R - L, 1, fill=black)
+        s.rect(L, y + 8, R - L, 1, fill=LINE)
 
-    def kv(label, value, ids="", size=13.5, label_font="reg", value_font="cond", step=24):
+    def ids_pills(ids, right):
+        """Requirement IDs as small outlined pills, laid out right to left from ``right``."""
+        x = right
+        for rid in reversed(ids.split()):
+            w = F["monom"].width(rid, 9.5) + 10
+            x -= w
+            s.rect(x, y - 12, w, 16, fill="none", rx=5, stroke="#34405a", sw=1)
+            s.text(rid, x + w / 2, y - 0.5, "monom", 9.5, INK2, anchor="middle")
+            x -= 5
+        return x
+
+    def kv(label, value, ids="", accent=None, label_color=INK2, value_color=INK,
+           label_font="reg", value_font="cond", size=13.5, step=26):
         nonlocal y
         y += step
-        s.text(label, L, y, label_font, size, black)
-        vw = s.text(value, R, y, value_font, size, black, anchor="end")
+        s.text(label, L, y, label_font, size, label_color)
+        vw = s.text(value, R, y, value_font, size, value_color, anchor="end")
+        left = R - vw
+        if accent:
+            check(s, left - 16, y - 1, accent)
+            left -= 20
         if ids:
-            s.text(ids, R - vw - 8, y - 0.5, "monom", 9.5, grey, anchor="end")
+            ids_pills(ids, left - 8)
         thin()
 
-    def heading(text, size=17, step=28):
+    def heading(text, color, step=34):
         nonlocal y
         y += step
-        s.text(text, L, y, "cond", size, black)
+        s.rect(L, y - 15, 4, 18, fill=color, rx=2)
+        s.text(text, L + 14, y, "cond", 17, color)
         thin()
 
-    def para(label, text, size=12.5, lead=16):
+    def para(label, text, color, size=12.5, lead=17):
         nonlocal y
-        y += 22
-        s.text(label, L, y, "cond", 13.5, black)
+        y += 26
+        s.text(label.upper(), L, y, "monob", 10, color, track=1.4)
         for line in wrap(text, "reg", size, R - L):
             y += lead
-            s.text(line, L, y, "reg", size, black)
+            s.text(line, L, y, "reg", size, INK2)
         y += 4
         thin()
 
-    y = 62
-    s.text("AI Nutrition Facts", L - 1, y, "display", 46, black, track=0.5)
+    # title
+    y = 40
+    s.text("MELINRESEARCH / HARPY", L, y, "monom", 10.5, MUTED, track=1.4)
+    s.text("REQUIREMENTS AT A GLANCE", R, y, "monom", 10.5, MUTED, anchor="end", track=1.4)
+    y += 54
+    s.text("AI Nutrition Facts", L - 1, y, "display", 50, INK, track=0.5)
     y += 12
-    rule(1)
-    y += 20
-    s.text("HARPY", L, y, "cond", 17, black)
-    s.text("budgeted oversight simulation", R, y, "reg", 13.5, black, anchor="end")
-    y += 10
-    rule(9)
+    s.rect(L, y, 64, 5, fill=AMBER, rx=2.5)
+    y += 30
+    s.text("HARPY", L, y, "cond", 18, AMBER)
+    s.text("budgeted oversight simulation", R, y, "reg", 13.5, INK2, anchor="end")
+    y += 12
+    rule(8)
+
+    y += 4
     para("Description", "Simulates budgeted oversight of multi-agent AI. Audits a sample of "
          "agents, traces each bad claim back to the agent that started it, and charges every "
-         "cost against worker spend.")
-    kv("Privacy Ladder Level", "N/A · synthetic data", label_font="cond")
-    kv("Feature is Optional", "Yes · runs offline", label_font="cond")
-    kv("Model Type", "Simulation (mock detector)", label_font="cond")
-    kv("Base Model", "None · replay: gpt-4.1, opt-in", label_font="cond")
-    y += 12
-    rule(9)
-    heading("Trust Ingredients")
+         "cost against worker spend.", CYAN)
+    kv("Privacy Ladder Level", "N/A · synthetic data", label_font="semi", label_color=INK)
+    kv("Feature is Optional", "Yes · runs offline", label_font="semi", label_color=INK)
+    kv("Model Type", "Simulation (mock detector)", label_font="semi", label_color=INK)
+    kv("Base Model", "None · replay: gpt-4.1, opt-in", label_font="semi", label_color=INK)
+    y += 16
+    rule(8)
+
+    heading("Trust Ingredients", VIOLET)
     kv("Base model trained with customer data", "No")
     kv("Customer data shared with model vendor", "No*", ids="N-4")
     kv("Training data anonymized", "N/A")
     kv("Data deletion", "Local files")
     kv("Human in the loop", "Yes · capped", ids="B-3")
     kv("Data retention", "You control")
-    y += 12
-    rule(9)
-    heading("Compliance")
-    kv("Logging & auditing", "Yes", ids="E-4 N-1")
-    kv("Guardrails", "Yes", ids="O-2 R-1 R-2")
-    kv("Input/output consistency", "Yes", ids="N-1 E-5")
-    kv("Budget enforced", "Yes", ids="B-1–B-5")
-    kv("Preregistered decision", "Yes", ids="E-1–E-3")
-    kv("Blame traced to origin", "Yes · v3", ids="A-1–A-5")
-    y += 12
-    rule(9)
+    y += 16
+    rule(8)
+
+    heading("Compliance", AMBER)
+    kv("Logging & auditing", "Yes", ids="E-4 N-1", accent=CYAN)
+    kv("Guardrails", "Yes", ids="O-2 R-1 R-2", accent=CYAN)
+    kv("Input/output consistency", "Yes", ids="N-1 E-5", accent=CYAN)
+    kv("Budget enforced", "Yes", ids="B-1–B-5", accent=CYAN)
+    kv("Preregistered decision", "Yes", ids="E-1–E-3", accent=CYAN)
+    kv("Blame traced to origin", "Yes · v3", ids="A-1–A-5", accent=CYAN)
+    y += 16
+    rule(8)
+
     para("Intended use", "Research: which oversight budgets and detector qualities justify a "
-         "trial on real agent traces.")
+         "trial on real agent traces.", CYAN)
     para("Out-of-scope use", "Production enforcement, adversaries adapting to the sampler, any "
-         "claim of live-model accuracy.")
+         "claim of live-model accuracy.", RED)
     para("Validation", "Simulation only. Detector accuracy is an input, not a measurement: "
          "overt 95%, moderate 78%, subtle 42%, false positives 2%. External validation: "
-         "not available.")
+         "not available.", AMBER)
     para("Maintenance", "CI on every push across Linux, macOS and Windows: lint, tests and "
-         "evidence checks.")
-    y += 10
-    rule(5)
-    y += 30
-    s.text("Requirements", L, y, "display", 28, black, track=0.5)
+         "evidence checks.", VIOLET)
+    y += 16
+    rule(4)
+
+    # requirements tally
     total, verified, manual = requirement_counts()
-    s.text(str(total), R, y + 1, "display", 34, black, anchor="end")
+    y += 44
+    s.text("Requirements", L, y, "display", 32, INK, track=0.5)
+    s.text(str(total), R, y + 2, "display", 40, AMBER, anchor="end")
+    y += 18
+    bar_w = R - L
+    s.rect(L, y, bar_w, 10, fill=PANEL2, rx=5)
+    s.rect(L, y, bar_w * verified / total, 10, fill=AMBER, rx=5)
     y += 10
-    rule(1)
-    kv("Verified by a test or CI step", str(verified), value_font="cond")
-    kv("Checked by inspection", str(manual), value_font="cond")
-    y += 14
+    kv("Verified by a test or CI step", str(verified), accent=CYAN, step=28)
+    kv("Checked by inspection", str(manual))
+    y += 18
     foot = ("* Simulation sends nothing anywhere. Replay sends observables to OpenAI only if you "
-            "run it with your own key. Full requirement list: docs/REQUIREMENTS.md. Format after "
-            "Twilio's AI Nutrition Facts and the ONC HTI-1 source attributes. Not a "
-            "certification.")
-    for line in wrap(foot, "reg", 10, R - L):
-        y += 13
-        s.text(line, L, y, "reg", 10, black)
-    y += 20
+            "run it with your own key. Full list: docs/REQUIREMENTS.md. Format after Twilio's AI "
+            "Nutrition Facts and the ONC HTI-1 source attributes. Not a certification.")
+    for line in wrap(foot, "reg", 10.5, R - L):
+        y += 14
+        s.text(line, L, y, "reg", 10.5, MUTED)
+    y += 26
 
     H = int(math.ceil(y))
     s.h = H
-    s.parts.insert(0, f'<rect width="{W}" height="{H}" rx="6" fill="{white}"/>'
-                      f'<rect x="6" y="6" width="{W - 12}" height="{H - 12}" rx="3" fill="none" '
-                      f'stroke="{black}" stroke-width="2"/>')
+    s.parts.insert(0, f'<rect width="{W}" height="{H}" rx="16" fill="{BG}"/>'
+                      f'<rect x="10" y="10" width="{W - 20}" height="{H - 20}" rx="10" '
+                      f'fill="none" stroke="{LINE}" stroke-width="1.5"/>')
     s.label = ("AI Nutrition Facts for HARPY, a budgeted oversight simulation. Privacy ladder "
                "not applicable (synthetic data); runs offline; model type: simulation with a "
                "mock detector; base model: none, with optional gpt-4.1 replay. Trust "
