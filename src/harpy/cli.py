@@ -126,7 +126,16 @@ def _cmd_run(args: argparse.Namespace) -> int:
     print(
         f"  false isolations={metrics['false_isolation_count']}"
         f" costing ${false_dollars:,.2f} of ${false_dollars + true_dollars:,.2f} discard+rerun"
+        f" ({metrics['relay_isolations']} relays)"
     )
+    if metrics.get("attribution"):
+        print(
+            f"  blame traced on {metrics['attribution_walks']} flags:"
+            f" {metrics['attribution_redirected']} moved upstream,"
+            f" {metrics['attribution_broken']} broken lineage,"
+            f" {metrics['attribution_to_fault_source']}/{metrics['attribution_on_corrupt']}"
+            " corrupt-evidence flags reached the fault source"
+        )
     print(
         f"  worker_model={metrics['worker_model']}"
         f" detection_prob={metrics['effective_detection_prob']:g}"
