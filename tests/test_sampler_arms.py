@@ -1,4 +1,4 @@
-"""All five arms exist, behave as described, and stay inside the budget."""
+"""All six arms exist, behave as described, and stay inside the budget."""
 
 from __future__ import annotations
 
@@ -29,8 +29,10 @@ def skewed_scores(target: str = "agent-07", high: float = 0.8, low: float = 0.01
     return {agent: (high if agent == target else low) for agent in AGENTS}
 
 
-def test_all_five_arms_are_present():
-    assert {arm.value for arm in Arm} == {"NONE", "TIER0_ONLY", "RANDOM", "DIRECTED", "HYBRID"}
+def test_all_six_arms_are_present():
+    assert {arm.value for arm in Arm} == {
+        "NONE", "TIER0_ONLY", "RANDOM", "DIRECTED", "HYBRID", "EXPOSURE"
+    }
 
 
 @pytest.mark.parametrize("arm", [Arm.NONE, Arm.TIER0_ONLY])
@@ -42,7 +44,7 @@ def test_the_non_auditing_arms_never_audit(arm):
     assert sampled.audits_drawn == 0
 
 
-@pytest.mark.parametrize("arm", [Arm.RANDOM, Arm.DIRECTED, Arm.HYBRID])
+@pytest.mark.parametrize("arm", [Arm.RANDOM, Arm.DIRECTED, Arm.HYBRID, Arm.EXPOSURE])
 def test_the_auditing_arms_audit(arm):
     sampled = sampler(arm, budget_pct=0.5)
     sampled.accrue(10.0, 0.0)

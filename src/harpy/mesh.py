@@ -98,6 +98,9 @@ class Mesh:
         self.current_tick = -1
         # Ground truth, written here and read only by scoring code.
         self.lineage_edges: set[LineageEdge] = set()
+        #: The same edges in creation order. The set has no order, and v3's
+        #: incremental provenance log has to consume new edges deterministically.
+        self.lineage_log: list[LineageEdge] = []
         self.corrupt_claim_ticks: list[int] = []
         self.total_claims = 0
         self.faulty_messages_after_onset = 0
@@ -245,7 +248,9 @@ class Mesh:
             is_corrupt=corrupt,
         )
         if parent is not None:
-            self.lineage_edges.add(LineageEdge(parent.claim_id, claim_id))
+            edge = LineageEdge(parent.claim_id, claim_id)
+            self.lineage_edges.add(edge)
+            self.lineage_log.append(edge)
         self.total_claims += 1
         if corrupt:
             self.corrupt_claim_ticks.append(tick)

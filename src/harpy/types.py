@@ -39,6 +39,19 @@ class Arm(str, Enum):
     RANDOM = "RANDOM"
     DIRECTED = "DIRECTED"
     HYBRID = "HYBRID"
+    #: v3. Audit placement by unchecked exposure: ticks since an agent was last
+    #: audited times the observable fan-out of what it emitted since then. The
+    #: BRA-Audit-style comparison arm (arXiv 2608.14668), on observables only.
+    EXPOSURE = "EXPOSURE"
+
+
+#: The five arms v1 and v2 were run on. Default grids and frozen-study
+#: comparisons enumerate these, not ``tuple(Arm)``, so adding a v3 arm cannot
+#: silently grow a historical grid.
+V2_ARMS: tuple[Arm, ...] = (Arm.NONE, Arm.TIER0_ONLY, Arm.RANDOM, Arm.DIRECTED, Arm.HYBRID)
+
+#: Arms that buy sentinel audits.
+AUDITING_ARMS: tuple[Arm, ...] = (Arm.RANDOM, Arm.DIRECTED, Arm.HYBRID, Arm.EXPOSURE)
 
 
 # --------------------------------------------------------------------------
@@ -55,6 +68,7 @@ GUARDED_MODULES = frozenset(
         "suspicion.py",
         "response.py",
         "alert_budget.py",
+        "attribution.py",
     }
 )
 
@@ -388,4 +402,8 @@ class AuditResult:
     flagged: bool
     input_tokens: int
     output_tokens: int
+    #: v3. Claims the detector points at as the reason for a flag. Empty unless
+    #: the run traces blame (``RunSpec.attribution``): only then does the mock
+    #: sentinel name a claim, so v1/v2 runs consume no extra RNG draws.
+    evidence_claim_ids: tuple[str, ...] = ()
 

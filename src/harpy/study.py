@@ -17,7 +17,15 @@ from .statistics import bootstrap_mean_interval, difference_interval, wilson_int
 from .sweep import SweepGrid, load_result_rows, run_sweep
 from .types import Arm, Severity
 
-CELL_KEYS = tuple(k for k in BASELINE_MATCH_KEYS if k != "seed") + ("arm", "reserve_fraction")
+CELL_KEYS = tuple(k for k in BASELINE_MATCH_KEYS if k != "seed") + (
+    "arm",
+    "reserve_fraction",
+    # v3. Absent from v2 rows, where it reads as None for every cell alike.
+    "followup_audits",
+    "attribution",
+)
+#: Arms a study evaluates against the matched TIER0_ONLY baseline.
+CANDIDATE_ARMS = ("RANDOM", "DIRECTED", "HYBRID", "EXPOSURE")
 
 
 def evaluate_cell(candidate: list[dict], baselines: dict, decision: dict) -> dict:
@@ -72,7 +80,7 @@ def analyze_rows(rows: list[dict], study: dict) -> dict:
             if key in baselines:
                 raise ValueError("duplicate matched baseline")
             baselines[key] = row
-        if row["arm"] in ("RANDOM", "DIRECTED", "HYBRID"):
+        if row["arm"] in CANDIDATE_ARMS:
             cells[tuple(row.get(k) for k in CELL_KEYS)].append(row)
     estimates = [
         evaluate_cell(group, baselines, study["decision"])
@@ -108,6 +116,12 @@ def run_study(study_path: str | Path, out_dir: str | Path, processes: int = 2) -
     study = yaml.safe_load(study_path.read_text(encoding="utf-8"))
     if study.get("schema") != "harpy/study/2":
         raise ValueError("unsupported study specification")
+    # v3: a specification still under design says so, and cannot produce
+    # evidence. v2 predates the field and is frozen by its commit history.
+    if study.get("status", "frozen") != "frozen":
+        raise ValueError(
+            f"study status is {study.get('status')!r}; only a frozen specification may run"
+        )
     if out_dir.exists() and any(out_dir.iterdir()):
         raise ValueError("use an empty output directory to preserve the frozen study")
     out_dir.mkdir(parents=True, exist_ok=True)

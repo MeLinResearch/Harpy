@@ -22,10 +22,11 @@ from .ledger import (
 from .metrics import attach_incremental_detection_over_tier0, result_document, run_metrics
 from .provenance import write_manifest
 from .simulation import RunSpec, rescale, run_simulation
-from .types import Arm, Severity
+from .types import AUDITING_ARMS, V2_ARMS, Arm, Severity
 
 SEEDS: tuple[int, ...] = tuple(range(50))
-ARMS: tuple[Arm, ...] = tuple(Arm)
+#: The v1/v2 arms. EXPOSURE (v3) is opt-in so the default grid does not grow.
+ARMS: tuple[Arm, ...] = V2_ARMS
 SEVERITIES: tuple[Severity, ...] = tuple(Severity)
 BUDGET_PCTS: tuple[float, ...] = (0.01, 0.025, 0.05, 0.10, 0.20)
 LINEAGE_FIDELITIES: tuple[float, ...] = (0.0, 0.25, 0.5, 0.75, 1.0)
@@ -62,6 +63,11 @@ class SweepGrid:
     #: what makes adding a tier a YAML edit and not a code change.
     worker_models: tuple[str, ...] | None = None
     review_scalings: tuple[str, ...] = ("fixed",)
+    #: v3. Follow-up depths for the auditing arms. NONE and TIER0_ONLY never
+    #: audit, so they run once at 0 rather than once per depth.
+    followup_audits: tuple[int, ...] = (0,)
+    #: v3. Whether flagged audits are traced to their origin. Auditing arms only.
+    attributions: tuple[bool, ...] = (False,)
 
     def __post_init__(self) -> None:
         if not self.review_scalings or not set(self.review_scalings).issubset({"fixed", "linear"}):
@@ -94,7 +100,11 @@ class SweepGrid:
                 # reserve_fraction is a HYBRID-only knob; every other arm would
                 # produce identical duplicate runs across it.
                 reserves = self.reserve_fractions if arm is Arm.HYBRID else (0.0,)
-                for severity in self.severities:
+                depths = self.followup_audits if arm in AUDITING_ARMS else (0,)
+                traces = self.attributions if arm in AUDITING_ARMS else (False,)
+                for severity, depth, traced in [
+                    (s, d, t) for s in self.severities for d in depths for t in traces
+                ]:
                     for budget in self.budget_pcts:
                         for fidelity in self.lineage_fidelities:
                             for reserve in reserves:
@@ -116,6 +126,8 @@ class SweepGrid:
                                                         false_positive_rate=fpr,
                                                         worker_model=worker,
                                                         review_scaling=self.review_scalings[0],
+                                                        followup_audits=int(depth),
+                                                        attribution=bool(traced),
                                                     )
                                                 )
         return specs
