@@ -4,7 +4,7 @@
 
 Owner: Melinda Emerson · Covers: v2 (main) and the v3 draft · Reviewed: October 15, 2026
 
-An AI nutrition label states what an AI system is, what it does with data, and which requirements it meets, in a fixed format that can be compared across systems. HARPY's label uses the fields of [Twilio's AI Nutrition Facts](https://www.twilio.com/docs/conversations/intelligence/ai-nutrition-facts):
+An AI nutrition label states what an AI system is, what it does with data, and which requirements it meets, in a fixed format that can be compared across systems. HARPY's label uses the standard fields:
 - description and model,
 - trust ingredients,
 - compliance.
