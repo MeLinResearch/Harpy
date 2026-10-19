@@ -576,7 +576,7 @@ def check(s: Svg, x, y, color, size=10):
 def nutrition() -> str:
     """HARPY's AI nutrition label: the requirements, in the standard label format.
 
-    Field set follows Twilio's AI Nutrition Facts (description, privacy ladder,
+    Field set follows the standard AI nutrition label (description, privacy ladder,
     model type, base model, trust ingredients, compliance), extended with the
     ONC HTI-1 source-attribute categories that a requirements reader needs:
     intended use, out-of-scope use, validation and maintenance. Compliance rows
@@ -709,8 +709,7 @@ def nutrition() -> str:
     kv("Checked by inspection", str(manual))
     y += 18
     foot = ("* Simulation sends nothing anywhere. Replay sends observables to OpenAI only if you "
-            "run it with your own key. Full list: docs/REQUIREMENTS.md. Format after Twilio's AI "
-            "Nutrition Facts and the ONC HTI-1 source attributes. Not a certification.")
+            "run it with your own key. Full list: docs/REQUIREMENTS.md. Not a certification.")
     for line in wrap(foot, "reg", 10.5, R - L):
         y += 14
         s.text(line, L, y, "reg", 10.5, MUTED)

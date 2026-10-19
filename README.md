@@ -66,7 +66,7 @@ The run prints whether it caught the fault, what oversight cost as a share of wo
 
 ## AI nutrition label
 
-The label is HARPY's requirements at a glance, in the standard AI nutrition label format: [Twilio's AI Nutrition Facts](https://www.twilio.com/docs/conversations/intelligence/ai-nutrition-facts) fields plus the [ONC HTI-1](https://casrai.org/guides/hti-1-predictive-dsi-source-attributes) source-attribute categories.
+The label is HARPY's requirements at a glance, in the standard AI nutrition label format, plus the [ONC HTI-1](https://casrai.org/guides/hti-1-predictive-dsi-source-attributes) source-attribute categories.
 
 Each compliance row names the requirements behind it, and each requirement names the test that checks it.
 
