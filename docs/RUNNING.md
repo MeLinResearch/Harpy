@@ -4,7 +4,7 @@
 
 ## Setup
 
-Install [uv](https://docs.astral.sh/uv/) and use Python 3.11 or newer.
+Install [uv](https://docs.astral.sh/uv/) 0.13.4 or newer and use Python 3.11 or newer. See [TLS security setup](../SECURITY.md) when upgrading an existing environment.
 
 ```bash
 git clone https://github.com/MeLinResearch/Harpy.git
