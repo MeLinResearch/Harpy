@@ -47,7 +47,7 @@ Results, baselines and caveats are in [the experiment write-up](experiments/who_
 
 ## Try it
 
-No API key and no paid model call. You need [uv](https://docs.astral.sh/uv/) and Python 3.11+.
+No API key and no paid model call. You need [uv](https://docs.astral.sh/uv/) 0.13.4 or newer and Python 3.11+. See [TLS security setup](SECURITY.md) before installing dependencies with an older uv.
 
 ```bash
 git clone https://github.com/MeLinResearch/Harpy.git && cd Harpy
